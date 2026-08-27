@@ -23,7 +23,9 @@ node_modules/
 web/dist/
 
 # editors / os
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
 .DS_Store
 Thumbs.db
