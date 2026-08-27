@@ -243,6 +243,22 @@ SECTIONS = [
         ),
     ]),
 
+        (
+            "You do your DSA in Java but this project is Python. Why?",
+            "Common when your resume shows both. They are checking whether it "
+            "was a deliberate choice or an accident, and whether you can justify "
+            "a tool decision.",
+            "Java for DSA because that is what I am fastest and most accurate in "
+            "under time pressure, and it is accepted everywhere. Python for this "
+            "project because the ecosystem is where the work is: pandas for the "
+            "data pipeline, spaCy for text processing. Writing an NLP pipeline in "
+            "Java would have meant fighting the tooling for no benefit. I pick the "
+            "language that fits the problem rather than defending one.",
+            "Apologising for it, or calling yourself 'a Java developer' -- which "
+            "invites the question of why your only project is in something else.",
+        ),
+    ]),
+
     ("Curveballs - the ones that catch people out", [
         (
             "Why not just use ChatGPT to extract the skills?",
