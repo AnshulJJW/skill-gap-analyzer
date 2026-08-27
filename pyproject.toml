@@ -1,0 +1,8 @@
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint.per-file-ignores]
+# Prose content file. ISC004 exists to catch a missing comma silently merging
+# two entries; _check_shape() verifies every entry has exactly four fields at
+# runtime, which catches the same bug more directly.
+"scripts/build_interview_doc.py" = ["ISC004"]

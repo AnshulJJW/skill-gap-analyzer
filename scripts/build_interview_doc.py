@@ -322,6 +322,21 @@ FACTS = [
 ]
 
 
+def _check_shape() -> None:
+    """Guard the thing ISC004 warns about: a missing comma between two prose
+    strings would silently merge two fields and shift everything after it.
+    Checking the shape at runtime is a stronger guarantee than the lint rule,
+    which is why that rule is scoped off for this file in pyproject.toml.
+    """
+    for heading, items in SECTIONS:
+        for i, item in enumerate(items):
+            if len(item) != 4:
+                raise SystemExit(
+                    f"{heading!r} item {i} has {len(item)} fields, expected 4 "
+                    "(question, why, model, weak) -- likely a missing comma."
+                )
+
+
 def _label_run(para, label, text, label_color, label_pt, text_pt,
                italic=False, text_color=None):
     r = para.add_run(label)
@@ -336,6 +351,7 @@ def _label_run(para, label, text, label_color, label_pt, text_pt,
 
 
 def main() -> None:
+    _check_shape()
     doc = Document()
     normal = doc.styles["Normal"]
     normal.font.name = "Calibri"
