@@ -19,7 +19,7 @@ from sqlalchemy import func, select, text
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from analyzer.db import get_engine, postings, provided_skills  # noqa: E402
+from analyzer.db import get_engine, postings, provided_skills
 
 ROLE_ALIASES = {
     "backend": "sde1-backend",
