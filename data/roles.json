@@ -1,20 +1,41 @@
 {
-  "_note": "Stage 1. Three roles, maybe four. 300 good postings for one role beats 40 each across fifteen -- thin per-role data is what kills these projects. 'query' is what you filter the raw dataset's job titles by.",
+  "_note": "Stage 1. Patterns are derived from the actual title distribution in the Naukri snapshot (see docs/stage1-data-audit.md), not guessed. `exclude` matters as much as `include`: the Indian entry-level market has a large PHP/WordPress/agency segment whose skill profile is genuinely different from product-company backend work, and pooling them produces a profile that describes neither.",
+  "entry_level_max_years": 2,
   "roles": [
     {
       "id": "sde1-backend",
       "name": "SDE-1 Backend",
-      "query": ["backend engineer", "backend developer", "software engineer backend", "sde 1", "sde-1"]
-    },
-    {
-      "id": "data-analyst",
-      "name": "Data Analyst",
-      "query": ["data analyst", "business analyst data", "analytics analyst"]
+      "include": [
+        "backend developer", "back end developer", "backend engineer",
+        "software engineer", "software developer",
+        "software development engineer", "sde",
+        "java developer", "python developer", "node js developer",
+        "nodejs developer", "golang developer", "spring boot"
+      ],
+      "exclude": [
+        "php", "wordpress", "shopify", "magento", "laravel",
+        "senior", "lead", "architect", "manager", "sr.", "sr "
+      ]
     },
     {
       "id": "frontend",
       "name": "Frontend Engineer",
-      "query": ["frontend engineer", "frontend developer", "ui engineer", "react developer"]
+      "include": [
+        "frontend developer", "front end developer", "frontend engineer",
+        "react js developer", "reactjs developer", "react developer",
+        "angular developer", "angularjs developer", "vue",
+        "ui developer", "javascript developer"
+      ],
+      "exclude": ["senior", "lead", "architect", "manager", "sr.", "sr "]
+    },
+    {
+      "id": "data-analyst",
+      "name": "Data Analyst",
+      "include": [
+        "data analyst", "data analytics", "analytics analyst",
+        "reporting analyst", "bi analyst", "business intelligence analyst"
+      ],
+      "exclude": ["senior", "lead", "manager", "sr.", "sr "]
     }
   ]
 }

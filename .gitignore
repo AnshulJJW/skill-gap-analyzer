@@ -32,3 +32,6 @@ Thumbs.db
 
 # raw dataset downloads (large; snapshots are curated into data/ instead)
 data/raw/
+
+# local database
+data/skillgap.db
