@@ -94,13 +94,19 @@ Measured against `eval/labeled.json`, 40 hand-labeled postings, via
 
 ## Running it locally
 
-Requires **Python 3.11** (not 3.13 — some ML wheels still lag) and **Node LTS**.
+Requires **Python 3.12+** and **Node LTS** (Node not needed until Stage 6).
+
+Verified on Python 3.14.7. Dependencies use lower bounds rather than exact
+pins -- older pinned versions have no wheels for recent Python and fall back
+to compiling from source, which needs a C++ toolchain you probably do not
+have.
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 python -m spacy download en_core_web_sm
+# requirements-ml.txt (PyTorch, ~2.5GB) is Stage 2 only -- skip for now
 cp .env.example .env
 ```
 

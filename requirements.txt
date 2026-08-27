@@ -1,23 +1,26 @@
-# --- core pipeline (Stages 1-4) ---
-pandas==2.2.3
-rapidfuzz==3.10.1          # fast alias / fuzzy matching
-spacy==3.8.2               # tokenizing + sentence splitting (NOT skill NER)
-sentence-transformers==3.3.1  # all-MiniLM-L6-v2 fallback matcher
+# Core deps -- everything through Stage 5 except embeddings.
+# Lower bounds, not exact pins: this project is a moving target and the
+# original hard pins predated Python 3.14, which has no wheels for them.
+
+# --- data + pipeline (Stages 1-4) ---
+pandas>=2.3
+rapidfuzz>=3.10          # fast alias / fuzzy matching
+spacy>=3.8               # tokenizing + sentence splitting (NOT skill NER)
 
 # --- database (Stage 1) ---
-psycopg[binary]==3.2.3
-SQLAlchemy==2.0.36
+psycopg[binary]>=3.2
+SQLAlchemy>=2.0
 
 # --- api (Stage 5) ---
-fastapi==0.115.5
-uvicorn[standard]==0.32.1
-pydantic==2.10.3
-pydantic-settings==2.6.1
-python-dotenv==1.0.1
+fastapi>=0.115
+uvicorn[standard]>=0.32
+pydantic>=2.10
+pydantic-settings>=2.6
+python-dotenv>=1.0
 
 # --- dev ---
-pytest==8.3.4
-ruff==0.8.4
+pytest>=8.3
+ruff>=0.8
 
 # after install, fetch the spaCy model:
 #   python -m spacy download en_core_web_sm

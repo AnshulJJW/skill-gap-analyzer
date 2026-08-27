@@ -1,0 +1,9 @@
+# Embedding fallback -- Stage 2 ONLY, and only if alias matching leaves
+# too many misses. Pulls PyTorch (~2.5GB), so do not install it on day one.
+#
+#   pip install -r requirements-ml.txt
+#
+# If dictionary matching gets Stage 3 recall over 0.70 without this, skip it
+# entirely: it also keeps you inside the 512MB free-tier budget in Stage 5.
+
+sentence-transformers>=3.3
