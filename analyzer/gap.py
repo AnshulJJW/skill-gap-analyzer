@@ -16,7 +16,6 @@ import argparse
 from dataclasses import dataclass
 from pathlib import Path
 
-from analyzer.extract import extract
 from analyzer.profiles import RoleProfile
 from analyzer.taxonomy import Taxonomy
 

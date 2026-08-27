@@ -12,7 +12,7 @@ time -- that is the difference between a 200ms response and a timeout on a
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
 
 DATA = Path(__file__).resolve().parent.parent / "data"
@@ -66,7 +66,7 @@ class RoleProfile:
         return path
 
     @classmethod
-    def load(cls, role_id: str, source_id: str) -> "RoleProfile":
+    def load(cls, role_id: str, source_id: str) -> RoleProfile:
         path = PROFILE_DIR / f"{role_id}__{source_id}.json"
         raw = json.loads(path.read_text(encoding="utf-8"))
         raw["demands"] = [SkillDemand(**d) for d in raw["demands"]]

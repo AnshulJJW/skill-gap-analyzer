@@ -30,7 +30,7 @@ class Taxonomy:
     _alias_index: dict[str, str] = field(default_factory=dict)
 
     @classmethod
-    def load(cls, path: Path | None = None) -> "Taxonomy":
+    def load(cls, path: Path | None = None) -> Taxonomy:
         path = path or DATA / "skills.json"
         raw = json.loads(path.read_text(encoding="utf-8"))
         tax = cls()
