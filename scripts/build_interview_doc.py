@@ -241,7 +241,6 @@ SECTIONS = [
             "can follow the decisions.",
             "Update, fix, final.",
         ),
-    ]),
 
         (
             "You do your DSA in Java but this project is Python. Why?",
