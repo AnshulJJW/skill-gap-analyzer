@@ -1,0 +1,19 @@
+{
+  "_note": "Stage 1. Each entry is one frozen snapshot. `market` is what keeps the Stage 4 percentages honest -- profiles are computed per source, never pooled by accident.",
+  "sources": [
+    {
+      "id": "linkedin",
+      "name": "LinkedIn Job Postings 2023-2024",
+      "market": "global",
+      "kaggle": "arshkon/linkedin-job-postings",
+      "notes": "Full description text preserved, so required/preferred sections survive."
+    },
+    {
+      "id": "naukri",
+      "name": "Naukri.com Job Postings",
+      "market": "india",
+      "kaggle": "iqbal303/job-postings-dataset-from-naukri-com",
+      "notes": "India-specific and directly relevant to placements. Descriptions may be shorter and tag-like -- verify the required/preferred split survives before relying on it."
+    }
+  ]
+}

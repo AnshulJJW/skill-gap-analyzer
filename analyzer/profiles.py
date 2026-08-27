@@ -39,30 +39,50 @@ class SkillDemand:
 
 @dataclass
 class RoleProfile:
+    """Demand for one role, within ONE source.
+
+    Profiles are per (role, source) on purpose. LinkedIn and Naukri describe
+    different labour markets; averaging them yields a percentage that
+    reflects which dataset was larger rather than either market. Comparing
+    the two profiles is far more interesting than blending them, and it is
+    the honest thing to put in front of a user deciding what to learn.
+    """
+
     role_id: str            # "sde1-backend"
     role_name: str          # "SDE-1 Backend"
+    source_id: str          # "linkedin" | "naukri"
+    market: str             # "global" | "india"
     total_postings: int
     demands: list[SkillDemand]
 
+    @property
+    def key(self) -> str:
+        return f"{self.role_id}__{self.source_id}"
+
     def save(self) -> Path:
         PROFILE_DIR.mkdir(parents=True, exist_ok=True)
-        path = PROFILE_DIR / f"{self.role_id}.json"
+        path = PROFILE_DIR / f"{self.key}.json"
         path.write_text(json.dumps(asdict(self), indent=2), encoding="utf-8")
         return path
 
     @classmethod
-    def load(cls, role_id: str) -> "RoleProfile":
-        raw = json.loads((PROFILE_DIR / f"{role_id}.json").read_text(encoding="utf-8"))
+    def load(cls, role_id: str, source_id: str) -> "RoleProfile":
+        path = PROFILE_DIR / f"{role_id}__{source_id}.json"
+        raw = json.loads(path.read_text(encoding="utf-8"))
         raw["demands"] = [SkillDemand(**d) for d in raw["demands"]]
         return cls(**raw)
 
 
-def build(role_id: str, postings: list[dict]) -> RoleProfile:
-    """Aggregate extracted mentions across postings into one profile.
+MIN_POSTINGS = 250
 
-    Guard rail: if len(postings) < 250, raise. A role backed by 40 postings
+
+def build(role_id: str, source_id: str, postings: list[dict]) -> RoleProfile:
+    """Aggregate extracted mentions across one source's postings.
+
+    Guard rail: fewer than MIN_POSTINGS raises. A role backed by 40 postings
     produces confident-looking percentages that mean nothing, and that is
-    worse than not shipping the role at all. See Stage 1's gate.
+    worse than not shipping the role at all. Enforcing the Stage 1 gate in
+    code stops you talking yourself past it at 1am.
     """
     # TODO Stage 4
     raise NotImplementedError
