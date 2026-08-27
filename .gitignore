@@ -1,0 +1,29 @@
+# python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# env / secrets
+.env
+.env.local
+
+# personal input — never commit your own resume
+resumes/*
+!resumes/.gitkeep
+!resumes/example.txt
+
+# generated artifacts
+data/postings.csv
+data/profiles/
+*.db
+
+# node / vite
+node_modules/
+web/dist/
+
+# editors / os
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

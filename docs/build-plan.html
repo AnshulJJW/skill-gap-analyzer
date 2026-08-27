@@ -1,0 +1,796 @@
+<title>Skill-Gap Analyzer Build Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap">
+
+<style>
+  :root {
+    --ground:      #F6F8F6;
+    --surface:     #FFFFFF;
+    --surface-sunk:#EFF2EF;
+    --ink:          #16201C;
+    --ink-mid:      #47544E;
+    --ink-soft:     #6C7A73;
+    --rule:         #DCE3DE;
+    --rule-strong:  #C3CDC7;
+
+    --accent:       #17564A;
+    --accent-bright:#1E7663;
+    --accent-soft:  #DEECE6;
+    --accent-line:  #A9CDC1;
+
+    --flag:         #8A5E0F;
+    --flag-soft:    #F7EEDA;
+    --flag-line:    #E0C68B;
+
+    --shadow: 0 1px 2px rgba(22,32,28,.05), 0 8px 24px -16px rgba(22,32,28,.28);
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Newsreader", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
+
+    --measure: 66ch;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0F1513;
+      --surface:     #161E1B;
+      --surface-sunk:#121A17;
+      --ink:          #E7EDE9;
+      --ink-mid:      #A8B6AF;
+      --ink-soft:     #83948C;
+      --rule:         #26312C;
+      --rule-strong:  #35423C;
+
+      --accent:       #58C4A7;
+      --accent-bright:#7BD8BE;
+      --accent-soft:  #16302A;
+      --accent-line:  #2C5A4D;
+
+      --flag:         #DDA84A;
+      --flag-soft:    #2C2412;
+      --flag-line:    #574318;
+
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.8);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0F1513;
+    --surface:     #161E1B;
+    --surface-sunk:#121A17;
+    --ink:          #E7EDE9;
+    --ink-mid:      #A8B6AF;
+    --ink-soft:     #83948C;
+    --rule:         #26312C;
+    --rule-strong:  #35423C;
+
+    --accent:       #58C4A7;
+    --accent-bright:#7BD8BE;
+    --accent-soft:  #16302A;
+    --accent-line:  #2C5A4D;
+
+    --flag:         #DDA84A;
+    --flag-soft:    #2C2412;
+    --flag-line:    #574318;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0 1.25rem 6rem;
+  }
+
+  .wrap {
+    max-width: 60rem;
+    margin: 0 auto;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 4rem 0 2rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .72rem;
+    font-weight: 500;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.1rem, 5.4vw, 3.15rem);
+    line-height: 1.03;
+    letter-spacing: -.028em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .standfirst {
+    max-width: var(--measure);
+    font-size: 1.1rem;
+    color: var(--ink-mid);
+    margin: 0;
+  }
+
+  .assumption {
+    font-family: var(--mono);
+    font-size: .78rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0;
+    padding-left: .85rem;
+    border-left: 2px solid var(--rule-strong);
+  }
+
+  /* ---------- generic section ---------- */
+
+  section { padding-top: 3.4rem; }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.42rem;
+    letter-spacing: -.018em;
+    line-height: 1.2;
+    text-wrap: balance;
+    margin: 0 0 .55rem;
+  }
+
+  .section-note {
+    max-width: var(--measure);
+    color: var(--ink-mid);
+    margin: 0 0 1.6rem;
+  }
+
+  p { margin: 0 0 .9rem; max-width: var(--measure); }
+  p:last-child { margin-bottom: 0; }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: .84em;
+    background: var(--surface-sunk);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: .08em .32em;
+  }
+
+  /* ---------- at-a-glance table ---------- */
+
+  .glance-scroll { overflow-x: auto; }
+
+  table.glance {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+
+  table.glance th {
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    font-size: .68rem;
+    color: var(--ink-soft);
+    padding: 0 1rem .55rem 0;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  table.glance td {
+    padding: .6rem 1rem .6rem 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: baseline;
+    color: var(--ink-mid);
+  }
+
+  table.glance td.n {
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    font-weight: 600;
+    width: 2.4rem;
+  }
+
+  table.glance td.what { color: var(--ink); font-weight: 500; }
+  table.glance tr.pivot td.what { color: var(--flag); }
+  table.glance tr.pivot td.n { color: var(--flag); }
+
+  /* ---------- stages ---------- */
+
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .9rem;
+    padding: 2.4rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .rail {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: .7rem;
+    font-family: var(--mono);
+  }
+
+  .rail .num {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rail .when {
+    font-size: .72rem;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .stage-body { display: flex; flex-direction: column; gap: .9rem; min-width: 0; }
+
+  h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.24rem;
+    letter-spacing: -.014em;
+    line-height: 1.24;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  ul.tasks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    max-width: var(--measure);
+  }
+
+  ul.tasks li {
+    position: relative;
+    padding-left: 1.35rem;
+    color: var(--ink-mid);
+  }
+
+  ul.tasks li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .62em;
+    width: .42rem;
+    height: .42rem;
+    border: 1.5px solid var(--accent-line);
+    border-radius: 1px;
+  }
+
+  ul.tasks li strong { color: var(--ink); font-weight: 600; }
+
+  .cmd {
+    font-family: var(--mono);
+    font-size: .78rem;
+    line-height: 1.7;
+    background: var(--surface-sunk);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: .7rem .85rem;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--ink-mid);
+    margin: 0;
+  }
+
+  .cmd .c { color: var(--ink-soft); }
+
+  /* ---------- gate callout ---------- */
+
+  .gate {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    background: var(--flag-soft);
+    border: 1px solid var(--flag-line);
+    border-radius: 4px;
+    padding: .8rem .95rem;
+    max-width: var(--measure);
+  }
+
+  .gate .label {
+    font-family: var(--mono);
+    font-size: .67rem;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--flag);
+  }
+
+  .gate p {
+    margin: 0;
+    font-size: .95rem;
+    color: var(--ink-mid);
+    max-width: none;
+  }
+
+  .gate p strong { color: var(--ink); font-weight: 600; }
+
+  .keystone {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: .8rem .95rem;
+    max-width: var(--measure);
+    font-size: .95rem;
+    color: var(--ink-mid);
+    margin: 0;
+  }
+
+  .keystone strong { color: var(--accent); font-weight: 600; }
+
+  /* ---------- decisions ---------- */
+
+  .decisions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .decision {
+    background: var(--surface);
+    padding: 1rem 1.05rem;
+    display: flex;
+    flex-direction: column;
+    gap: .28rem;
+  }
+
+  .decision .k {
+    font-family: var(--mono);
+    font-size: .67rem;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .decision .v {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--ink);
+    letter-spacing: -.01em;
+  }
+
+  .decision .why { font-size: .88rem; color: var(--ink-mid); }
+
+  /* ---------- tree ---------- */
+
+  pre.tree {
+    font-family: var(--mono);
+    font-size: .76rem;
+    line-height: 1.75;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    margin: 0;
+    color: var(--ink-mid);
+    box-shadow: var(--shadow);
+  }
+
+  pre.tree b { color: var(--ink); font-weight: 600; }
+  pre.tree i { color: var(--ink-soft); font-style: normal; }
+
+  /* ---------- stretch ---------- */
+
+  .stretch {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    max-width: var(--measure);
+    padding-left: 1.1rem;
+    border-left: 2px dashed var(--rule-strong);
+  }
+
+  .stretch .item { color: var(--ink-soft); }
+  .stretch .item b { color: var(--ink-mid); font-weight: 600; }
+
+  /* ---------- loop ---------- */
+
+  ol.loop {
+    counter-reset: loop;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    max-width: var(--measure);
+  }
+
+  ol.loop li {
+    counter-increment: loop;
+    position: relative;
+    padding-left: 2.1rem;
+    color: var(--ink-mid);
+  }
+
+  ol.loop li::before {
+    content: counter(loop);
+    position: absolute;
+    left: 0;
+    top: .1em;
+    font-family: var(--mono);
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--accent);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    width: 1.45rem;
+    height: 1.45rem;
+    display: grid;
+    place-items: center;
+  }
+
+  footer {
+    margin-top: 3.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--ink-soft);
+    letter-spacing: .04em;
+  }
+
+  @media (min-width: 60rem) {
+    .stage {
+      grid-template-columns: 8.5rem 1fr;
+      gap: 2rem;
+    }
+    .rail {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: .35rem;
+      position: sticky;
+      top: 2rem;
+      align-self: start;
+    }
+    .rail .num { font-size: 2.1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Skill-Gap Analyzer &amp; Career Path Recommender</p>
+    <h1>Build it in dependency order, not in stack order</h1>
+    <p class="standfirst">Nine stages, each one gated. The rule underneath all of them: the thing most likely to kill this project is bad skill extraction, so that gets proven before a single route or component exists.</p>
+    <p class="assumption">ASSUMES ~4 WEEKS OF PART-TIME WORK. If your deadline is tighter, cut Stage 6 to a single unstyled page and cut to 2 roles — never cut Stage 3. If it's longer, spend the extra time in Stages 2–4, not on the frontend.</p>
+  </header>
+
+  <section>
+    <h2>At a glance</h2>
+    <p class="section-note">Stage 3 is the pivot. Everything before it is proving the core works; everything after it is packaging.</p>
+    <div class="glance-scroll">
+      <table class="glance">
+        <thead>
+          <tr><th>#</th><th>Stage</th><th>When</th><th>You can stop and show someone</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="n">0</td><td class="what">Foundation</td><td>Today, 2h</td><td>A repo with a real README</td></tr>
+          <tr><td class="n">1</td><td class="what">Data</td><td>Days 1–3</td><td>Postings + taxonomy in Postgres</td></tr>
+          <tr><td class="n">2</td><td class="what">Extraction</td><td>Days 4–7</td><td>Text in, clean skill list out</td></tr>
+          <tr class="pivot"><td class="n">3</td><td class="what">Evaluation — go / no-go</td><td>Days 8–9</td><td>A precision/recall number</td></tr>
+          <tr><td class="n">4</td><td class="what">Gap logic + roadmap</td><td>Days 10–14</td><td>The actual product, as a CLI</td></tr>
+          <tr><td class="n">5</td><td class="what">API</td><td>Days 15–17</td><td>Live JSON endpoints</td></tr>
+          <tr><td class="n">6</td><td class="what">Frontend</td><td>Days 18–21</td><td>A usable page on localhost</td></tr>
+          <tr><td class="n">7</td><td class="what">Deploy</td><td>Days 22–24</td><td>A public URL</td></tr>
+          <tr><td class="n">8</td><td class="what">The story</td><td>Days 25–28</td><td>The thing you send recruiters</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Decisions locked before Day 1</h2>
+    <p class="section-note">These were open in your plan. Leaving them open costs you days later, so close them now.</p>
+    <div class="decisions">
+      <div class="decision">
+        <span class="k">Backend</span>
+        <span class="v">FastAPI</span>
+        <span class="why">You're serving an ML pipeline. Django's ORM and admin buy nothing here and cost deploy weight.</span>
+      </div>
+      <div class="decision">
+        <span class="k">Database</span>
+        <span class="v">Postgres via Supabase</span>
+        <span class="why">The data is deeply relational — postings, skills, aliases, join tables. And <code>pgvector</code> is there if you want it.</span>
+      </div>
+      <div class="decision">
+        <span class="k">Frontend</span>
+        <span class="v">React + Vite</span>
+        <span class="why">One page, no router, no state library. Vite because the build is instant and Vercel deploys it with zero config.</span>
+      </div>
+      <div class="decision">
+        <span class="k">Skill source</span>
+        <span class="v">Curated taxonomy first</span>
+        <span class="why">ESCO or Lightcast Open Skills as the backbone. Embeddings only resolve variants the dictionary misses.</span>
+      </div>
+      <div class="decision">
+        <span class="k">Job data</span>
+        <span class="v">Frozen snapshot, committed</span>
+        <span class="why">No live scraper in the request path. A demo that depends on a scraper is a demo that breaks in an interview.</span>
+      </div>
+      <div class="decision">
+        <span class="k">Roles</span>
+        <span class="v">Three, maybe four</span>
+        <span class="why">300 good postings for one role beats 40 each across fifteen. Thin per-role data is what kills these projects.</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The stages</h2>
+    <p class="section-note">Each stage ends with a gate. The gate is a thing you check, not a feeling — if it fails, you stay in that stage.</p>
+
+    <div class="stage">
+      <div class="rail"><span class="num">00</span><span class="when">Today · 2h</span></div>
+      <div class="stage-body">
+        <h3>Foundation</h3>
+        <p class="keystone"><strong>Heads up:</strong> I checked your machine — Git is installed, but Python and Node are not. That's the first thing to fix, before anything else here.</p>
+        <ul class="tasks">
+          <li>Install <strong>Python 3.11</strong> (not 3.13 — some ML wheels still lag) and <strong>Node LTS</strong>. Tick "Add to PATH" in the Python installer.</li>
+          <li>Create the repo and the folder structure below. Push it.</li>
+          <li>Write the README <strong>now</strong>, not at the end: the problem in three sentences, the dataset you're using, the architecture, and an empty "Results" heading you'll fill in at Stage 3.</li>
+          <li>Set up a virtualenv and pin dependencies in <code>requirements.txt</code> from the start.</li>
+        </ul>
+        <pre class="cmd"><span class="c"># after installing Python 3.11 and Node</span>
+python -m venv .venv
+.venv\Scripts\activate
+pip install fastapi uvicorn spacy sentence-transformers psycopg[binary] pandas</pre>
+        <div class="gate">
+          <span class="label">Gate</span>
+          <p><code>python --version</code> and <code>node --version</code> both answer, and <strong>GitHub shows a repo with a README that explains the project to a stranger.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">01</span><span class="when">Days 1–3</span></div>
+      <div class="stage-body">
+        <h3>Data foundation</h3>
+        <ul class="tasks">
+          <li>Pick the job-postings dataset and freeze it. Load raw rows into Postgres, then clean in SQL so the cleaning is reproducible and reviewable.</li>
+          <li><strong>Dedupe hard.</strong> Job boards are full of the same posting reposted. Duplicates will silently inflate every frequency number you compute later.</li>
+          <li>Build the <code>skills</code> table from the taxonomy: canonical name, aliases, category. This is the backbone of everything downstream, so it's worth a full day.</li>
+          <li>Split each posting's text into <strong>required</strong> vs <strong>preferred</strong> sections where the wording allows. This distinction is what will make your output feel smart later.</li>
+        </ul>
+        <div class="gate">
+          <span class="label">Gate</span>
+          <p><strong>At least 250 deduped postings per target role.</strong> If a role can't clear that bar, cut the role — don't ship a role backed by 40 postings.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">02</span><span class="when">Days 4–7</span></div>
+      <div class="stage-body">
+        <h3>Extraction pipeline, offline</h3>
+        <p>No web server yet. This is a script that reads a text file and prints a list.</p>
+        <ul class="tasks">
+          <li>Taxonomy matching with alias normalization — <code>Node</code>, <code>NodeJS</code>, <code>Node.js</code> all collapse to one entity. This does most of the work.</li>
+          <li>Use spaCy for what it's actually good at: tokenizing, sentence splitting, and noun-phrase candidates — <strong>not</strong> for named-entity recognition of skills. Off-the-shelf NER won't tag <code>Kafka</code> or <code>gRPC</code>.</li>
+          <li>Add embedding similarity (<code>all-MiniLM-L6-v2</code>) as a fallback for candidates the dictionary misses. Log every fuzzy match so you can inspect the bad ones.</li>
+          <li>Handle the resume side: crude section detection so "Skills" and "Experience" are weighted differently from "Interests".</li>
+          <li><strong>Pasted text is the primary input.</strong> PDF parsing is a swamp of two-column layouts and tables — it's a Stage 9 stretch, not a Week 1 problem.</li>
+        </ul>
+        <pre class="cmd">python -m analyzer.extract --file resumes/me.txt
+<span class="c"># → python, fastapi, postgresql, docker, git, rest-api ...</span></pre>
+        <div class="gate">
+          <span class="label">Gate</span>
+          <p>Run it on your own resume. <strong>The output is recognizably you</strong> — no phantom skills, and nothing obvious missing.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">03</span><span class="when">Days 8–9</span></div>
+      <div class="stage-body">
+        <h3>Evaluation — the go / no-go</h3>
+        <p class="keystone"><strong>This is the stage nobody else's project has.</strong> A student project with a real metric in the README stands out immediately, and it gives you ten minutes of interview material. Do not skip it because it feels like a detour.</p>
+        <ul class="tasks">
+          <li>Hand-label <strong>40 postings</strong> with the skills they actually require. Boring, roughly three hours, worth every minute.</li>
+          <li>Compute precision and recall against your extractor. Write the numbers into the README's Results section.</li>
+          <li>Read the false positives and false negatives one by one. They will tell you exactly what to fix — usually alias gaps and section-boundary bugs.</li>
+          <li>Iterate on Stage 2 until the numbers move. Keep the labeled set in the repo as a regression test.</li>
+        </ul>
+        <div class="gate">
+          <span class="label">Gate — hard stop</span>
+          <p><strong>Recall ≥ 0.70 on hard technical skills.</strong> Below that, go back to Stage 2. Every downstream number — the gap score, the ranking, the roadmap — inherits these errors, so shipping a pretty frontend on top of bad extraction just hides the problem.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">04</span><span class="when">Days 10–14</span></div>
+      <div class="stage-body">
+        <h3>Gap logic and roadmap</h3>
+        <p class="keystone"><strong>This stage is the whole project.</strong> Stages 5 through 8 are packaging. Budget accordingly.</p>
+        <ul class="tasks">
+          <li><strong>Precompute role profiles offline:</strong> for each role, each skill's frequency across postings, split by required vs preferred. Store the result. The API must never scan 10,000 postings at request time.</li>
+          <li><strong>Gap score</strong> = weighted coverage of the role profile. Keep it as the headline number, but make the evidence the product.</li>
+          <li><strong>Rank by marginal coverage,</strong> not raw frequency: which single skill, learned next, unlocks the most postings you currently fail? That's greedy set cover — about ten lines — and it's a far better answer than "sorted by frequency."</li>
+          <li><strong>Prerequisite graph:</strong> hand-encode dependencies for ~100 skills so the roadmap is topologically sane. No recommending Kubernetes before Docker.</li>
+          <li><strong>Resource map:</strong> a curated JSON of skill → free resources. Be honest that it's curated, not learned. A good hand-built map beats a bad recommender, and interviewers respect the distinction.</li>
+        </ul>
+        <pre class="cmd">python -m analyzer.gap --resume resumes/me.txt --role sde1-backend
+<span class="c">#  Coverage: 61%  (of 340 SDE-1 Backend postings)</span>
+<span class="c">#  1. Kafka   — in 68% of postings, blocks 231  → [resource]</span>
+<span class="c">#  2. Docker  — in 54% of postings, blocks 118  → [resource]</span></pre>
+        <div class="gate">
+          <span class="label">Gate</span>
+          <p>Run it on yourself. <strong>The top three recommendations are things you'd genuinely go learn this month.</strong> If they aren't, your ranking is wrong — fix it here, where it's still a fifty-line file.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">05</span><span class="when">Days 15–17</span></div>
+      <div class="stage-body">
+        <h3>API</h3>
+        <p>A thin wrapper. If this takes more than three days, logic is leaking out of Stage 4 and into your routes.</p>
+        <ul class="tasks">
+          <li>Three endpoints: <code>GET /roles</code>, <code>POST /analyze</code>, <code>GET /resources/{skill}</code>. That's it.</li>
+          <li>Role profiles are <strong>read</strong> from the precomputed table. Only the resume is processed live.</li>
+          <li>Pydantic response models from day one — they become your frontend's contract and your API docs for free.</li>
+          <li>Plan for the free-tier memory wall now: Render's free instance is <strong>512MB and cold-starts after inactivity</strong>. Loading spaCy and a transformer together can blow it, and a 60-second blank screen in front of a recruiter is the failure mode to avoid.</li>
+          <li>If dictionary matching alone gets you through the resume path, skip loading the transformer at runtime entirely.</li>
+        </ul>
+        <div class="gate">
+          <span class="label">Gate — measure it, don't assume</span>
+          <p><strong>Cold start under 10 seconds and resident memory under 400MB.</strong> Check with <code>/analyze</code> on a real resume, not on an empty request.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">06</span><span class="when">Days 18–21</span></div>
+      <div class="stage-body">
+        <h3>Frontend</h3>
+        <ul class="tasks">
+          <li>One page. A textarea for the resume, a role dropdown, an Analyze button, and a results view.</li>
+          <li>Results view: the coverage number up top, then the ranked gaps as cards — each showing the skill, the evidence sentence, and the resource link.</li>
+          <li>Show a real loading state. Your first request will hit a cold backend and take several seconds; a frozen button reads as broken.</li>
+          <li>Show the skills you <em>did</em> find in the resume too. It builds trust in the output and makes extraction errors visible instead of hidden.</li>
+        </ul>
+        <div class="gate">
+          <span class="label">Gate</span>
+          <p><strong>A friend who has never seen it can paste a resume and understand the result without you narrating.</strong> Watch them do it and don't help.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">07</span><span class="when">Days 22–24</span></div>
+      <div class="stage-body">
+        <h3>Deploy</h3>
+        <ul class="tasks">
+          <li>Supabase first (the DB others depend on), then Render for the API, then Vercel for the frontend.</li>
+          <li>Budget a full day for the boring failures: CORS, environment variables, the Postgres connection string format, and the build that works locally but not in CI.</li>
+          <li>Seed the deployed database from your committed snapshot with a script — never by hand, or you can't redo it.</li>
+        </ul>
+        <div class="gate">
+          <span class="label">Gate</span>
+          <p><strong>It works from your phone, on mobile data, with the laptop closed.</strong> That catches the localhost URL you left hardcoded somewhere.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="num">08</span><span class="when">Days 25–28</span></div>
+      <div class="stage-body">
+        <h3>The story</h3>
+        <p>Skipping this stage is why good student projects get ignored. Treat it as engineering work, not paperwork.</p>
+        <ul class="tasks">
+          <li>README: problem, live link, demo GIF above the fold, architecture diagram, <strong>the Stage 3 metrics</strong>, how to run it locally.</li>
+          <li>A demo GIF beats a screenshot and massively beats a wall of text. Fifteen seconds, no audio.</li>
+          <li><strong>Write the honest self-analysis section:</strong> what the tool said about your own resume, what it got right, what it got wrong, and why. This is the most memorable thing in the whole repo and nobody else does it.</li>
+          <li>A "Limitations" section. Naming your own weaknesses first is the single strongest signal of engineering maturity you can put in a README.</li>
+        </ul>
+        <div class="gate">
+          <span class="label">Gate</span>
+          <p><strong>A stranger reading the README for 60 seconds can say what it does and how well it works.</strong> Test this on someone non-technical.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Repo structure</h2>
+    <p class="section-note">Set this up in Stage 0. The <code>analyzer/</code> package is importable and testable with no server running — that's what makes Stages 2–4 possible.</p>
+    <pre class="tree"><b>skill-gap-analyzer/</b>
+├── <b>analyzer/</b>            <i>the ML core — no web framework imports</i>
+│   ├── taxonomy.py       <i>load skills + aliases</i>
+│   ├── extract.py        <i>text → normalized skills</i>
+│   ├── profiles.py       <i>precompute role skill profiles</i>
+│   ├── gap.py            <i>coverage + marginal-impact ranking</i>
+│   └── roadmap.py        <i>prereq graph + resource map</i>
+├── <b>api/</b>
+│   ├── main.py           <i>FastAPI app, 3 routes</i>
+│   └── schemas.py        <i>pydantic models</i>
+├── <b>web/</b>                <i>vite + react, one page</i>
+├── <b>data/</b>
+│   ├── postings.csv      <i>the frozen snapshot</i>
+│   ├── skills.json       <i>taxonomy + aliases</i>
+│   ├── prereqs.json      <i>skill dependency edges</i>
+│   └── resources.json    <i>curated free resources</i>
+├── <b>eval/</b>
+│   ├── labeled.json      <i>your 40 hand-labeled postings</i>
+│   └── score.py          <i>precision / recall</i>
+├── <b>scripts/</b>            <i>load_db, build_profiles, seed_prod</i>
+└── README.md</pre>
+  </section>
+
+  <section>
+    <h2>How we work each session</h2>
+    <p class="section-note">Since I'm running inside the repo, the loop is tighter than paste-and-fix.</p>
+    <ol class="loop">
+      <li>You open with the stage and the goal — "Stage 2, alias normalization" — so I'm not guessing at context.</li>
+      <li>I write the code across the files it touches and run whatever can be run without your credentials.</li>
+      <li>You run the thing that needs real data or a real key, and paste back the output or the traceback.</li>
+      <li>We iterate until the stage's gate passes. Then you commit with a message that says what the stage did.</li>
+      <li>Commit at every gate at minimum. Recruiters open the commit list, and four commits named "final" reads badly.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Deferred — only after Stage 8 ships</h2>
+    <p class="section-note">Each of these is a real feature. Each is also a way to spend three weeks and never deploy. The order here is by payoff.</p>
+    <div class="stretch">
+      <p class="item"><b>PDF resume upload</b> — with an editable "check what we extracted" step, because the parse will be wrong sometimes and silently wrong parsing is worse than no parsing.</p>
+      <p class="item"><b>An LLM extraction baseline</b> — run the same 40 labeled postings through a model and compare against your taxonomy approach. Whichever wins, you have a genuinely interesting result and a great interview answer.</p>
+      <p class="item"><b>More roles</b> — by then it's a data task, not a code task, which is exactly the right thing to be able to say.</p>
+      <p class="item"><b>Auth and progress tracking</b> — deliberately last. It needs users and elapsed time to show anything, so at demo day it's an empty chart. The prerequisite graph in Stage 4 is the better use of the same effort.</p>
+    </div>
+  </section>
+
+  <footer>NINE STAGES · ONE HARD GATE AT STAGE 3 · THE REST IS PACKAGING</footer>
+
+</div>

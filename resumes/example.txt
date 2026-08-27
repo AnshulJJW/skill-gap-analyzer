@@ -1,0 +1,9 @@
+Replace this file with your own resume as plain text, saved as
+resumes/me.txt (gitignored -- your real resume never gets committed).
+
+Pasted text is the primary input for this project. PDF parsing is a swamp of
+two-column layouts and text trapped in tables; it is a deferred stretch, not
+a Week 1 problem.
+
+    python -m analyzer.extract --file resumes/me.txt
+    python -m analyzer.gap --resume resumes/me.txt --role sde1-backend

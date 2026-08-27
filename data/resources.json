@@ -1,0 +1,17 @@
+{
+  "_note": "Stage 4. Curated free resources per skill. Be honest in the README that this is curated, not learned -- a good hand-built map beats a bad recommender, and interviewers respect knowing the difference. Aim for 2-3 per skill, free only, and check the links before you ship.",
+
+  "python": [
+    {"title": "Automate the Boring Stuff", "url": "https://automatetheboringstuff.com/", "kind": "book", "hours": 20},
+    {"title": "Official Python Tutorial", "url": "https://docs.python.org/3/tutorial/", "kind": "docs", "hours": 10}
+  ],
+  "docker": [
+    {"title": "Docker Get Started", "url": "https://docs.docker.com/get-started/", "kind": "docs", "hours": 6}
+  ],
+  "kafka": [
+    {"title": "Kafka Introduction", "url": "https://kafka.apache.org/intro", "kind": "docs", "hours": 4}
+  ],
+  "sql": [
+    {"title": "SQLBolt", "url": "https://sqlbolt.com/", "kind": "practice", "hours": 6}
+  ]
+}

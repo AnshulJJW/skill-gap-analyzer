@@ -1,0 +1,45 @@
+{
+  "_note": "Stage 1. Seed taxonomy -- grow this from ESCO or Lightcast Open Skills rather than by hand once the shape feels right. Aliases are where recall is won or lost; when Stage 3 recall comes back low, add aliases here first.",
+  "skills": [
+    {"id": "python", "name": "Python", "category": "language", "aliases": ["python3", "py"]},
+    {"id": "java", "name": "Java", "category": "language", "aliases": ["core java", "java 8", "java 17"]},
+    {"id": "javascript", "name": "JavaScript", "category": "language", "aliases": ["js", "es6", "ecmascript"]},
+    {"id": "typescript", "name": "TypeScript", "category": "language", "aliases": ["ts"]},
+    {"id": "sql", "name": "SQL", "category": "language", "aliases": ["structured query language"]},
+    {"id": "go", "name": "Go", "category": "language", "aliases": ["golang"]},
+
+    {"id": "fastapi", "name": "FastAPI", "category": "framework", "aliases": []},
+    {"id": "django", "name": "Django", "category": "framework", "aliases": ["django rest framework", "drf"]},
+    {"id": "flask", "name": "Flask", "category": "framework", "aliases": []},
+    {"id": "spring-boot", "name": "Spring Boot", "category": "framework", "aliases": ["spring", "springboot"]},
+    {"id": "nodejs", "name": "Node.js", "category": "framework", "aliases": ["node", "nodejs", "node js"]},
+    {"id": "express", "name": "Express", "category": "framework", "aliases": ["expressjs", "express.js"]},
+    {"id": "react", "name": "React", "category": "framework", "aliases": ["reactjs", "react.js"]},
+
+    {"id": "postgresql", "name": "PostgreSQL", "category": "database", "aliases": ["postgres", "psql"]},
+    {"id": "mysql", "name": "MySQL", "category": "database", "aliases": []},
+    {"id": "mongodb", "name": "MongoDB", "category": "database", "aliases": ["mongo"]},
+    {"id": "redis", "name": "Redis", "category": "database", "aliases": []},
+
+    {"id": "docker", "name": "Docker", "category": "devops", "aliases": ["containerization", "containers"]},
+    {"id": "kubernetes", "name": "Kubernetes", "category": "devops", "aliases": ["k8s", "kubectl"]},
+    {"id": "aws", "name": "AWS", "category": "cloud", "aliases": ["amazon web services", "ec2", "s3"]},
+    {"id": "ci-cd", "name": "CI/CD", "category": "devops", "aliases": ["continuous integration", "github actions", "jenkins"]},
+    {"id": "linux", "name": "Linux", "category": "devops", "aliases": ["unix", "bash", "shell scripting"]},
+
+    {"id": "git", "name": "Git", "category": "tooling", "aliases": ["version control", "github", "gitlab"]},
+    {"id": "rest-api", "name": "REST APIs", "category": "concept", "aliases": ["rest", "restful", "restful api"]},
+    {"id": "graphql", "name": "GraphQL", "category": "concept", "aliases": []},
+    {"id": "kafka", "name": "Apache Kafka", "category": "infrastructure", "aliases": ["kafka", "event streaming"]},
+    {"id": "microservices", "name": "Microservices", "category": "concept", "aliases": ["microservice architecture"]},
+    {"id": "system-design", "name": "System Design", "category": "concept", "aliases": ["distributed systems", "scalability"]},
+    {"id": "testing", "name": "Automated Testing", "category": "practice", "aliases": ["unit testing", "pytest", "junit", "tdd"]},
+    {"id": "dsa", "name": "Data Structures & Algorithms", "category": "fundamentals", "aliases": ["data structures", "algorithms", "dsa"]},
+
+    {"id": "pandas", "name": "pandas", "category": "data", "aliases": []},
+    {"id": "excel", "name": "Excel", "category": "data", "aliases": ["ms excel", "spreadsheets", "advanced excel"]},
+    {"id": "tableau", "name": "Tableau", "category": "data", "aliases": []},
+    {"id": "power-bi", "name": "Power BI", "category": "data", "aliases": ["powerbi", "microsoft power bi"]},
+    {"id": "statistics", "name": "Statistics", "category": "data", "aliases": ["statistical analysis", "hypothesis testing"]}
+  ]
+}

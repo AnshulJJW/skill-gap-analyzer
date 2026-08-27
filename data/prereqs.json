@@ -1,0 +1,25 @@
+{
+  "_note": "Stage 4. skill_id -> skills that should be learned first. This is what stops the roadmap recommending Kubernetes before Docker. Hand-curated on purpose -- say so in the README. Must stay a DAG; roadmap.py fails loudly on cycles.",
+
+  "fastapi": ["python"],
+  "django": ["python"],
+  "flask": ["python"],
+  "pandas": ["python"],
+  "spring-boot": ["java"],
+  "nodejs": ["javascript"],
+  "express": ["nodejs"],
+  "react": ["javascript"],
+  "typescript": ["javascript"],
+  "kubernetes": ["docker", "linux"],
+  "docker": ["linux"],
+  "ci-cd": ["git", "docker"],
+  "microservices": ["rest-api", "docker"],
+  "kafka": ["microservices"],
+  "system-design": ["rest-api", "postgresql"],
+  "graphql": ["rest-api"],
+  "rest-api": [],
+  "tableau": ["sql"],
+  "power-bi": ["sql"],
+  "postgresql": ["sql"],
+  "mysql": ["sql"]
+}

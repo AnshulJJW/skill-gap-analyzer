@@ -1,0 +1,20 @@
+{
+  "_note": "Stage 1. Three roles, maybe four. 300 good postings for one role beats 40 each across fifteen -- thin per-role data is what kills these projects. 'query' is what you filter the raw dataset's job titles by.",
+  "roles": [
+    {
+      "id": "sde1-backend",
+      "name": "SDE-1 Backend",
+      "query": ["backend engineer", "backend developer", "software engineer backend", "sde 1", "sde-1"]
+    },
+    {
+      "id": "data-analyst",
+      "name": "Data Analyst",
+      "query": ["data analyst", "business analyst data", "analytics analyst"]
+    },
+    {
+      "id": "frontend",
+      "name": "Frontend Engineer",
+      "query": ["frontend engineer", "frontend developer", "ui engineer", "react developer"]
+    }
+  ]
+}
