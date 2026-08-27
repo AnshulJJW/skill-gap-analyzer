@@ -37,13 +37,18 @@ class RoadmapStep:
 def load_prereqs(path: Path | None = None) -> dict[str, list[str]]:
     """skill_id -> list of skill_ids that should be learned first."""
     path = path or DATA / "prereqs.json"
-    return json.loads(path.read_text(encoding="utf-8"))
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    return {k: v for k, v in raw.items() if not k.startswith("_")}
 
 
 def load_resources(path: Path | None = None) -> dict[str, list[Resource]]:
     path = path or DATA / "resources.json"
     raw = json.loads(path.read_text(encoding="utf-8"))
-    return {sid: [Resource(**r) for r in items] for sid, items in raw.items()}
+    return {
+        sid: [Resource(**r) for r in items]
+        for sid, items in raw.items()
+        if not sid.startswith("_")
+    }
 
 
 def build_roadmap(gap_skill_ids: list[str], have: set[str]) -> list[RoadmapStep]:
