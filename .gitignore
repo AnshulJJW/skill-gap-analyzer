@@ -29,3 +29,6 @@ web/dist/
 .idea/
 .DS_Store
 Thumbs.db
+
+# raw dataset downloads (large; snapshots are curated into data/ instead)
+data/raw/
