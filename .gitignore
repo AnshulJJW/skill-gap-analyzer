@@ -26,6 +26,7 @@ web/dist/
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+!.vscode/launch.json
 .idea/
 .DS_Store
 Thumbs.db
