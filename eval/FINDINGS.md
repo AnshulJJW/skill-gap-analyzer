@@ -25,6 +25,9 @@ flattery. It is the most common way people accidentally lie with a metric.
 | term | seen in | note |
 |---|---|---|
 | Kotlin | posting 4 (Android Support) | named outright; no checkbox exists |
+| Cypress | posting 8 (Backend Developer) | named outright; end-to-end testing tool |
+| Splunk | posting 6 | logging/observability tool |
+| Visual Studio | posting 6 | an editor, not a skill — correctly absent |
 | GIS / ESRI / ERDAS / remote sensing | posting 3 | whole adjacent profession; out of scope, not a gap to fill |
 
 ## Normalisation gaps
