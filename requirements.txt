@@ -24,6 +24,11 @@ python-dotenv>=1.0
 # --- dev ---
 pytest>=8.3
 ruff>=0.8
+# fastapi's TestClient needs an HTTP client library. It is NOT pulled in by
+# fastapi itself, so leaving it out means `pytest` cannot even collect
+# tests/test_api.py on a clean install -- which is how it was missed: the
+# development machine had it from an earlier transitive install.
+httpx>=0.27
 
 # after install, fetch the spaCy model:
 #   python -m spacy download en_core_web_sm
