@@ -190,3 +190,27 @@ Candidate fixes, after the full 40:
 - add the missing Git spellings
 - decide whether framework-implies-language should be an extraction rule or
   stay purely in the Stage 4 prerequisite graph
+
+## Scored at 20 postings (backend block complete): P 0.810 / R 0.878 / F1 0.842
+
+131 true skill mentions. Precision up from 0.757 at ten postings, recall
+flat. Macro moved more (P 0.584 -> 0.738) as the later postings carried
+fuller labels.
+
+**JavaScript fails in both directions at once**, which is the sharpest
+finding so far:
+
+- missed 3x — the labeller ticks it because Node.js or React.js implies
+  JavaScript; the extractor makes no such inference
+- invented 2x — a `javascript` tag on postings whose descriptions
+  contradict it (the Goldman Sachs systems role, the Python/Django role)
+
+Too literal on the description, too trusting of the tags. One skill, two
+opposite failures, needing two different fixes. Averaging them into "recall
+is 0.88" would hide that entirely.
+
+The three predicted over-greedy aliases are now confirmed with counts:
+Problem Solving 4, Cloud Fundamentals 4, SAP 2.
+
+Remaining backend recall losses are the prose problem again: System Design
+2, Database Design 2, SQL, NoSQL — all phrases rather than names.

@@ -1,6 +1,6 @@
 {
   "_note": "Stage 3 hand labels. Ground truth for precision/recall.",
-  "reviewed": 10,
+  "reviewed": 20,
   "total": 40,
   "cases": [
     {
@@ -118,10 +118,138 @@
         "communication",
         "django",
         "dsa",
-        "git",
         "oop",
         "python",
         "shell"
+      ]
+    },
+    {
+      "id": 317,
+      "role": "sde1-backend",
+      "skills": [
+        "cpp",
+        "design-patterns",
+        "dsa",
+        "git",
+        "golang",
+        "java",
+        "javascript",
+        "networking",
+        "nodejs",
+        "python",
+        "rest-api",
+        "system-design"
+      ]
+    },
+    {
+      "id": 300,
+      "role": "sde1-backend",
+      "skills": [
+        "agile",
+        "communication",
+        "debugging",
+        "monitoring",
+        "problem-solving",
+        "statistics",
+        "testing"
+      ]
+    },
+    {
+      "id": 907,
+      "role": "sde1-backend",
+      "skills": [
+        "agile",
+        "oracle-db"
+      ]
+    },
+    {
+      "id": 2088,
+      "role": "sde1-backend",
+      "skills": [
+        "agile",
+        "dsa",
+        "hibernate",
+        "java",
+        "linux",
+        "rest-api",
+        "spring-boot",
+        "system-design"
+      ]
+    },
+    {
+      "id": 2222,
+      "role": "sde1-backend",
+      "skills": [
+        "c",
+        "ios",
+        "xml"
+      ]
+    },
+    {
+      "id": 5969,
+      "role": "sde1-backend",
+      "skills": [
+        "css",
+        "html",
+        "javascript",
+        "nodejs",
+        "php",
+        "react"
+      ]
+    },
+    {
+      "id": 264,
+      "role": "sde1-backend",
+      "skills": [
+        "agile",
+        "aws",
+        "code-review",
+        "debugging",
+        "etl",
+        "json",
+        "problem-solving",
+        "python",
+        "rest-api",
+        "shell",
+        "sql"
+      ]
+    },
+    {
+      "id": 1901,
+      "role": "sde1-backend",
+      "skills": [
+        "css",
+        "database-design",
+        "html",
+        "javascript",
+        "mysql",
+        "oop",
+        "php",
+        "wordpress"
+      ]
+    },
+    {
+      "id": 6918,
+      "role": "sde1-backend",
+      "skills": [
+        "debugging",
+        "django",
+        "mongodb",
+        "python",
+        "rest-api",
+        "teamwork"
+      ]
+    },
+    {
+      "id": 4313,
+      "role": "sde1-backend",
+      "skills": [
+        "java",
+        "jdbc",
+        "jsp",
+        "maven",
+        "rest-api",
+        "testing"
       ]
     }
   ]
