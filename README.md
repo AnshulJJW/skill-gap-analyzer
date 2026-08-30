@@ -61,16 +61,39 @@ the postings table at request time.
 
 ## Results
 
-<!-- Stage 3 fills this in. Do not ship without it. -->
+Measured against `eval/labels.json` — 40 postings hand-labelled by a human
+who did not see the extractor's output, using the rules in
+[eval/LABELLING_GUIDE.md](eval/LABELLING_GUIDE.md). Reproduce with
+`python -m eval.score`.
 
 | metric | value |
 |---|---|
-| labeled postings | — |
-| precision (hard skills) | — |
-| recall (hard skills) | — |
+| labelled postings | 40 |
+| true skill mentions | 255 |
+| **precision** (micro) | **0.852** |
+| **recall** (micro) | **0.855** |
+| **F1** (micro) | **0.853** |
+| precision / recall (macro) | 0.800 / 0.787 |
 
-Measured against `eval/labeled.json`, 40 hand-labeled postings, via
-`python -m eval.score`. The gate for proceeding past Stage 3 is **recall ≥ 0.70**.
+Per role:
+
+| role | precision | recall | mentions |
+|---|---|---|---|
+| Frontend Engineer | 0.936 | 0.830 | 88 |
+| Data Analyst | 0.833 | 0.833 | 36 |
+| SDE-1 Backend | 0.810 | 0.878 | 131 |
+
+**Frontend precision is 12 points above backend, and the reason is
+linguistic rather than technical: frontend postings *name* their skills
+("React", "jQuery"), backend postings *describe* them ("relational and
+non-relational databases", "architect scalable systems"). A taxonomy
+matches nouns, not prose.**
+
+These figures are pre-fix. Every problem found during labelling is recorded
+in [eval/FINDINGS.md](eval/FINDINGS.md) and was deliberately **not** fixed
+before scoring — patching a taxonomy because an evaluation posting exposed
+a gap, then scoring against that posting, measures nothing. Post-fix numbers
+will be reported separately and labelled as tuned on this set.
 
 ## What it said about my own resume
 

@@ -316,3 +316,82 @@ following. The detector also produced at least one false positive in the
 Rare enough to be a footnote. It does not bias the precision/recall
 comparison — labeller and extractor read the same truncated text — but it
 does mean a small number of demand profiles are built on partial postings.
+
+---
+
+# FINAL — all 40 postings: P 0.852 / R 0.855 / F1 0.853
+
+255 true skill mentions. **Gate (recall >= 0.70) PASSED.**
+
+| role | precision | recall | n |
+|---|---|---|---|
+| frontend | 0.936 | 0.830 | 88 |
+| data-analyst | 0.833 | 0.833 | 36 |
+| sde1-backend | 0.810 | 0.878 | 131 |
+
+Precision across checkpoints: 0.700 (n=4) -> 0.757 (10) -> 0.810 (20) ->
+0.850 (30) -> 0.852 (40). Recall stayed between 0.85 and 0.89 throughout.
+
+Data-analyst precision landed between backend and frontend, as predicted at
+the 30-posting checkpoint: data postings name their tools like frontend
+ones, but "data analysis" and "business intelligence" are exactly the vague
+category words the taxonomy handles badly.
+
+## Everything to fix now, in priority order
+
+Ordered by measured cost, not by how annoying each one is.
+
+**1. Category-to-product aliases — 15 false positives, one mistake**
+
+Problem Solving 7, Cloud Fundamentals 6, SAP 2. Plus Computer Networks 2.
+All are a generic category word listed as an alias of a specific product.
+The fix is a curation rule, not five patches.
+
+**2. JavaScript from frameworks — 6 misses, 2 false positives**
+
+Missed where React/Angular/Vue/Node imply it; asserted where a `javascript`
+tag contradicts the description. Too literal on prose, too trusting of tags.
+One skill, two opposite failures.
+
+**3. Responsive Design — 6 misses**
+
+Aliases too narrow. Postings say "responsive and adaptive design", "UX
+design concepts", "user interface design"; only a couple of spellings exist.
+The entry is also badly named for what it is being used to cover.
+
+**4. Missing skills — cannot be labelled, so cost is unmeasured**
+
+R (the largest — a principal data-analysis language), Kotlin, Cypress,
+OpenGL, Webflow, Crystal Reports, PySpark, BigQuery, Amazon Redshift,
+Business Objects, Apache NiFi, Groovy, CakePHP, Smarty, Splunk.
+
+R deserves its own line: it is absent because it never cleared the
+20-occurrence threshold in a corpus that is 73% backend. **A
+frequency-thresholded taxonomy is only as broad as the corpus it was counted
+from** — the method inherited the data's bias silently.
+
+**5. Vague entries** — `apache` (a foundation, not a product), Responsive
+Design (used for UI design generally).
+
+**6. Role misfiling — 7 of 40 (17.5%)**
+
+| posting | filed as | actually |
+|---|---|---|
+| 3 | backend | GIS specialist |
+| 5 | backend, entry | senior, 7+ years |
+| 6 | backend, entry | senior, 5+ years |
+| 9 | backend | hardware/firmware |
+| 15 | backend | iOS mobile |
+| 18 | backend | PHP/CMS agency work |
+| 25 | frontend, entry | senior, 6+ years |
+| 38 | data-analyst | business/sales analyst |
+
+Three distinct causes needing three different fixes: generic title patterns,
+seniority markers absent from the exclude list, and exclusions that read
+only the title while the disqualifying signal sits in the description.
+
+**This is the most consequential finding in the project, and it has nothing
+to do with the extractor.** Roughly one in six postings behind each demand
+profile is the wrong role. It was invisible from the outside — the pipeline
+ran clean and the percentages looked plausible — and only reading 40 real
+postings exposed it.

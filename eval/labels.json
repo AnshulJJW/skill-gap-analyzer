@@ -1,6 +1,6 @@
 {
   "_note": "Stage 3 hand labels. Ground truth for precision/recall.",
-  "reviewed": 30,
+  "reviewed": 40,
   "total": 40,
   "cases": [
     {
@@ -388,6 +388,112 @@
         "html",
         "javascript",
         "jquery"
+      ]
+    },
+    {
+      "id": 5709,
+      "role": "frontend",
+      "skills": [
+        "bootstrap",
+        "css",
+        "responsive-design",
+        "teamwork"
+      ]
+    },
+    {
+      "id": 4411,
+      "role": "frontend",
+      "skills": [
+        "cpp",
+        "debugging",
+        "javascript",
+        "jquery",
+        "responsive-design",
+        "teamwork"
+      ]
+    },
+    {
+      "id": 7207,
+      "role": "data-analyst",
+      "skills": [
+        "business-intelligence",
+        "data-analysis",
+        "data-quality",
+        "machine-learning",
+        "nlp",
+        "python",
+        "sql"
+      ]
+    },
+    {
+      "id": 7387,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "data-quality",
+        "data-visualization",
+        "database-design",
+        "debugging",
+        "information-security"
+      ]
+    },
+    {
+      "id": 7209,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "data-quality",
+        "data-visualization",
+        "etl",
+        "excel",
+        "machine-learning",
+        "python",
+        "sql"
+      ]
+    },
+    {
+      "id": 7374,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "database-design"
+      ]
+    },
+    {
+      "id": 7367,
+      "role": "data-analyst",
+      "skills": [
+        "aws",
+        "data-analysis",
+        "python",
+        "sql"
+      ]
+    },
+    {
+      "id": 7540,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis"
+      ]
+    },
+    {
+      "id": 7315,
+      "role": "data-analyst",
+      "skills": [
+        "business-intelligence",
+        "data-analysis",
+        "power-bi",
+        "sql"
+      ]
+    },
+    {
+      "id": 7143,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "data-quality",
+        "etl",
+        "excel"
       ]
     }
   ]
