@@ -61,99 +61,75 @@ the postings table at request time.
 
 ## Results
 
-Measured against `eval/labels.json` — 40 postings hand-labelled by a human
-who did not see the extractor's output, using the rules in
-[eval/LABELLING_GUIDE.md](eval/LABELLING_GUIDE.md). Reproduce with
-`python -m eval.score`.
+Hand-labelled evaluation. 40 postings were labelled by a human who could not
+see the extractor's output, following the rules in
+[eval/LABELLING_GUIDE.md](eval/LABELLING_GUIDE.md).
+
+### Current — reproducible from this tree
+
+```
+python -m eval.score
+```
 
 | metric | value |
 |---|---|
-| labelled postings | 40 |
-| true skill mentions | 255 |
-| **precision** (micro) | **0.852** |
-| **recall** (micro) | **0.855** |
-| **F1** (micro) | **0.853** |
-| precision / recall (macro) | 0.800 / 0.787 |
-
-Per role:
+| labelled postings scored | 34 |
+| true skill mentions | 220 |
+| **precision** (micro) | **0.857** |
+| **recall** (micro) | **0.900** |
+| **F1** (micro) | **0.878** |
+| precision / recall (macro) | 0.855 / 0.859 |
 
 | role | precision | recall | mentions |
 |---|---|---|---|
-| Frontend Engineer | 0.936 | 0.830 | 88 |
-| Data Analyst | 0.833 | 0.833 | 36 |
-| SDE-1 Backend | 0.810 | 0.878 | 131 |
+| Frontend Engineer | 0.952 | 0.898 | 88 |
+| SDE-1 Backend | 0.817 | 0.927 | 96 |
+| Data Analyst | 0.769 | 0.833 | 36 |
 
-**Frontend precision is 12 points above backend, and the reason is
-linguistic rather than technical: frontend postings *name* their skills
-("React", "jQuery"), backend postings *describe* them ("relational and
-non-relational databases", "architect scalable systems"). A taxonomy
-matches nouns, not prose.**
+**Why 34 and not 40.** Stage 4 applied role filters that removed 6 of the
+labelled postings from the corpus entirely — a GIS role, a firmware role, an
+iOS role and three senior roles, all of which had been misfiled as
+entry-level backend. Their labels are kept in
+`eval/labels_filtered_out.json` as evidence the filters removed the right
+things.
 
-### How much to trust these numbers
+**These figures are tuned on this set.** The taxonomy was corrected using
+gaps this set exposed, so they are optimistic. A clean measurement needs a
+fresh sample.
+
+### The history, and why it is not reproducible
+
+| stage | postings | precision | recall | F1 |
+|---|---|---|---|---|
+| pre-fix baseline — **the honest untuned number** | 40 | 0.852 | 0.855 | 0.853 |
+| after taxonomy and extraction fixes | 40 | 0.850 | 0.890 | 0.870 |
+| after fixes, like-for-like | 40 | 0.904 | 0.890 | 0.897 |
+| after role filters — **current** | 34 | 0.857 | 0.900 | 0.878 |
+
+The first three rows were measured against a corpus of 7,593 postings that
+no longer exists — the Stage 4 filters reduced it to 6,898. **They cannot be
+reproduced from this tree, and are recorded as history rather than as
+claims.** Only the current row reproduces.
+
+The pre-fix row is the one to trust as an unbiased estimate: every gap found
+while labelling was written down and deliberately left unfixed until after
+that number was recorded.
+
+### How much to trust the numbers
 
 `python -m eval.uncertainty` bootstraps 5,000 resamples of postings (not of
-individual mentions -- mentions inside one posting are correlated, and
+individual mentions — mentions inside one posting are correlated, and
 resampling them independently would make the intervals look far tighter than
 they are).
 
-| role | precision (95% CI) | recall (95% CI) | mentions |
-|---|---|---|---|
-| sde1-backend | 0.810 [0.75–0.88] | 0.878 [0.82–0.93] | 131 |
-| frontend | 0.936 [0.87–1.00] | 0.830 [0.70–0.93] | 88 |
-| data-analyst | 0.833 [0.73–0.92] | 0.833 [0.63–0.96] | 36 |
-| **all (micro)** | **0.852 [0.80–0.90]** | **0.855 [0.80–0.90]** | 255 |
+On the 40-posting set the overall figure was reliable to about ±0.05, while
+data-analyst recall spanned 0.63–0.96 on 36 mentions. **Per-role figures
+should always be quoted with their interval, never as point estimates.**
 
-The overall figure is reliable to about ±0.05. **The per-role figures are
-not equally trustworthy**: data-analyst rests on 36 mentions and its recall
-interval spans 0.63–0.96, so it should always be quoted with the interval
-rather than as a point estimate.
-
-The sample is also not proportional to the corpus — it deliberately
-over-samples the smaller roles (sample 50/30/20 against a corpus of
-73/22/6) so each role gets measured at all. Re-weighting the per-role rates
-by true corpus share gives **precision 0.839, recall 0.865** — about one
-point from the micro figures, because the three roles score similarly. Had
-they diverged, the weighting would have mattered a great deal.
-
-### Before and after the fixes
-
-Every problem found during labelling was recorded in
-[eval/FINDINGS.md](eval/FINDINGS.md) and deliberately **not** fixed until
-after the score above was locked in. Patching a taxonomy because an
-evaluation posting exposed a gap, then scoring against that posting,
-measures nothing.
-
-| | precision | recall | F1 |
-|---|---|---|---|
-| **pre-fix** — untuned, the honest baseline | 0.852 | 0.855 | 0.853 |
-| post-fix, counting newly-added skills as errors | 0.850 | 0.890 | 0.870 |
-| post-fix, like-for-like against the labels | **0.904** | **0.890** | **0.897** |
-
-**The post-fix figures are tuned on this set and are therefore optimistic.**
-A clean measurement would need a fresh sample.
-
-The middle row needs explaining, because it looks like precision stalled.
-Sixteen of its "false positives" are skills added *after* labelling — R,
-Kotlin, Cypress, OpenGL, Webflow, Crystal Reports, PySpark, BigQuery,
-Redshift, NiFi and others. Every one was identified during labelling as
-named in the posting but having no checkbox. The extractor now finds them
-correctly and is scored wrong for it, because the ground truth predates
-them. The bottom row removes that artefact.
-
-What the targeted fixes did:
-
-| false positive | before | after | | miss | before | after |
-|---|---|---|---|---|---|---|
-| Problem Solving | 7 | **0** | | JavaScript | 6 | **0** |
-| Cloud Fundamentals | 6 | **0** | | Responsive Design | 6 | 3 |
-| Computer Networks | 2 | **0** | | | | |
-
-All the false-positive fixes were one curation error repeated: a category
-term listed as an alias of a specific product (`analytical` → Problem
-Solving, `cloud` → Cloud Fundamentals, `http` → Computer Networks, `erp` →
-SAP, `cms` → WordPress). The JavaScript recall fix was the opposite
-problem — frameworks assert their language even when the language is never
-written.
+The sample also over-samples the smaller roles (50/30/20 against a corpus of
+73/22/6) so each role gets measured at all. Re-weighting by true corpus share
+moved the headline by about one point, because the three roles score
+similarly.
 
 ## What it said about my own resume
 
