@@ -27,6 +27,7 @@ flattery. It is the most common way people accidentally lie with a metric.
 | Kotlin | posting 4 (Android Support) | named outright; no checkbox exists |
 | Cypress | posting 8 (Backend Developer) | named outright; end-to-end testing tool |
 | Splunk | posting 6 | logging/observability tool |
+| Crystal Reports | posting 13 | the entire subject of the role; BI reporting tool |
 | Visual Studio | posting 6 | an editor, not a skill — correctly absent |
 | GIS / ESRI / ERDAS / remote sensing | posting 3 | whole adjacent profession; out of scope, not a gap to fill |
 
@@ -128,6 +129,7 @@ the matcher:
 | Problem Solving | 3 | `analytical` is an alias of problem-solving, and Naukri tags almost everything `analytical` |
 | Cloud Fundamentals | 3 | "AWS Cloud" matches both AWS and the generic cloud entry, so we claim two skills where the labeller sees one |
 | Computer Networks | 2 | `http` is an alias of networking; any posting tagged http acquires it |
+| SAP | expected | `erp` is an alias of SAP, so posting 13's "Prior exposure to ERP products" will assert SAP although SAP is never named |
 
 Recall losses split two ways:
 
