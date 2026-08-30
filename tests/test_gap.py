@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from analyzer.gap import analyze, coverage_of, rank_by_marginal_coverage
-from analyzer.profiles import RoleProfile, SkillDemand
+from analyzer.profiles import RoleProfile
 from analyzer.roadmap import _detect_cycle, load_prereqs, load_resources
 from analyzer.taxonomy import Taxonomy
 
