@@ -89,6 +89,32 @@ linguistic rather than technical: frontend postings *name* their skills
 non-relational databases", "architect scalable systems"). A taxonomy
 matches nouns, not prose.**
 
+### How much to trust these numbers
+
+`python -m eval.uncertainty` bootstraps 5,000 resamples of postings (not of
+individual mentions -- mentions inside one posting are correlated, and
+resampling them independently would make the intervals look far tighter than
+they are).
+
+| role | precision (95% CI) | recall (95% CI) | mentions |
+|---|---|---|---|
+| sde1-backend | 0.810 [0.75–0.88] | 0.878 [0.82–0.93] | 131 |
+| frontend | 0.936 [0.87–1.00] | 0.830 [0.70–0.93] | 88 |
+| data-analyst | 0.833 [0.73–0.92] | 0.833 [0.63–0.96] | 36 |
+| **all (micro)** | **0.852 [0.80–0.90]** | **0.855 [0.80–0.90]** | 255 |
+
+The overall figure is reliable to about ±0.05. **The per-role figures are
+not equally trustworthy**: data-analyst rests on 36 mentions and its recall
+interval spans 0.63–0.96, so it should always be quoted with the interval
+rather than as a point estimate.
+
+The sample is also not proportional to the corpus — it deliberately
+over-samples the smaller roles (sample 50/30/20 against a corpus of
+73/22/6) so each role gets measured at all. Re-weighting the per-role rates
+by true corpus share gives **precision 0.839, recall 0.865** — about one
+point from the micro figures, because the three roles score similarly. Had
+they diverged, the weighting would have mattered a great deal.
+
 These figures are pre-fix. Every problem found during labelling is recorded
 in [eval/FINDINGS.md](eval/FINDINGS.md) and was deliberately **not** fixed
 before scoring — patching a taxonomy because an evaluation posting exposed
