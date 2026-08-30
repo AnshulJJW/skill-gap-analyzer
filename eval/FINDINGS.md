@@ -33,6 +33,7 @@ flattery. It is the most common way people accidentally lie with a metric.
 | Groovy, Jolt, Hashicorp Vault | posting 17 | named in nice-to-haves |
 | CakePHP, Smarty | posting 18 | PHP ecosystem |
 | Webflow | posting 29 | no-code website builder |
+| **R** | posting 35 | **the most consequential gap found.** One of the two principal data-analysis languages, named beside Excel, SQL and Python. Every R-requiring posting undercounts. |
 | PySpark | posting 33 | named beside Python |
 | BigQuery | posting 33 | GCP warehouse; also missing as an AWS/GCP alias |
 | Amazon Redshift | posting 33 | AWS warehouse; same |
@@ -290,3 +291,13 @@ problems, in opposite directions.
 Data-domain coverage looks thinner than backend or frontend, which is
 consistent with the taxonomy having been curated from a corpus that is 73%
 backend postings.
+
+R is the clearest illustration. It is not obscure — it is one of the two
+principal languages of the entire data-analysis profession — and it is
+absent because it did not clear the 20-occurrence threshold in a corpus
+dominated by backend engineering roles. The curation method quietly
+inherited the corpus's bias, and only labelling the data block surfaced it.
+
+That is worth stating plainly as a limitation of the method, not just as a
+missing row: **a frequency-thresholded taxonomy is only as broad as the
+corpus it was counted from.**
