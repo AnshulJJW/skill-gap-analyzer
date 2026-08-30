@@ -1,45 +1,1105 @@
 {
-  "_note": "Stage 1. Seed taxonomy -- grow this from ESCO or Lightcast Open Skills rather than by hand once the shape feels right. Aliases are where recall is won or lost; when Stage 3 recall comes back low, add aliases here first.",
+  "_note": "Stage 2 taxonomy. Curated from the 403 tags that appear 20+ times across the 7,593 loaded postings -- derived from what employers actually wrote, not guessed. Aliases are where recall is won or lost: when Stage 3 recall comes back low, add aliases here before touching the matching code.",
+  "_curation_rules": [
+    "A skill is something a person can learn and then claim. 'Docker' qualifies; 'development' does not.",
+    "Job titles ('backend', 'software engineer'), degrees ('computer science', 'mca') and traits ('analytical') are not skills -- see stoplist.json.",
+    "Where a generic tag maps cleanly onto a real skill, it becomes an alias: 'version control' -> git, 'web services' -> rest-api.",
+    "Deprecated or niche technologies are kept when they appear in the data. Struts and JSP are still being hired for in this market, and omitting them would misreport demand."
+  ],
   "skills": [
-    {"id": "python", "name": "Python", "category": "language", "aliases": ["python3", "py"]},
-    {"id": "java", "name": "Java", "category": "language", "aliases": ["core java", "java 8", "java 17"]},
-    {"id": "javascript", "name": "JavaScript", "category": "language", "aliases": ["js", "es6", "ecmascript"]},
-    {"id": "typescript", "name": "TypeScript", "category": "language", "aliases": ["ts"]},
-    {"id": "sql", "name": "SQL", "category": "language", "aliases": ["structured query language"]},
-    {"id": "go", "name": "Go", "category": "language", "aliases": ["golang"]},
-
-    {"id": "fastapi", "name": "FastAPI", "category": "framework", "aliases": []},
-    {"id": "django", "name": "Django", "category": "framework", "aliases": ["django rest framework", "drf"]},
-    {"id": "flask", "name": "Flask", "category": "framework", "aliases": []},
-    {"id": "spring-boot", "name": "Spring Boot", "category": "framework", "aliases": ["spring", "springboot"]},
-    {"id": "nodejs", "name": "Node.js", "category": "framework", "aliases": ["node", "nodejs", "node js"]},
-    {"id": "express", "name": "Express", "category": "framework", "aliases": ["expressjs", "express.js"]},
-    {"id": "react", "name": "React", "category": "framework", "aliases": ["reactjs", "react.js"]},
-
-    {"id": "postgresql", "name": "PostgreSQL", "category": "database", "aliases": ["postgres", "psql"]},
-    {"id": "mysql", "name": "MySQL", "category": "database", "aliases": []},
-    {"id": "mongodb", "name": "MongoDB", "category": "database", "aliases": ["mongo"]},
-    {"id": "redis", "name": "Redis", "category": "database", "aliases": []},
-
-    {"id": "docker", "name": "Docker", "category": "devops", "aliases": ["containerization", "containers"]},
-    {"id": "kubernetes", "name": "Kubernetes", "category": "devops", "aliases": ["k8s", "kubectl"]},
-    {"id": "aws", "name": "AWS", "category": "cloud", "aliases": ["amazon web services", "ec2", "s3"]},
-    {"id": "ci-cd", "name": "CI/CD", "category": "devops", "aliases": ["continuous integration", "github actions", "jenkins"]},
-    {"id": "linux", "name": "Linux", "category": "devops", "aliases": ["unix", "bash", "shell scripting"]},
-
-    {"id": "git", "name": "Git", "category": "tooling", "aliases": ["version control", "github", "gitlab"]},
-    {"id": "rest-api", "name": "REST APIs", "category": "concept", "aliases": ["rest", "restful", "restful api"]},
-    {"id": "graphql", "name": "GraphQL", "category": "concept", "aliases": []},
-    {"id": "kafka", "name": "Apache Kafka", "category": "infrastructure", "aliases": ["kafka", "event streaming"]},
-    {"id": "microservices", "name": "Microservices", "category": "concept", "aliases": ["microservice architecture"]},
-    {"id": "system-design", "name": "System Design", "category": "concept", "aliases": ["distributed systems", "scalability"]},
-    {"id": "testing", "name": "Automated Testing", "category": "practice", "aliases": ["unit testing", "pytest", "junit", "tdd"]},
-    {"id": "dsa", "name": "Data Structures & Algorithms", "category": "fundamentals", "aliases": ["data structures", "algorithms", "dsa"]},
-
-    {"id": "pandas", "name": "pandas", "category": "data", "aliases": []},
-    {"id": "excel", "name": "Excel", "category": "data", "aliases": ["ms excel", "spreadsheets", "advanced excel"]},
-    {"id": "tableau", "name": "Tableau", "category": "data", "aliases": []},
-    {"id": "power-bi", "name": "Power BI", "category": "data", "aliases": ["powerbi", "microsoft power bi"]},
-    {"id": "statistics", "name": "Statistics", "category": "data", "aliases": ["statistical analysis", "hypothesis testing"]}
+    {
+      "id": "python",
+      "name": "Python",
+      "category": "language",
+      "aliases": [
+        "python3",
+        "python development",
+        "py"
+      ]
+    },
+    {
+      "id": "java",
+      "name": "Java",
+      "category": "language",
+      "aliases": [
+        "core java",
+        "java development",
+        "java developer",
+        "j2ee",
+        "java j2ee developer",
+        "jee"
+      ]
+    },
+    {
+      "id": "javascript",
+      "name": "JavaScript",
+      "category": "language",
+      "aliases": [
+        "js",
+        "es6",
+        "ecmascript",
+        "java script"
+      ]
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "category": "language",
+      "aliases": [
+        "ts"
+      ]
+    },
+    {
+      "id": "c",
+      "name": "C",
+      "category": "language",
+      "aliases": [
+        "c programming",
+        "embedded c"
+      ]
+    },
+    {
+      "id": "cpp",
+      "name": "C++",
+      "category": "language",
+      "aliases": [
+        "c++",
+        "cpp"
+      ]
+    },
+    {
+      "id": "csharp",
+      "name": "C#",
+      "category": "language",
+      "aliases": [
+        "c#",
+        "c sharp"
+      ]
+    },
+    {
+      "id": "php",
+      "name": "PHP",
+      "category": "language",
+      "aliases": []
+    },
+    {
+      "id": "sql",
+      "name": "SQL",
+      "category": "language",
+      "aliases": [
+        "sql queries",
+        "sql database",
+        "structured query language"
+      ]
+    },
+    {
+      "id": "golang",
+      "name": "Go",
+      "category": "language",
+      "aliases": [
+        "go",
+        "go lang"
+      ]
+    },
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "category": "language",
+      "aliases": [
+        "ruby on rails",
+        "rails"
+      ]
+    },
+    {
+      "id": "scala",
+      "name": "Scala",
+      "category": "language",
+      "aliases": []
+    },
+    {
+      "id": "perl",
+      "name": "Perl",
+      "category": "language",
+      "aliases": []
+    },
+    {
+      "id": "matlab",
+      "name": "MATLAB",
+      "category": "language",
+      "aliases": []
+    },
+    {
+      "id": "shell",
+      "name": "Shell Scripting",
+      "category": "language",
+      "aliases": [
+        "shell scripting",
+        "bash",
+        "shell",
+        "powershell"
+      ]
+    },
+    {
+      "id": "assembly",
+      "name": "Assembly",
+      "category": "language",
+      "aliases": [
+        "assembly language"
+      ]
+    },
+    {
+      "id": "html",
+      "name": "HTML",
+      "category": "frontend",
+      "aliases": [
+        "html5",
+        "xhtml"
+      ]
+    },
+    {
+      "id": "css",
+      "name": "CSS",
+      "category": "frontend",
+      "aliases": [
+        "css3",
+        "sass",
+        "scss",
+        "less"
+      ]
+    },
+    {
+      "id": "react",
+      "name": "React",
+      "category": "frontend",
+      "aliases": [
+        "react.js",
+        "reactjs",
+        "react js",
+        "react developer"
+      ]
+    },
+    {
+      "id": "angular",
+      "name": "Angular",
+      "category": "frontend",
+      "aliases": [
+        "angularjs",
+        "angular.js",
+        "angular development",
+        "angular developer"
+      ]
+    },
+    {
+      "id": "vue",
+      "name": "Vue.js",
+      "category": "frontend",
+      "aliases": [
+        "vue.js",
+        "vuejs",
+        "vue"
+      ]
+    },
+    {
+      "id": "jquery",
+      "name": "jQuery",
+      "category": "frontend",
+      "aliases": []
+    },
+    {
+      "id": "bootstrap",
+      "name": "Bootstrap",
+      "category": "frontend",
+      "aliases": []
+    },
+    {
+      "id": "redux",
+      "name": "Redux",
+      "category": "frontend",
+      "aliases": []
+    },
+    {
+      "id": "dom",
+      "name": "DOM Manipulation",
+      "category": "frontend",
+      "aliases": [
+        "dom"
+      ]
+    },
+    {
+      "id": "ajax",
+      "name": "AJAX",
+      "category": "frontend",
+      "aliases": []
+    },
+    {
+      "id": "responsive-design",
+      "name": "Responsive Design",
+      "category": "frontend",
+      "aliases": [
+        "responsive web design",
+        "web designing",
+        "user interface designing"
+      ]
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "category": "backend",
+      "aliases": [
+        "node.js",
+        "nodejs",
+        "node js",
+        "node"
+      ]
+    },
+    {
+      "id": "express",
+      "name": "Express",
+      "category": "backend",
+      "aliases": [
+        "expressjs",
+        "express.js"
+      ]
+    },
+    {
+      "id": "django",
+      "name": "Django",
+      "category": "backend",
+      "aliases": [
+        "django rest framework",
+        "drf"
+      ]
+    },
+    {
+      "id": "flask",
+      "name": "Flask",
+      "category": "backend",
+      "aliases": []
+    },
+    {
+      "id": "fastapi",
+      "name": "FastAPI",
+      "category": "backend",
+      "aliases": []
+    },
+    {
+      "id": "spring",
+      "name": "Spring",
+      "category": "backend",
+      "aliases": [
+        "spring framework",
+        "spring mvc"
+      ]
+    },
+    {
+      "id": "spring-boot",
+      "name": "Spring Boot",
+      "category": "backend",
+      "aliases": [
+        "springboot",
+        "spring boot"
+      ]
+    },
+    {
+      "id": "hibernate",
+      "name": "Hibernate",
+      "category": "backend",
+      "aliases": [
+        "jpa",
+        "hibernate orm"
+      ]
+    },
+    {
+      "id": "dotnet",
+      "name": ".NET",
+      "category": "backend",
+      "aliases": [
+        ".net",
+        "ado.net",
+        "asp.net",
+        "asp.net mvc",
+        "dotnet",
+        "entity framework",
+        "linq",
+        "vb.net",
+        "wcf",
+        "winforms",
+        "wpf"
+      ]
+    },
+    {
+      "id": "jsp",
+      "name": "JSP / Servlets",
+      "category": "backend",
+      "aliases": [
+        "jsp",
+        "servlets",
+        "jsf"
+      ]
+    },
+    {
+      "id": "struts",
+      "name": "Struts",
+      "category": "backend",
+      "aliases": []
+    },
+    {
+      "id": "laravel",
+      "name": "Laravel",
+      "category": "backend",
+      "aliases": []
+    },
+    {
+      "id": "mean-stack",
+      "name": "MEAN Stack",
+      "category": "backend",
+      "aliases": [
+        "mean stack",
+        "mern stack",
+        "mern"
+      ]
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "category": "database",
+      "aliases": []
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "category": "database",
+      "aliases": [
+        "postgres",
+        "psql"
+      ]
+    },
+    {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "category": "database",
+      "aliases": [
+        "mongo"
+      ]
+    },
+    {
+      "id": "oracle-db",
+      "name": "Oracle Database",
+      "category": "database",
+      "aliases": [
+        "oracle",
+        "oracle database",
+        "oracle sql",
+        "plsql",
+        "pl/sql"
+      ]
+    },
+    {
+      "id": "sql-server",
+      "name": "SQL Server",
+      "category": "database",
+      "aliases": [
+        "ms sql",
+        "mssql",
+        "sql server",
+        "ssrs",
+        "ssis"
+      ]
+    },
+    {
+      "id": "sqlite",
+      "name": "SQLite",
+      "category": "database",
+      "aliases": []
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "category": "database",
+      "aliases": []
+    },
+    {
+      "id": "cassandra",
+      "name": "Cassandra",
+      "category": "database",
+      "aliases": []
+    },
+    {
+      "id": "nosql",
+      "name": "NoSQL",
+      "category": "database",
+      "aliases": []
+    },
+    {
+      "id": "jdbc",
+      "name": "JDBC",
+      "category": "database",
+      "aliases": []
+    },
+    {
+      "id": "stored-procedures",
+      "name": "Stored Procedures",
+      "category": "database",
+      "aliases": [
+        "stored procedure"
+      ]
+    },
+    {
+      "id": "database-design",
+      "name": "Database Design",
+      "category": "database",
+      "aliases": [
+        "database design",
+        "data modeling",
+        "schema design",
+        "rdbms",
+        "dbms",
+        "database management"
+      ]
+    },
+    {
+      "id": "query-optimization",
+      "name": "Query Optimisation",
+      "category": "database",
+      "aliases": [
+        "performance tuning",
+        "query tuning",
+        "indexing"
+      ]
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "category": "tooling",
+      "aliases": [
+        "github",
+        "gitlab",
+        "version control",
+        "svn",
+        "mercurial",
+        "bitbucket"
+      ]
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "category": "devops",
+      "aliases": [
+        "containerization",
+        "containers"
+      ]
+    },
+    {
+      "id": "kubernetes",
+      "name": "Kubernetes",
+      "category": "devops",
+      "aliases": [
+        "k8s",
+        "kubectl",
+        "orchestration"
+      ]
+    },
+    {
+      "id": "ci-cd",
+      "name": "CI/CD",
+      "category": "devops",
+      "aliases": [
+        "ci/cd",
+        "continuous integration",
+        "continuous deployment",
+        "jenkins",
+        "github actions",
+        "gitlab ci"
+      ]
+    },
+    {
+      "id": "linux",
+      "name": "Linux",
+      "category": "devops",
+      "aliases": [
+        "unix",
+        "ubuntu"
+      ]
+    },
+    {
+      "id": "maven",
+      "name": "Maven / Gradle",
+      "category": "tooling",
+      "aliases": [
+        "maven",
+        "gradle",
+        "ant"
+      ]
+    },
+    {
+      "id": "tomcat",
+      "name": "Tomcat",
+      "category": "devops",
+      "aliases": [
+        "apache tomcat",
+        "jboss",
+        "iis",
+        "weblogic"
+      ]
+    },
+    {
+      "id": "apache",
+      "name": "Apache",
+      "category": "devops",
+      "aliases": [
+        "apache http",
+        "nginx"
+      ]
+    },
+    {
+      "id": "jira",
+      "name": "Jira",
+      "category": "tooling",
+      "aliases": [
+        "confluence"
+      ]
+    },
+    {
+      "id": "devops",
+      "name": "DevOps",
+      "category": "devops",
+      "aliases": [
+        "deployment",
+        "release management",
+        "configuration management"
+      ]
+    },
+    {
+      "id": "monitoring",
+      "name": "Monitoring",
+      "category": "devops",
+      "aliases": [
+        "observability",
+        "logging"
+      ]
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "category": "cloud",
+      "aliases": [
+        "amazon web services",
+        "ec2",
+        "s3",
+        "lambda"
+      ]
+    },
+    {
+      "id": "azure",
+      "name": "Azure",
+      "category": "cloud",
+      "aliases": [
+        "microsoft azure"
+      ]
+    },
+    {
+      "id": "gcp",
+      "name": "Google Cloud",
+      "category": "cloud",
+      "aliases": [
+        "google cloud platform",
+        "gcp"
+      ]
+    },
+    {
+      "id": "cloud",
+      "name": "Cloud Fundamentals",
+      "category": "cloud",
+      "aliases": [
+        "cloud computing",
+        "cloud services",
+        "saas",
+        "iaas"
+      ]
+    },
+    {
+      "id": "rest-api",
+      "name": "REST APIs",
+      "category": "concept",
+      "aliases": [
+        "rest",
+        "restful",
+        "restful api",
+        "api",
+        "web services",
+        "api development"
+      ]
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "category": "concept",
+      "aliases": []
+    },
+    {
+      "id": "microservices",
+      "name": "Microservices",
+      "category": "concept",
+      "aliases": [
+        "microservice architecture",
+        "soa"
+      ]
+    },
+    {
+      "id": "kafka",
+      "name": "Apache Kafka",
+      "category": "concept",
+      "aliases": [
+        "kafka",
+        "event streaming",
+        "rabbitmq",
+        "jms",
+        "message queue"
+      ]
+    },
+    {
+      "id": "system-design",
+      "name": "System Design",
+      "category": "concept",
+      "aliases": [
+        "distributed systems",
+        "scalability",
+        "system architecture",
+        "application architecture",
+        "software architecture"
+      ]
+    },
+    {
+      "id": "design-patterns",
+      "name": "Design Patterns",
+      "category": "concept",
+      "aliases": [
+        "design pattern",
+        "software design patterns"
+      ]
+    },
+    {
+      "id": "mvc",
+      "name": "MVC",
+      "category": "concept",
+      "aliases": [
+        "mvc framework",
+        "mvvm"
+      ]
+    },
+    {
+      "id": "oop",
+      "name": "Object-Oriented Programming",
+      "category": "fundamentals",
+      "aliases": [
+        "oops",
+        "oop",
+        "object oriented programming",
+        "object oriented design",
+        "object oriented"
+      ]
+    },
+    {
+      "id": "dsa",
+      "name": "Data Structures & Algorithms",
+      "category": "fundamentals",
+      "aliases": [
+        "data structures",
+        "algorithms",
+        "dsa",
+        "data structure"
+      ]
+    },
+    {
+      "id": "multithreading",
+      "name": "Multithreading",
+      "category": "fundamentals",
+      "aliases": [
+        "concurrency",
+        "threading",
+        "memory management"
+      ]
+    },
+    {
+      "id": "operating-systems",
+      "name": "Operating Systems",
+      "category": "fundamentals",
+      "aliases": [
+        "os",
+        "operating system"
+      ]
+    },
+    {
+      "id": "networking",
+      "name": "Computer Networks",
+      "category": "fundamentals",
+      "aliases": [
+        "networking",
+        "computer networks",
+        "tcp",
+        "tcp/ip",
+        "http",
+        "ethernet"
+      ]
+    },
+    {
+      "id": "json",
+      "name": "JSON",
+      "category": "concept",
+      "aliases": []
+    },
+    {
+      "id": "xml",
+      "name": "XML",
+      "category": "concept",
+      "aliases": [
+        "xslt",
+        "xsd"
+      ]
+    },
+    {
+      "id": "uml",
+      "name": "UML",
+      "category": "concept",
+      "aliases": []
+    },
+    {
+      "id": "testing",
+      "name": "Automated Testing",
+      "category": "testing",
+      "aliases": [
+        "unit testing",
+        "pytest",
+        "junit",
+        "test cases",
+        "software testing",
+        "integration testing",
+        "system testing",
+        "regression testing",
+        "functional testing"
+      ]
+    },
+    {
+      "id": "tdd",
+      "name": "Test-Driven Development",
+      "category": "testing",
+      "aliases": [
+        "tdd",
+        "test driven development"
+      ]
+    },
+    {
+      "id": "selenium",
+      "name": "Selenium",
+      "category": "testing",
+      "aliases": [
+        "automation testing",
+        "automation framework",
+        "test automation"
+      ]
+    },
+    {
+      "id": "manual-testing",
+      "name": "Manual Testing",
+      "category": "testing",
+      "aliases": [
+        "manual testing",
+        "test planning",
+        "test scripts"
+      ]
+    },
+    {
+      "id": "debugging",
+      "name": "Debugging",
+      "category": "practice",
+      "aliases": [
+        "troubleshooting",
+        "diagnostics"
+      ]
+    },
+    {
+      "id": "agile",
+      "name": "Agile / Scrum",
+      "category": "practice",
+      "aliases": [
+        "scrum",
+        "agile methodology",
+        "agile development",
+        "agile scrum",
+        "sdlc",
+        "kanban"
+      ]
+    },
+    {
+      "id": "code-review",
+      "name": "Code Review",
+      "category": "practice",
+      "aliases": [
+        "peer review"
+      ]
+    },
+    {
+      "id": "pandas",
+      "name": "pandas",
+      "category": "data",
+      "aliases": []
+    },
+    {
+      "id": "numpy",
+      "name": "NumPy",
+      "category": "data",
+      "aliases": []
+    },
+    {
+      "id": "scikit-learn",
+      "name": "scikit-learn",
+      "category": "data",
+      "aliases": [
+        "sklearn",
+        "scikit learn"
+      ]
+    },
+    {
+      "id": "matplotlib",
+      "name": "Matplotlib",
+      "category": "data",
+      "aliases": [
+        "seaborn"
+      ]
+    },
+    {
+      "id": "machine-learning",
+      "name": "Machine Learning",
+      "category": "data",
+      "aliases": [
+        "ml",
+        "deep learning",
+        "artificial intelligence",
+        "ai"
+      ]
+    },
+    {
+      "id": "nlp",
+      "name": "Natural Language Processing",
+      "category": "data",
+      "aliases": [
+        "nlp",
+        "natural language processing",
+        "text mining"
+      ]
+    },
+    {
+      "id": "data-analysis",
+      "name": "Data Analysis",
+      "category": "data",
+      "aliases": [
+        "data analytics",
+        "analytics",
+        "data mining",
+        "business analysis"
+      ]
+    },
+    {
+      "id": "data-visualization",
+      "name": "Data Visualisation",
+      "category": "data",
+      "aliases": [
+        "data visualization",
+        "dashboards"
+      ]
+    },
+    {
+      "id": "excel",
+      "name": "Excel",
+      "category": "data",
+      "aliases": [
+        "ms excel",
+        "advanced excel",
+        "spreadsheets",
+        "macros"
+      ]
+    },
+    {
+      "id": "tableau",
+      "name": "Tableau",
+      "category": "data",
+      "aliases": []
+    },
+    {
+      "id": "power-bi",
+      "name": "Power BI",
+      "category": "data",
+      "aliases": [
+        "powerbi",
+        "microsoft power bi"
+      ]
+    },
+    {
+      "id": "statistics",
+      "name": "Statistics",
+      "category": "data",
+      "aliases": [
+        "statistical analysis",
+        "hypothesis testing",
+        "mathematics"
+      ]
+    },
+    {
+      "id": "business-intelligence",
+      "name": "Business Intelligence",
+      "category": "data",
+      "aliases": [
+        "bi",
+        "sas"
+      ]
+    },
+    {
+      "id": "etl",
+      "name": "ETL",
+      "category": "data",
+      "aliases": [
+        "data pipeline",
+        "data processing",
+        "data collection"
+      ]
+    },
+    {
+      "id": "data-quality",
+      "name": "Data Quality",
+      "category": "data",
+      "aliases": [
+        "data validation",
+        "data cleaning"
+      ]
+    },
+    {
+      "id": "android",
+      "name": "Android",
+      "category": "mobile",
+      "aliases": [
+        "android sdk",
+        "android development"
+      ]
+    },
+    {
+      "id": "ios",
+      "name": "iOS",
+      "category": "mobile",
+      "aliases": [
+        "swift",
+        "objective-c"
+      ]
+    },
+    {
+      "id": "react-native",
+      "name": "React Native",
+      "category": "mobile",
+      "aliases": [
+        "react native"
+      ]
+    },
+    {
+      "id": "flutter",
+      "name": "Flutter",
+      "category": "mobile",
+      "aliases": [
+        "dart"
+      ]
+    },
+    {
+      "id": "wordpress",
+      "name": "WordPress",
+      "category": "cms",
+      "aliases": [
+        "cms",
+        "drupal",
+        "joomla"
+      ]
+    },
+    {
+      "id": "shopify",
+      "name": "Shopify",
+      "category": "cms",
+      "aliases": [
+        "magento",
+        "woocommerce"
+      ]
+    },
+    {
+      "id": "salesforce",
+      "name": "Salesforce",
+      "category": "platform",
+      "aliases": [
+        "apex",
+        "visualforce",
+        "crm"
+      ]
+    },
+    {
+      "id": "sap",
+      "name": "SAP",
+      "category": "platform",
+      "aliases": [
+        "erp"
+      ]
+    },
+    {
+      "id": "seo",
+      "name": "SEO",
+      "category": "marketing",
+      "aliases": [
+        "search engine optimization",
+        "digital marketing"
+      ]
+    },
+    {
+      "id": "embedded",
+      "name": "Embedded Systems",
+      "category": "embedded",
+      "aliases": [
+        "embedded systems",
+        "firmware",
+        "rtos",
+        "microcontroller"
+      ]
+    },
+    {
+      "id": "information-security",
+      "name": "Information Security",
+      "category": "security",
+      "aliases": [
+        "data security",
+        "cybersecurity",
+        "security"
+      ]
+    },
+    {
+      "id": "communication",
+      "name": "Communication",
+      "category": "soft",
+      "aliases": [
+        "communication skills",
+        "interpersonal skills"
+      ]
+    },
+    {
+      "id": "problem-solving",
+      "name": "Problem Solving",
+      "category": "soft",
+      "aliases": [
+        "problem solving",
+        "analytical skills",
+        "analytical"
+      ]
+    },
+    {
+      "id": "teamwork",
+      "name": "Teamwork",
+      "category": "soft",
+      "aliases": [
+        "collaboration",
+        "team player"
+      ]
+    }
   ]
 }

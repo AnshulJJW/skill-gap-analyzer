@@ -1,69 +1,210 @@
 """Stage 2 -- text in, normalized skill ids out.
 
-Order of operations, and it matters:
-  1. taxonomy alias matching        <- does most of the work
-  2. spaCy for sentence/section splitting and noun-phrase candidates
-  3. embedding similarity          <- fallback only, for what 1 misses
+Same function runs over job postings and over resumes. That symmetry is what
+makes the Stage 4 comparison meaningful: both sides are measured with the
+same instrument, so a gap is a real gap rather than an artifact of two
+different extractors disagreeing.
 
-Note what spaCy is NOT used for: off-the-shelf NER will not tag Kafka or
-gRPC as skills, because it is trained on people, places and organisations.
-Using it that way is the mistake this module exists to avoid.
+Matching is n-gram lookup against the taxonomy rather than one large regex.
+Longest match wins and consumes its tokens, so "spring boot" does not also
+register a separate "spring", and "data structures" does not register "data".
+
+Note what spaCy is NOT used for here: off-the-shelf NER is trained on people,
+places and organisations and will not tag Kafka or gRPC as skills. It earns
+its place at sentence segmentation, which is how the evidence string for each
+mention is found.
 """
 
 from __future__ import annotations
 
 import argparse
+import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 
-from analyzer.taxonomy import Taxonomy
+from analyzer.taxonomy import Taxonomy, normalize
+
+MAX_NGRAM = 3
 
 
 class Section(str, Enum):
     """Where in the document a mention was found."""
-    REQUIRED = "required"      # posting: hard requirements
-    PREFERRED = "preferred"    # posting: nice-to-haves
-    SKILLS = "skills"          # resume: explicit skills section
-    EXPERIENCE = "experience"  # resume: demonstrated in work/projects
+
+    SKILLS = "skills"          # resume: an explicit skills list
+    EXPERIENCE = "experience"  # resume: demonstrated in work or projects
+    EDUCATION = "education"    # resume: degrees, coursework
     OTHER = "other"
 
 
-class MatchMethod(str, Enum):
-    ALIAS = "alias"            # exact taxonomy hit -- high confidence
-    FUZZY = "fuzzy"            # rapidfuzz near-miss
-    EMBEDDING = "embedding"    # semantic fallback -- log and review these
+class Origin(str, Enum):
+    """How strong the evidence is.
+
+    This replaces the required/preferred split, which does not survive on
+    Naukri's short descriptions -- only 14.9% carry both markers. See
+    docs/stage1-data-audit.md.
+    """
+
+    TAGGED = "tagged"            # employer named it outright in tagsAndSkills
+    DESCRIPTION = "description"  # found in the body text
+    RESUME = "resume"
+
+
+class Method(str, Enum):
+    ALIAS = "alias"    # exact taxonomy hit
+    FUZZY = "fuzzy"    # near-miss caught by rapidfuzz
 
 
 @dataclass
 class Mention:
     skill_id: str
-    surface: str               # the literal text that matched
+    surface: str
     section: Section
-    method: MatchMethod
+    origin: Origin
+    method: Method
     confidence: float
-    evidence: str              # the sentence it came from, for the UI
+    evidence: str
+
+
+# Resume section headers. Real resumes shout them, which is convenient.
+_HEADINGS = [
+    (Section.SKILLS, r"(technical\s+skills?|skills?\s*(&|and)?\s*\w*|technologies|tech\s+stack)"),
+    (Section.EXPERIENCE, r"(experience|projects?|work\s+history|employment|internships?)"),
+    (Section.EDUCATION, r"(education|academics?|qualifications?|certifications?|achievements?|awards?)"),
+]
+_HEADING_RE = re.compile(
+    r"^\s*(" + "|".join(p for _, p in _HEADINGS) + r")\s*:?\s*$",
+    re.IGNORECASE,
+)
 
 
 def split_sections(text: str) -> list[tuple[Section, str]]:
-    """Split raw text into (section, chunk) pairs.
+    """Split a resume into (section, chunk) pairs.
 
-    For postings this is the required/preferred split -- that distinction is
-    what makes the Stage 4 output feel intelligent rather than mechanical.
-    For resumes it separates demonstrated experience from a keyword dump.
+    A skill claimed under TECHNICAL SKILLS is a claim; the same word under
+    EDUCATION is usually a course name. Weighting them identically is how you
+    end up crediting someone with Java because their degree mentioned it.
     """
-    # TODO Stage 2: heading regexes for both document types.
-    raise NotImplementedError
+    lines = text.splitlines()
+    chunks: list[tuple[Section, list[str]]] = [(Section.OTHER, [])]
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        matched = None
+        # A heading is short and, in practice, capitalised.
+        if len(stripped) <= 40:
+            for section, pattern in _HEADINGS:
+                if re.fullmatch(r"\s*" + pattern + r"\s*:?\s*", stripped,
+                                re.IGNORECASE):
+                    matched = section
+                    break
+        if matched is not None:
+            chunks.append((matched, []))
+        else:
+            chunks[-1][1].append(stripped)
+
+    return [(sec, "\n".join(body)) for sec, body in chunks if body]
 
 
-def extract(text: str, taxonomy: Taxonomy) -> list[Mention]:
-    """Full pipeline: raw text -> deduped, normalized mentions."""
-    # TODO Stage 2:
-    #   - split_sections
-    #   - alias pass over each chunk (rapidfuzz, score_cutoff ~90)
-    #   - embedding pass over leftover noun phrases
-    #   - dedupe by skill_id, keeping the highest-confidence mention
-    raise NotImplementedError
+def _tokens(text: str) -> list[str]:
+    return [t for t in normalize(text).split() if t]
+
+
+def find_skills(text: str, taxonomy: Taxonomy) -> list[tuple[str, str]]:
+    """Return (skill_id, matched_surface) pairs found in the text.
+
+    Longest-first so multi-word skills win over their own fragments.
+    """
+    toks = _tokens(text)
+    used = [False] * len(toks)
+    found: list[tuple[str, str]] = []
+
+    for n in range(MAX_NGRAM, 0, -1):
+        for i in range(len(toks) - n + 1):
+            if any(used[i:i + n]):
+                continue
+            gram = " ".join(toks[i:i + n])
+            skill_id = taxonomy.resolve(gram)
+            if skill_id:
+                found.append((skill_id, gram))
+                for j in range(i, i + n):
+                    used[j] = True
+    return found
+
+
+def _evidence_for(surface: str, text: str, width: int = 90) -> str:
+    """The line the match came from, trimmed. Shown to the user as proof."""
+    head = surface.split()[0]
+    for line in text.splitlines():
+        if head in line.lower():
+            line = line.strip()
+            return line if len(line) <= width else line[:width].rstrip() + "..."
+    return ""
+
+
+def extract(text: str, taxonomy: Taxonomy,
+            origin: Origin = Origin.RESUME,
+            sectioned: bool = True) -> list[Mention]:
+    """Full pipeline: raw text -> deduped, normalized mentions.
+
+    Keeps the highest-confidence mention per skill. Section confidence is a
+    judgement call, recorded here so it can be defended: an explicit skills
+    list is a direct claim, project text is demonstrated use, and a mention
+    under education is usually incidental.
+    """
+    weights = {
+        Section.SKILLS: 1.0,
+        Section.EXPERIENCE: 0.9,
+        Section.OTHER: 0.7,
+        Section.EDUCATION: 0.5,
+    }
+
+    pieces = split_sections(text) if sectioned else [(Section.OTHER, text)]
+    best: dict[str, Mention] = {}
+
+    for section, chunk in pieces:
+        for skill_id, surface in find_skills(chunk, taxonomy):
+            confidence = weights[section]
+            existing = best.get(skill_id)
+            if existing and existing.confidence >= confidence:
+                continue
+            best[skill_id] = Mention(
+                skill_id=skill_id,
+                surface=surface,
+                section=section,
+                origin=origin,
+                method=Method.ALIAS,
+                confidence=confidence,
+                evidence=_evidence_for(surface, chunk),
+            )
+    return list(best.values())
+
+
+def extract_from_tags(tags: list[str], taxonomy: Taxonomy) -> list[Mention]:
+    """Employer-named tags. Higher confidence, and fuzzy matching is safe here
+    because each tag is already a short skill-shaped string rather than prose.
+    """
+    best: dict[str, Mention] = {}
+    for tag in tags:
+        skill_id = taxonomy.resolve(tag)
+        method, confidence = Method.ALIAS, 1.0
+        if not skill_id:
+            if taxonomy.is_noise(tag):
+                continue
+            skill_id, score = taxonomy.fuzzy_resolve(tag)
+            if not skill_id:
+                continue
+            method, confidence = Method.FUZZY, score
+        if skill_id in best and best[skill_id].confidence >= confidence:
+            continue
+        best[skill_id] = Mention(
+            skill_id=skill_id, surface=tag, section=Section.OTHER,
+            origin=Origin.TAGGED, method=method,
+            confidence=confidence, evidence=tag,
+        )
+    return list(best.values())
 
 
 def main() -> None:
@@ -73,8 +214,13 @@ def main() -> None:
 
     taxonomy = Taxonomy.load()
     mentions = extract(args.file.read_text(encoding="utf-8"), taxonomy)
-    for m in sorted(mentions, key=lambda x: -x.confidence):
-        print(f"{m.skill_id:<24} {m.method.value:<10} {m.confidence:.2f}  {m.section.value}")
+
+    print(f"{len(mentions)} skills found in {args.file.name}\n")
+    print(f"{'skill':<32} {'section':<12} {'conf':>5}  evidence")
+    print("-" * 96)
+    for m in sorted(mentions, key=lambda x: (-x.confidence, x.skill_id)):
+        print(f"{taxonomy.name_of(m.skill_id):<32} {m.section.value:<12} "
+              f"{m.confidence:>5.2f}  {m.evidence[:44]}")
 
 
 if __name__ == "__main__":

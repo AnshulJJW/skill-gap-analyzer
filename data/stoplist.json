@@ -1,0 +1,73 @@
+{
+  "_note": "Tags that appear frequently in employer data but are NOT learnable skills. Rejecting these explicitly -- rather than silently failing to match them -- means we can measure how much of the source data is noise, which is a finding worth reporting rather than hiding. Measured on the loaded corpus: roughly half the top 20 employer tags land here.",
+
+  "_categories": {
+    "job_title": "Names a role, not a skill. You cannot learn 'backend'.",
+    "generic_activity": "Too vague to act on. 'Development' is not a thing to study.",
+    "credential": "A degree or qualification, not a skill.",
+    "trait": "A personal quality. Real, but not something a roadmap can teach.",
+    "domain": "An industry the employer operates in, not a skill.",
+    "fragment": "A broken piece of a longer phrase, produced by the source's own tagging."
+  },
+
+  "stoplist": {
+    "job_title": [
+      "backend", "frontend", "front end", "full stack", "software engineer",
+      "software engineer ii", "software developer", "developer", "java developer",
+      "software associate", "business executive", "angular developer",
+      "manager technology", "manager quality assurance", "product management",
+      "project management", "technology management", "technical leadership",
+      "software development lead", "software development manager", "qa",
+      "data analyst", "recruitment", "hr", "sales", "customer support",
+      "customer service", "technical support", "consulting", "operations"
+    ],
+    "generic_activity": [
+      "development", "coding", "programming", "software", "software development",
+      "software engineering", "software programming", "application development",
+      "web development", "frontend development", "backend development",
+      "ui development", "web designing", "design", "design development",
+      "developing", "engineering", "code", "application", "technical",
+      "technology", "tools", "framework", "architecture", "software design",
+      "software solutions", "business solutions", "it services", "it",
+      "web", "web technologies", "internet applications", "mobile",
+      "mobile applications", "mobile development", "mobile application development",
+      "application software", "web application", "web application development",
+      "enterprise application", "application design", "application programming",
+      "application architecture", "product design", "product engineering",
+      "product analysis", "product quality", "software quality", "management",
+      "process improvement", "continuous improvement", "operational excellence",
+      "change management", "risk management", "business process", "workflow",
+      "integration", "system integration", "automation", "usage", "training",
+      "research", "analysis", "simulation", "prototype", "graphics",
+      "animation", "translation", "scheduling", "compliance", "monitoring",
+      "distribution system", "supply chain", "packaging", "production support",
+      "development testing", "testing tools", "software development m",
+      "emerging technologies", "infrastructure", "server", "hardware",
+      "interfaces", "metadata", "query", "schema", "basic", "core", "level",
+      "program", "science", "data", "data management", "diversity and inclusion"
+    ],
+    "credential": [
+      "computer science", "cs", "mca", "b.tech", "be", "mtech", "degree",
+      "internship", "operating systems", "dbms"
+    ],
+    "trait": [
+      "analytical", "analytical skills", "communication skills",
+      "interpersonal skills", "problem solving", "time management",
+      "focus", "wellness", "french"
+    ],
+    "domain": [
+      "healthcare", "health insurance", "medical insurance", "banking",
+      "investment banking", "financial services", "finance", "e-commerce",
+      "telecom", "social media", "digital marketing", "sap", "erp",
+      "salesforce", "crm", "seo", "content management", "cms",
+      "information technology", "microsoft", "adobe", "photoshop",
+      "illustrator", "dreamweaver", "psd", "ms office", "mis", "excel"
+    ],
+    "fragment": [
+      "end", "side", "front", "com", "boot", "node", "spi", "soc", "san",
+      "usb", "sms", "sdk", "ux", "ui", "pdf", "vb", "linq"
+    ]
+  },
+
+  "_note_on_overlap": "Some entries here also appear as skills or aliases in skills.json -- 'excel', 'dbms', 'operating systems', 'problem solving', 'ui', 'node', 'linq'. The taxonomy wins: an exact alias match is a deliberate mapping and beats the stoplist, which only applies to tags that would otherwise pass through unmatched. See taxonomy.resolve() for the precedence."
+}
