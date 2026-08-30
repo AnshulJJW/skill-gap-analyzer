@@ -51,3 +51,19 @@ is a stronger statement than an unexamined claim of accuracy.
   looser than "graduate roles only".
 - Boilerplate postings (posting 1) name no technology at all. They still
   count toward the demand denominator while contributing no signal.
+
+## Role-matching problems (continued)
+
+| posting | filed as | actually |
+|---|---|---|
+| 5 — Staff Software Engineer | sde1-backend, entry-level | Senior role. Body text says "7+ years of experience in backend development", while Naukri's own `experience` field says `2-5 Yrs`. The exclude list catches "senior", "lead" and "architect" but not "staff". |
+
+This is a second, distinct failure mode from posting 3. Posting 3 was the
+wrong *profession*; this is the wrong *seniority*, and it slipped through
+because the structured experience field disagrees with the description.
+The structured field is the one we filter on, and it is not always right.
+
+Candidate fixes, after scoring:
+- add "staff", "principal", "sr", "iii", "iv" to the role exclude list
+- cross-check the description for "N+ years" and prefer it over the
+  structured field when they disagree
