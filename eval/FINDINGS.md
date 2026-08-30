@@ -31,6 +31,7 @@ flattery. It is the most common way people accidentally lie with a metric.
 | OpenGL | posting 15 | graphics library |
 | Apache NiFi | posting 17 | the entire subject of the role |
 | Groovy, Jolt, Hashicorp Vault | posting 17 | named in nice-to-haves |
+| CakePHP, Smarty | posting 18 | PHP ecosystem |
 | Business Objects | posting 15 | SAP BI reporting tool |
 | Visual Studio | posting 6 | an editor, not a skill — correctly absent |
 | GIS / ESRI / ERDAS / remote sensing | posting 3 | whole adjacent profession; out of scope, not a gap to fill |
@@ -125,9 +126,19 @@ something else. Counted properly once labelling is complete.
 | 6 | Software Engineer III | senior, 5+ years |
 | 9 | Software Engineer - Power | hardware/firmware, power management ICs |
 | 15 | Software Engineer iPhone | iOS mobile development |
+| 18 | Web Developer/Software Engineer | PHP/CakePHP/Drupal/WordPress agency work — the exact segment the exclude list was meant to keep out |
 
-Five of the first fifteen — a third of the sample so far. Two distinct
-causes: `software engineer` and `software developer` are so generic they
+Six of the first eighteen — a third of the sample so far. Three distinct
+causes:
+
+**Exclusions are title-only.** Posting 18 is precisely the PHP/CMS agency
+work the exclude list exists to filter out, but its title is "Web
+Developer/Software Engineer" and every PHP mention is in the description.
+The filter never reads the description, so the exclusion cannot fire. This
+is a design flaw rather than a missing pattern — adding more words to the
+list would not have caught it.
+
+Two further causes: `software engineer` and `software developer` are so generic they
 match any adjacent discipline, and seniority words like "staff" and "III"
 are not excluded. Both are cheap to fix; the value is knowing the rate.
 
