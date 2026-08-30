@@ -18,6 +18,7 @@ from pathlib import Path
 
 import pytest
 from sqlalchemy import inspect
+from sqlalchemy.exc import SQLAlchemyError
 
 from analyzer.db import get_engine
 from eval.score import load_predictions, prf
@@ -35,7 +36,7 @@ def _corpus_available() -> bool:
     """
     try:
         return "posting_skills" in inspect(get_engine()).get_table_names()
-    except Exception:
+    except SQLAlchemyError:
         return False
 
 
