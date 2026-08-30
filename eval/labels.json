@@ -1,6 +1,6 @@
 {
   "_note": "Stage 3 hand labels. Ground truth for precision/recall.",
-  "reviewed": 20,
+  "reviewed": 30,
   "total": 40,
   "cases": [
     {
@@ -250,6 +250,144 @@
         "maven",
         "rest-api",
         "testing"
+      ]
+    },
+    {
+      "id": 5101,
+      "role": "frontend",
+      "skills": [
+        "ci-cd",
+        "cloud",
+        "devops",
+        "javascript",
+        "php",
+        "react",
+        "redux"
+      ]
+    },
+    {
+      "id": 6231,
+      "role": "frontend",
+      "skills": [
+        "communication",
+        "git",
+        "javascript",
+        "jquery",
+        "system-design",
+        "wordpress"
+      ]
+    },
+    {
+      "id": 6881,
+      "role": "frontend",
+      "skills": [
+        "debugging",
+        "javascript",
+        "react",
+        "responsive-design",
+        "testing"
+      ]
+    },
+    {
+      "id": 5391,
+      "role": "frontend",
+      "skills": [
+        "ajax",
+        "django",
+        "flask",
+        "git",
+        "javascript",
+        "jquery",
+        "mvc",
+        "mysql",
+        "nosql",
+        "postgresql",
+        "python",
+        "sql"
+      ]
+    },
+    {
+      "id": 3597,
+      "role": "frontend",
+      "skills": [
+        "angular",
+        "communication",
+        "docker",
+        "gcp",
+        "git",
+        "java",
+        "javascript",
+        "nodejs",
+        "python",
+        "react",
+        "tdd",
+        "testing",
+        "typescript",
+        "vue"
+      ]
+    },
+    {
+      "id": 4675,
+      "role": "frontend",
+      "skills": [
+        "agile",
+        "angular",
+        "code-review",
+        "css",
+        "javascript",
+        "nodejs",
+        "react",
+        "responsive-design"
+      ]
+    },
+    {
+      "id": 6132,
+      "role": "frontend",
+      "skills": [
+        "angular",
+        "communication",
+        "html",
+        "javascript",
+        "responsive-design",
+        "rest-api",
+        "testing"
+      ]
+    },
+    {
+      "id": 5728,
+      "role": "frontend",
+      "skills": [
+        "debugging",
+        "javascript",
+        "monitoring",
+        "react",
+        "responsive-design"
+      ]
+    },
+    {
+      "id": 4652,
+      "role": "frontend",
+      "skills": [
+        "css",
+        "git",
+        "html",
+        "javascript",
+        "responsive-design",
+        "rest-api",
+        "seo",
+        "testing"
+      ]
+    },
+    {
+      "id": 5075,
+      "role": "frontend",
+      "skills": [
+        "ajax",
+        "bootstrap",
+        "css",
+        "html",
+        "javascript",
+        "jquery"
       ]
     }
   ]

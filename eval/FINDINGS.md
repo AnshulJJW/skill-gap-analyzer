@@ -235,3 +235,37 @@ Problem Solving 4, Cloud Fundamentals 4, SAP 2.
 
 Remaining backend recall losses are the prose problem again: System Design
 2, Database Design 2, SQL, NoSQL — all phrases rather than names.
+
+## Scored at 30 postings (frontend block done): P 0.850 / R 0.871 / F1 0.861
+
+209 true skill mentions. Precision has climbed steadily across the three
+checkpoints: 0.757 (n=10) -> 0.810 (n=20) -> 0.850 (n=30). Recall is flat
+around 0.87-0.89 throughout.
+
+| role | precision | recall | n |
+|---|---|---|---|
+| frontend | **0.931** | 0.859 | 78 |
+| sde1-backend | 0.810 | 0.878 | 131 |
+
+**Frontend precision is 12 points higher than backend, and the reason is
+linguistic rather than technical: frontend skills are named, backend skills
+are described.** A React posting writes "React". A backend posting writes
+"relational and non-relational databases", "architect scalable systems",
+"code versioning tools". Concrete product nouns match a taxonomy; prose
+does not.
+
+The same split shows in the tags: frontend postings tag `react.js` and
+`jquery`, backend postings tag `analytical`, `computer science`, `coding`.
+
+### Recall losses are now concentrated in two causes
+
+- **JavaScript, 6 misses** — the single largest. Every instance is React,
+  Angular, Vue or Node named with JavaScript implied but never written.
+  The framework-implies-language question can no longer be deferred to the
+  Stage 4 prerequisite graph; it is costing measurable recall now.
+- **Responsive Design, 4 misses** — my aliases are too narrow. Postings say
+  "responsive and adaptive design", "UX design concepts", "user interface
+  design"; the taxonomy lists only a couple of spellings.
+
+False positives remain dominated by the category-to-product aliases:
+Problem Solving 5, Cloud Fundamentals 5, SAP 2, Computer Networks 2.
