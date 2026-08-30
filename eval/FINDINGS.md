@@ -148,8 +148,10 @@ are not excluded. Both are cheap to fix; the value is knowing the rate.
 |---|---|---|---|
 | 5 | Staff Software Engineer | 7+ years | 2-5 Yrs |
 | 6 | Software Engineer III | 5+ years | 2-5 Yrs |
+| 25 | Frontend Engineer | 6+ years, React 4+ years | 1-4 Yrs |
 
-Two of the first six. If the rate holds across the sample it is a headline
+Three by posting 25, and the third is in the frontend block -- so this is
+not a backend-only artefact. If the rate holds across the sample it is a headline
 limitation, not a footnote: a meaningful share of the "entry-level" demand
 profile is built from senior postings, which would inflate demand for
 skills a fresher is not expected to have.
