@@ -99,6 +99,7 @@ color:var(--ink);padding:.5rem;display:none}
   <span id="cnt" class="meta"></span>
   <button id="prev">&larr; Prev</button>
   <button id="next" class="p">Next &rarr;</button>
+  <button id="none">No skills here</button>
   <button id="save">Save file</button>
 </header>
 <main>
@@ -122,11 +123,13 @@ color:var(--ink);padding:.5rem;display:none}
 const POSTINGS = __POSTINGS__, SKILLS = __SKILLS__;
 const KEY = "sga_labels_v1";
 let i = 0, labels = JSON.parse(localStorage.getItem(KEY) || "{}");
+let seen = new Set(JSON.parse(localStorage.getItem(KEY + "_seen") || "[]"));
 
 const byCat = {};
 SKILLS.forEach(s => (byCat[s.category] ||= []).push(s));
 
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(labels)); }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(labels));
+  localStorage.setItem(KEY + "_seen", JSON.stringify([...seen])); }catch(e){} }
 
 function renderSkills(){
   const q = document.getElementById("find").value.toLowerCase();
@@ -157,10 +160,10 @@ function render(){
   document.getElementById("jd").textContent = p.description;
   document.getElementById("tags").textContent = "employer tags: " + (p.tags || "none");
   document.getElementById("prog").style.width =
-    (100*Object.keys(labels).length/POSTINGS.length) + "%";
-  const n = Object.keys(labels).length;
+    (100*seen.size/POSTINGS.length) + "%";
+  const n = seen.size;
   const c = document.getElementById("cnt");
-  c.textContent = `${n} of ${POSTINGS.length} labelled`;
+  c.textContent = `${n} of ${POSTINGS.length} reviewed`;
   c.className = n >= POSTINGS.length ? "done" : "meta";
   document.getElementById("prev").disabled = i === 0;
   document.getElementById("next").disabled = i === POSTINGS.length - 1;
@@ -173,8 +176,14 @@ document.getElementById("skills").addEventListener("change", e => {
   const set = new Set(labels[pid] || []);
   e.target.checked ? set.add(id) : set.delete(id);
   labels[pid] = [...set];
+  seen.add(pid);
   save(); render();
 });
+document.getElementById("none").onclick = () => {
+  const pid = POSTINGS[i].id;
+  labels[pid] = []; seen.add(pid); save();
+  if(i < POSTINGS.length-1){ i++; } render();
+};
 document.getElementById("find").addEventListener("input", renderSkills);
 document.getElementById("prev").onclick = () => { if(i>0){ i--; render(); } };
 document.getElementById("next").onclick = () => { if(i<POSTINGS.length-1){ i++; render(); } };
@@ -187,9 +196,10 @@ document.addEventListener("keydown", e => {
 document.getElementById("save").onclick = () => {
   const payload = {
     _note: "Stage 3 hand labels. Ground truth for precision/recall.",
-    labelled: Object.keys(labels).length,
+    reviewed: seen.size,
     total: POSTINGS.length,
-    cases: POSTINGS.map(p => ({ id: p.id, role: p.role, skills: (labels[p.id]||[]).sort() }))
+    cases: POSTINGS.filter(p => seen.has(p.id))
+      .map(p => ({ id: p.id, role: p.role, skills: (labels[p.id]||[]).sort() }))
   };
   const text = JSON.stringify(payload, null, 2);
   const blob = new Blob([text], {type:"application/json"});

@@ -68,10 +68,14 @@ def main() -> int:
 
     tax = Taxonomy.load()
     data = json.loads(args.labels.read_text(encoding="utf-8"))
-    cases = [c for c in data["cases"] if c["skills"]]
+    # Every exported case was explicitly reviewed, so an empty skills list
+    # means "this posting genuinely requires nothing in our taxonomy" -- a
+    # real test of precision. Dropping those would hide invented skills.
+    cases = data["cases"]
+    empty = sum(1 for c in cases if not c["skills"])
 
     if not cases:
-        raise SystemExit("labels.json has no labelled cases yet.")
+        raise SystemExit("labels.json has no reviewed cases yet.")
 
     predicted = load_predictions([c["id"] for c in cases])
 
@@ -99,7 +103,9 @@ def main() -> int:
 
     precision, recall, f1 = prf(TP, FP, FN)
 
-    print(f"labelled postings   {len(cases)} of {data.get('total', '?')}")
+    print(f"reviewed postings   {len(cases)} of {data.get('total', '?')}")
+    if empty:
+        print(f"  of which empty    {empty}  (no taxonomy skill required)")
     print(f"true skill mentions {TP + FN}\n")
     print(f"{'':<12}{'precision':>11}{'recall':>9}{'F1':>8}")
     print("-" * 40)
