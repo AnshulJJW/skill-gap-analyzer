@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from analyzer.db import (
     create_all,
     get_engine,
+    posting_skills,
     postings,
     provided_skills,
     sources,
@@ -62,13 +63,60 @@ def dedupe_key(title: str, company: str, desc: str) -> str:
     return hashlib.md5(blob.encode("utf-8")).hexdigest()
 
 
-def assign_role(title: str, roles: list[dict]) -> str | None:
+# Reading a minimum experience requirement out of prose.
+#
+# The first version of this matched any number followed by "year", which read
+# "2-5 years" as five and discarded genuinely entry-level postings. Three of
+# the forty labelled postings were removed that way. A range states a
+# MINIMUM of its lower bound; only "N+" and "at least N" state a floor.
+_RANGE = re.compile(r"(\d{1,2}(?:\.\d)?)\s*(?:-|–|to)\s*\d{1,2}(?:\.\d)?\s*\+?\s*y(?:ea)?rs?", re.IGNORECASE)
+_PLUS = re.compile(r"(\d{1,2}(?:\.\d)?)\s*\+\s*y(?:ea)?rs?", re.IGNORECASE)
+_ATLEAST = re.compile(r"(?:at least|minimum(?:\s+of)?|min\.?)\s+(\d{1,2}(?:\.\d)?)\s*\+?\s*y(?:ea)?rs?", re.IGNORECASE)
+
+
+def min_years_required(text: str) -> float | None:
+    """Lowest years-of-experience floor the text states, or None.
+
+    Ranges contribute their lower bound: "2-5 years" asks for two, not five.
+    Taking the smallest floor found is deliberate -- a posting saying both
+    "2-5 years overall" and "5+ years in React" is still open to someone with
+    two years, and over-filtering costs real data.
+    """
+    floors = [float(m.group(1)) for m in _RANGE.finditer(text)]
+    floors += [float(m.group(1)) for m in _PLUS.finditer(text)]
+    floors += [float(m.group(1)) for m in _ATLEAST.finditer(text)]
+    return min(floors) if floors else None
+
+
+def assign_role(title: str, description: str, cfg: dict) -> str | None:
+    """Match a posting to a role, then apply three disqualifying checks.
+
+    Stage 3 hand-labelling found 7 of 40 postings (17.5%) misfiled -- GIS,
+    firmware and iOS roles filed as backend, three senior roles filed as
+    entry-level, a business analyst filed as a data analyst. Three distinct
+    causes, so three distinct checks.
+    """
     t = title.lower()
-    for role in roles:
+    d = description.lower()
+    desc_ex = cfg.get("exclude_description", {})
+    max_years = cfg.get("min_years_from_description", {}).get("max_years", 99)
+
+    for role in cfg["roles"]:
         if any(x in t for x in role["exclude"]):
             continue
-        if any(i in t for i in role["include"]):
-            return role["id"]
+        if not any(i in t for i in role["include"]):
+            continue
+
+        # 1. disqualifying signal in the description, not the title
+        if any(x in d for x in desc_ex.get(role["id"], [])):
+            return None
+
+        # 2. body text states a higher floor than the structured field claims
+        floor = min_years_required(description)
+        if floor is not None and floor > max_years:
+            return None
+
+        return role["id"]
     return None
 
 
@@ -85,11 +133,15 @@ def load_naukri(cfg: dict) -> pd.DataFrame:
     df = df[years <= cfg["entry_level_max_years"]]
     print(f"  entry-level     {len(df):>7,}  (0-{cfg['entry_level_max_years']} yrs)")
 
-    df["role_id"] = df.title.fillna("").map(lambda t: assign_role(t, cfg["roles"]))
+    df["description_raw"] = df.jobDescription.fillna("").map(clean_html)
+    df["role_id"] = [
+        assign_role(str(t), d, cfg)
+        for t, d in zip(df.title.fillna(""), df.description_raw)
+    ]
     df = df[df.role_id.notna()]
     print(f"  role-matched    {len(df):>7,}")
 
-    df["description"] = df.jobDescription.fillna("").map(clean_html)
+    df["description"] = df.description_raw
     df = df[df.description.str.len() >= 60]
     print(f"  desc >= 60ch    {len(df):>7,}")
 
@@ -111,6 +163,13 @@ def main() -> int:
     df = load_naukri(cfg)
 
     with engine.begin() as conn:
+        # Clear children first, explicitly. SQLite does not enforce
+        # ON DELETE CASCADE unless foreign keys are switched on per
+        # connection, so deleting postings alone leaves orphaned rows --
+        # and because primary keys restart from 1, the next load collides
+        # with them on the unique constraint.
+        conn.execute(delete(posting_skills))
+        conn.execute(delete(provided_skills))
         conn.execute(delete(postings).where(postings.c.source_id == "naukri"))
         conn.execute(delete(sources).where(sources.c.id == "naukri"))
         conn.execute(insert(sources), {

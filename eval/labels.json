@@ -1,18 +1,19 @@
 {
   "_note": "Stage 3 hand labels. Ground truth for precision/recall.",
-  "reviewed": 40,
-  "total": 40,
+  "reviewed": 34,
+  "total": 34,
   "cases": [
     {
-      "id": 1082,
+      "id": 1014,
       "role": "sde1-backend",
       "skills": [
         "debugging",
         "testing"
-      ]
+      ],
+      "external_id": "40924501294"
     },
     {
-      "id": 248,
+      "id": 242,
       "role": "sde1-backend",
       "skills": [
         "agile",
@@ -20,61 +21,22 @@
         "javascript",
         "nodejs",
         "python"
-      ]
+      ],
+      "external_id": "170622502127"
     },
     {
-      "id": 2600,
-      "role": "sde1-backend",
-      "skills": []
-    },
-    {
-      "id": 2338,
+      "id": 1921,
       "role": "sde1-backend",
       "skills": [
         "android",
         "debugging",
         "git",
         "testing"
-      ]
+      ],
+      "external_id": "111024501023"
     },
     {
-      "id": 2132,
-      "role": "sde1-backend",
-      "skills": [
-        "agile",
-        "aws",
-        "azure",
-        "ci-cd",
-        "communication",
-        "database-design",
-        "git",
-        "java",
-        "microservices",
-        "mysql",
-        "nosql",
-        "postgresql",
-        "problem-solving",
-        "python",
-        "rest-api",
-        "spring-boot",
-        "sql",
-        "system-design",
-        "testing"
-      ]
-    },
-    {
-      "id": 1350,
-      "role": "sde1-backend",
-      "skills": [
-        "azure",
-        "ci-cd",
-        "csharp",
-        "git",
-        "redis"
-      ]
-    },
-    {
-      "id": 996,
+      "id": 943,
       "role": "sde1-backend",
       "skills": [
         "agile",
@@ -83,10 +45,11 @@
         "java",
         "multithreading",
         "python"
-      ]
+      ],
+      "external_id": "211124506643"
     },
     {
-      "id": 6927,
+      "id": 6262,
       "role": "sde1-backend",
       "skills": [
         "agile",
@@ -103,15 +66,11 @@
         "sql",
         "system-design",
         "testing"
-      ]
+      ],
+      "external_id": "51124502471"
     },
     {
-      "id": 838,
-      "role": "sde1-backend",
-      "skills": []
-    },
-    {
-      "id": 4355,
+      "id": 3788,
       "role": "sde1-backend",
       "skills": [
         "agile",
@@ -121,10 +80,11 @@
         "oop",
         "python",
         "shell"
-      ]
+      ],
+      "external_id": "280423501689"
     },
     {
-      "id": 317,
+      "id": 307,
       "role": "sde1-backend",
       "skills": [
         "cpp",
@@ -139,10 +99,11 @@
         "python",
         "rest-api",
         "system-design"
-      ]
+      ],
+      "external_id": "61124022955"
     },
     {
-      "id": 300,
+      "id": 290,
       "role": "sde1-backend",
       "skills": [
         "agile",
@@ -152,18 +113,283 @@
         "problem-solving",
         "statistics",
         "testing"
-      ]
+      ],
+      "external_id": "61124501697"
     },
     {
-      "id": 907,
+      "id": 861,
       "role": "sde1-backend",
       "skills": [
         "agile",
         "oracle-db"
-      ]
+      ],
+      "external_id": "210922501696"
     },
     {
-      "id": 2088,
+      "id": 5333,
+      "role": "sde1-backend",
+      "skills": [
+        "css",
+        "html",
+        "javascript",
+        "nodejs",
+        "php",
+        "react"
+      ],
+      "external_id": "61124501026"
+    },
+    {
+      "id": 6253,
+      "role": "sde1-backend",
+      "skills": [
+        "debugging",
+        "django",
+        "mongodb",
+        "python",
+        "rest-api",
+        "teamwork"
+      ],
+      "external_id": "60522500478"
+    },
+    {
+      "id": 3747,
+      "role": "sde1-backend",
+      "skills": [
+        "java",
+        "jdbc",
+        "jsp",
+        "maven",
+        "rest-api",
+        "testing"
+      ],
+      "external_id": "121224503098"
+    },
+    {
+      "id": 4487,
+      "role": "frontend",
+      "skills": [
+        "ci-cd",
+        "cloud",
+        "devops",
+        "javascript",
+        "php",
+        "react",
+        "redux"
+      ],
+      "external_id": "211024503709"
+    },
+    {
+      "id": 5586,
+      "role": "frontend",
+      "skills": [
+        "communication",
+        "git",
+        "javascript",
+        "jquery",
+        "system-design",
+        "wordpress"
+      ],
+      "external_id": "260424501369"
+    },
+    {
+      "id": 6216,
+      "role": "frontend",
+      "skills": [
+        "debugging",
+        "javascript",
+        "react",
+        "responsive-design",
+        "testing"
+      ],
+      "external_id": "70624502147"
+    },
+    {
+      "id": 4090,
+      "role": "frontend",
+      "skills": [
+        "agile",
+        "angular",
+        "code-review",
+        "css",
+        "javascript",
+        "nodejs",
+        "react",
+        "responsive-design"
+      ],
+      "external_id": "51224917029"
+    },
+    {
+      "id": 5489,
+      "role": "frontend",
+      "skills": [
+        "angular",
+        "communication",
+        "html",
+        "javascript",
+        "responsive-design",
+        "rest-api",
+        "testing"
+      ],
+      "external_id": "281122504403"
+    },
+    {
+      "id": 5096,
+      "role": "frontend",
+      "skills": [
+        "debugging",
+        "javascript",
+        "monitoring",
+        "react",
+        "responsive-design"
+      ],
+      "external_id": "131224503625"
+    },
+    {
+      "id": 4069,
+      "role": "frontend",
+      "skills": [
+        "css",
+        "git",
+        "html",
+        "javascript",
+        "responsive-design",
+        "rest-api",
+        "seo",
+        "testing"
+      ],
+      "external_id": "171224500485"
+    },
+    {
+      "id": 4461,
+      "role": "frontend",
+      "skills": [
+        "ajax",
+        "bootstrap",
+        "css",
+        "html",
+        "javascript",
+        "jquery"
+      ],
+      "external_id": "80719500108"
+    },
+    {
+      "id": 5077,
+      "role": "frontend",
+      "skills": [
+        "bootstrap",
+        "css",
+        "responsive-design",
+        "teamwork"
+      ],
+      "external_id": "101224501429"
+    },
+    {
+      "id": 3843,
+      "role": "frontend",
+      "skills": [
+        "cpp",
+        "debugging",
+        "javascript",
+        "jquery",
+        "responsive-design",
+        "teamwork"
+      ],
+      "external_id": "30723501839"
+    },
+    {
+      "id": 6530,
+      "role": "data-analyst",
+      "skills": [
+        "business-intelligence",
+        "data-analysis",
+        "data-quality",
+        "machine-learning",
+        "nlp",
+        "python",
+        "sql"
+      ],
+      "external_id": "121224500274"
+    },
+    {
+      "id": 6702,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "data-quality",
+        "data-visualization",
+        "database-design",
+        "debugging",
+        "information-security"
+      ],
+      "external_id": "101224504229"
+    },
+    {
+      "id": 6532,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "data-quality",
+        "data-visualization",
+        "etl",
+        "excel",
+        "machine-learning",
+        "python",
+        "sql"
+      ],
+      "external_id": "100724501642"
+    },
+    {
+      "id": 6690,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "database-design"
+      ],
+      "external_id": "141224008120"
+    },
+    {
+      "id": 6683,
+      "role": "data-analyst",
+      "skills": [
+        "aws",
+        "data-analysis",
+        "python",
+        "sql"
+      ],
+      "external_id": "161224500993"
+    },
+    {
+      "id": 6849,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis"
+      ],
+      "external_id": "20323502771"
+    },
+    {
+      "id": 6633,
+      "role": "data-analyst",
+      "skills": [
+        "business-intelligence",
+        "data-analysis",
+        "power-bi",
+        "sql"
+      ],
+      "external_id": "21224013701"
+    },
+    {
+      "id": 6468,
+      "role": "data-analyst",
+      "skills": [
+        "data-analysis",
+        "data-quality",
+        "etl",
+        "excel"
+      ],
+      "external_id": "40319502010"
+    },
+    {
+      "id": 1729,
       "role": "sde1-backend",
       "skills": [
         "agile",
@@ -174,31 +400,11 @@
         "rest-api",
         "spring-boot",
         "system-design"
-      ]
+      ],
+      "external_id": "230923500478"
     },
     {
-      "id": 2222,
-      "role": "sde1-backend",
-      "skills": [
-        "c",
-        "ios",
-        "xml"
-      ]
-    },
-    {
-      "id": 5969,
-      "role": "sde1-backend",
-      "skills": [
-        "css",
-        "html",
-        "javascript",
-        "nodejs",
-        "php",
-        "react"
-      ]
-    },
-    {
-      "id": 264,
+      "id": 257,
       "role": "sde1-backend",
       "skills": [
         "agile",
@@ -212,84 +418,11 @@
         "rest-api",
         "shell",
         "sql"
-      ]
+      ],
+      "external_id": "191124503580"
     },
     {
-      "id": 1901,
-      "role": "sde1-backend",
-      "skills": [
-        "css",
-        "database-design",
-        "html",
-        "javascript",
-        "mysql",
-        "oop",
-        "php",
-        "wordpress"
-      ]
-    },
-    {
-      "id": 6918,
-      "role": "sde1-backend",
-      "skills": [
-        "debugging",
-        "django",
-        "mongodb",
-        "python",
-        "rest-api",
-        "teamwork"
-      ]
-    },
-    {
-      "id": 4313,
-      "role": "sde1-backend",
-      "skills": [
-        "java",
-        "jdbc",
-        "jsp",
-        "maven",
-        "rest-api",
-        "testing"
-      ]
-    },
-    {
-      "id": 5101,
-      "role": "frontend",
-      "skills": [
-        "ci-cd",
-        "cloud",
-        "devops",
-        "javascript",
-        "php",
-        "react",
-        "redux"
-      ]
-    },
-    {
-      "id": 6231,
-      "role": "frontend",
-      "skills": [
-        "communication",
-        "git",
-        "javascript",
-        "jquery",
-        "system-design",
-        "wordpress"
-      ]
-    },
-    {
-      "id": 6881,
-      "role": "frontend",
-      "skills": [
-        "debugging",
-        "javascript",
-        "react",
-        "responsive-design",
-        "testing"
-      ]
-    },
-    {
-      "id": 5391,
+      "id": 4771,
       "role": "frontend",
       "skills": [
         "ajax",
@@ -304,10 +437,11 @@
         "postgresql",
         "python",
         "sql"
-      ]
+      ],
+      "external_id": "141122502418"
     },
     {
-      "id": 3597,
+      "id": 3059,
       "role": "frontend",
       "skills": [
         "angular",
@@ -324,177 +458,10 @@
         "testing",
         "typescript",
         "vue"
-      ]
-    },
-    {
-      "id": 4675,
-      "role": "frontend",
-      "skills": [
-        "agile",
-        "angular",
-        "code-review",
-        "css",
-        "javascript",
-        "nodejs",
-        "react",
-        "responsive-design"
-      ]
-    },
-    {
-      "id": 6132,
-      "role": "frontend",
-      "skills": [
-        "angular",
-        "communication",
-        "html",
-        "javascript",
-        "responsive-design",
-        "rest-api",
-        "testing"
-      ]
-    },
-    {
-      "id": 5728,
-      "role": "frontend",
-      "skills": [
-        "debugging",
-        "javascript",
-        "monitoring",
-        "react",
-        "responsive-design"
-      ]
-    },
-    {
-      "id": 4652,
-      "role": "frontend",
-      "skills": [
-        "css",
-        "git",
-        "html",
-        "javascript",
-        "responsive-design",
-        "rest-api",
-        "seo",
-        "testing"
-      ]
-    },
-    {
-      "id": 5075,
-      "role": "frontend",
-      "skills": [
-        "ajax",
-        "bootstrap",
-        "css",
-        "html",
-        "javascript",
-        "jquery"
-      ]
-    },
-    {
-      "id": 5709,
-      "role": "frontend",
-      "skills": [
-        "bootstrap",
-        "css",
-        "responsive-design",
-        "teamwork"
-      ]
-    },
-    {
-      "id": 4411,
-      "role": "frontend",
-      "skills": [
-        "cpp",
-        "debugging",
-        "javascript",
-        "jquery",
-        "responsive-design",
-        "teamwork"
-      ]
-    },
-    {
-      "id": 7207,
-      "role": "data-analyst",
-      "skills": [
-        "business-intelligence",
-        "data-analysis",
-        "data-quality",
-        "machine-learning",
-        "nlp",
-        "python",
-        "sql"
-      ]
-    },
-    {
-      "id": 7387,
-      "role": "data-analyst",
-      "skills": [
-        "data-analysis",
-        "data-quality",
-        "data-visualization",
-        "database-design",
-        "debugging",
-        "information-security"
-      ]
-    },
-    {
-      "id": 7209,
-      "role": "data-analyst",
-      "skills": [
-        "data-analysis",
-        "data-quality",
-        "data-visualization",
-        "etl",
-        "excel",
-        "machine-learning",
-        "python",
-        "sql"
-      ]
-    },
-    {
-      "id": 7374,
-      "role": "data-analyst",
-      "skills": [
-        "data-analysis",
-        "database-design"
-      ]
-    },
-    {
-      "id": 7367,
-      "role": "data-analyst",
-      "skills": [
-        "aws",
-        "data-analysis",
-        "python",
-        "sql"
-      ]
-    },
-    {
-      "id": 7540,
-      "role": "data-analyst",
-      "skills": [
-        "data-analysis"
-      ]
-    },
-    {
-      "id": 7315,
-      "role": "data-analyst",
-      "skills": [
-        "business-intelligence",
-        "data-analysis",
-        "power-bi",
-        "sql"
-      ]
-    },
-    {
-      "id": 7143,
-      "role": "data-analyst",
-      "skills": [
-        "data-analysis",
-        "data-quality",
-        "etl",
-        "excel"
-      ]
+      ],
+      "external_id": "91024500455"
     }
-  ]
+  ],
+  "_anchored": "Cases carry external_id (Naukri's own job id) so the set survives a rebuild that reassigns primary keys.",
+  "_note_filtered": "10 of 40 labelled postings were removed by the Stage 4 role filters and are no longer in the corpus. Their labels are retained in labels_filtered_out.json as evidence the filters removed the right things."
 }

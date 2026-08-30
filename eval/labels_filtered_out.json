@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "id": 2600,
+      "role": "sde1-backend",
+      "skills": [],
+      "external_id": "120822502372"
+    },
+    {
+      "id": 2132,
+      "role": "sde1-backend",
+      "skills": [
+        "agile",
+        "aws",
+        "azure",
+        "ci-cd",
+        "communication",
+        "database-design",
+        "git",
+        "java",
+        "microservices",
+        "mysql",
+        "nosql",
+        "postgresql",
+        "problem-solving",
+        "python",
+        "rest-api",
+        "spring-boot",
+        "sql",
+        "system-design",
+        "testing"
+      ],
+      "external_id": "161024502091"
+    },
+    {
+      "id": 1350,
+      "role": "sde1-backend",
+      "skills": [
+        "azure",
+        "ci-cd",
+        "csharp",
+        "git",
+        "redis"
+      ],
+      "external_id": "191224502515"
+    },
+    {
+      "id": 838,
+      "role": "sde1-backend",
+      "skills": [],
+      "external_id": "180423500480"
+    },
+    {
+      "id": 2222,
+      "role": "sde1-backend",
+      "skills": [
+        "c",
+        "ios",
+        "xml"
+      ],
+      "external_id": "51219501707"
+    },
+    {
+      "id": 1901,
+      "role": "sde1-backend",
+      "skills": [
+        "css",
+        "database-design",
+        "html",
+        "javascript",
+        "mysql",
+        "oop",
+        "php",
+        "wordpress"
+      ],
+      "external_id": "201223502152"
+    }
+  ]
+}

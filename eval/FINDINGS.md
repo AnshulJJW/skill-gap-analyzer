@@ -482,3 +482,50 @@ Applying it belongs at the start of Stage 4, together with drawing a fresh
 sample — which is needed anyway, since the post-fix figures are tuned on the
 current one. Doing both at once means the next measurement is clean on both
 counts.
+
+---
+
+# STAGE 4 PREP — role filters applied, and a bug they exposed
+
+Applied the three role filters and rebuilt. Labels survived by being
+anchored to Naukri's own job id rather than the database primary key.
+
+## The filter's first version over-removed, and the labels proved it
+
+It removed 10 of the 40 labelled postings against a hand-identified rate of
+8. The three extra were all one bug: the years-of-experience regex matched
+any number before "year", so it read **"2-4 years"** as four and **"2-5
+years"** as five, discarding genuinely entry-level postings.
+
+A range states a minimum of its *lower* bound. Only "N+" and "at least N"
+state a floor. Replaced with a reader that understands all three forms and
+takes the smallest floor stated.
+
+**Without the hand labels this would have shipped silently.** The corpus
+would simply have been 8% smaller with no indication anything was wrong.
+
+## After the fix
+
+Removes exactly 6 postings, and all six are hand-flagged misfilings. **No
+false removals.** Corpus 7,593 -> 6,898.
+
+The two it still misses show its limits:
+
+- **#25** says "6+ years" overall but also "Typescript required (2+ years)".
+  Taking the smallest floor rescues it. Deliberate: under-filtering is
+  cheaper than discarding good postings.
+- **#38** is a business analyst with no seniority marker and no
+  disqualifying keyword — a semantic mismatch no pattern will catch.
+
+So the filter is precise but incomplete: 6 of 8 caught, 0 false positives.
+
+## Score on the cleaned corpus (34 surviving labels, 220 mentions)
+
+| | precision | recall | F1 |
+|---|---|---|---|
+| micro | 0.857 | 0.900 | 0.878 |
+| macro | 0.855 | 0.859 | — |
+
+Backend recall rose 0.901 -> 0.927 and macro precision 0.804 -> 0.855: the
+removed postings were disproportionately the ones extraction handled worst,
+because a GIS or firmware posting contains almost nothing the taxonomy knows.
