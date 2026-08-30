@@ -6,7 +6,8 @@
     "Where a generic tag maps cleanly onto a real skill, it becomes an alias: 'version control' -> git, 'web services' -> rest-api.",
     "Deprecated or niche technologies are kept when they appear in the data. Struts and JSP are still being hired for in this market, and omitting them would misreport demand.",
     "A category term is NEVER an alias of a specific product. 'erp' is not SAP, 'cms' is not WordPress, 'analytical' is not Problem Solving. This single error produced 15 of the false positives measured in Stage 3.",
-    "Warehouse and platform products (Redshift, BigQuery) are their own skills, not aliases of AWS/GCP. The Stage 3 labeller treated 'Amazon Redshift' as naming Redshift, not AWS, and the taxonomy follows that."
+    "Warehouse and platform products (Redshift, BigQuery) are their own skills, not aliases of AWS/GCP. The Stage 3 labeller treated 'Amazon Redshift' as naming Redshift, not AWS, and the taxonomy follows that.",
+    "`actionable: false` marks skills that are genuine demand but useless as a recommendation. Two kinds: traits no course teaches (Communication), and category words that restate the job rather than name a next step ('learn Data Analysis' was the top suggestion for the Data Analyst role). They still count toward coverage -- they are demanded -- but never appear in the roadmap."
   ],
   "skills": [
     {
@@ -17,7 +18,8 @@
         "python3",
         "python development",
         "py"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "java",
@@ -30,7 +32,8 @@
         "j2ee",
         "java j2ee developer",
         "jee"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "javascript",
@@ -41,7 +44,8 @@
         "es6",
         "ecmascript",
         "java script"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "typescript",
@@ -49,7 +53,8 @@
       "category": "language",
       "aliases": [
         "ts"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "c",
@@ -58,7 +63,8 @@
       "aliases": [
         "c programming",
         "embedded c"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "cpp",
@@ -67,7 +73,8 @@
       "aliases": [
         "c++",
         "cpp"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "csharp",
@@ -76,13 +83,15 @@
       "aliases": [
         "c#",
         "c sharp"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "php",
       "name": "PHP",
       "category": "language",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "sql",
@@ -92,7 +101,8 @@
         "sql queries",
         "sql database",
         "structured query language"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "golang",
@@ -101,7 +111,8 @@
       "aliases": [
         "go",
         "go lang"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "ruby",
@@ -110,25 +121,29 @@
       "aliases": [
         "ruby on rails",
         "rails"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "scala",
       "name": "Scala",
       "category": "language",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "perl",
       "name": "Perl",
       "category": "language",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "matlab",
       "name": "MATLAB",
       "category": "language",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "shell",
@@ -139,7 +154,8 @@
         "bash",
         "shell",
         "powershell"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "assembly",
@@ -147,7 +163,8 @@
       "category": "language",
       "aliases": [
         "assembly language"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "html",
@@ -156,7 +173,8 @@
       "aliases": [
         "html5",
         "xhtml"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "css",
@@ -167,7 +185,8 @@
         "sass",
         "scss",
         "less"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "react",
@@ -178,7 +197,8 @@
         "reactjs",
         "react js",
         "react developer"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "angular",
@@ -189,7 +209,8 @@
         "angular.js",
         "angular development",
         "angular developer"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "vue",
@@ -199,25 +220,29 @@
         "vue.js",
         "vuejs",
         "vue"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "jquery",
       "name": "jQuery",
       "category": "frontend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "bootstrap",
       "name": "Bootstrap",
       "category": "frontend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "redux",
       "name": "Redux",
       "category": "frontend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "dom",
@@ -225,13 +250,15 @@
       "category": "frontend",
       "aliases": [
         "dom"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "ajax",
       "name": "AJAX",
       "category": "frontend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "responsive-design",
@@ -250,7 +277,8 @@
         "user interface designing",
         "ux design",
         "web designing"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "nodejs",
@@ -261,7 +289,8 @@
         "nodejs",
         "node js",
         "node"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "express",
@@ -270,7 +299,8 @@
       "aliases": [
         "expressjs",
         "express.js"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "django",
@@ -279,19 +309,22 @@
       "aliases": [
         "django rest framework",
         "drf"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "flask",
       "name": "Flask",
       "category": "backend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "fastapi",
       "name": "FastAPI",
       "category": "backend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "spring",
@@ -300,7 +333,8 @@
       "aliases": [
         "spring framework",
         "spring mvc"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "spring-boot",
@@ -309,7 +343,8 @@
       "aliases": [
         "springboot",
         "spring boot"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "hibernate",
@@ -318,7 +353,8 @@
       "aliases": [
         "jpa",
         "hibernate orm"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "dotnet",
@@ -336,7 +372,8 @@
         "wcf",
         "winforms",
         "wpf"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "jsp",
@@ -346,19 +383,22 @@
         "jsp",
         "servlets",
         "jsf"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "struts",
       "name": "Struts",
       "category": "backend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "laravel",
       "name": "Laravel",
       "category": "backend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "mean-stack",
@@ -368,13 +408,15 @@
         "mean stack",
         "mern stack",
         "mern"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "mysql",
       "name": "MySQL",
       "category": "database",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "postgresql",
@@ -383,7 +425,8 @@
       "aliases": [
         "postgres",
         "psql"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "mongodb",
@@ -391,7 +434,8 @@
       "category": "database",
       "aliases": [
         "mongo"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "oracle-db",
@@ -403,7 +447,8 @@
         "oracle sql",
         "plsql",
         "pl/sql"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "sql-server",
@@ -415,37 +460,43 @@
         "sql server",
         "ssrs",
         "ssis"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "sqlite",
       "name": "SQLite",
       "category": "database",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "redis",
       "name": "Redis",
       "category": "database",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "cassandra",
       "name": "Cassandra",
       "category": "database",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "nosql",
       "name": "NoSQL",
       "category": "database",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "jdbc",
       "name": "JDBC",
       "category": "database",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "stored-procedures",
@@ -453,7 +504,8 @@
       "category": "database",
       "aliases": [
         "stored procedure"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "database-design",
@@ -466,7 +518,8 @@
         "rdbms",
         "dbms",
         "database management"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "query-optimization",
@@ -476,7 +529,8 @@
         "performance tuning",
         "query tuning",
         "indexing"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "git",
@@ -489,7 +543,8 @@
         "svn",
         "mercurial",
         "bitbucket"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "docker",
@@ -498,7 +553,8 @@
       "aliases": [
         "containerization",
         "containers"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "kubernetes",
@@ -508,7 +564,8 @@
         "k8s",
         "kubectl",
         "orchestration"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "ci-cd",
@@ -521,7 +578,8 @@
         "jenkins",
         "github actions",
         "gitlab ci"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "linux",
@@ -530,7 +588,8 @@
       "aliases": [
         "unix",
         "ubuntu"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "maven",
@@ -540,7 +599,8 @@
         "maven",
         "gradle",
         "ant"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "tomcat",
@@ -551,7 +611,8 @@
         "jboss",
         "iis",
         "weblogic"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "apache-http",
@@ -562,7 +623,8 @@
         "apache httpd",
         "httpd",
         "nginx"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "jira",
@@ -570,7 +632,8 @@
       "category": "tooling",
       "aliases": [
         "confluence"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "devops",
@@ -580,7 +643,8 @@
         "deployment",
         "release management",
         "configuration management"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "monitoring",
@@ -589,7 +653,8 @@
       "aliases": [
         "observability",
         "logging"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "aws",
@@ -600,7 +665,8 @@
         "ec2",
         "s3",
         "lambda"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "azure",
@@ -608,7 +674,8 @@
       "category": "cloud",
       "aliases": [
         "microsoft azure"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "gcp",
@@ -617,7 +684,8 @@
       "aliases": [
         "google cloud platform",
         "gcp"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "cloud",
@@ -628,7 +696,8 @@
         "cloud services",
         "saas",
         "iaas"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "rest-api",
@@ -641,13 +710,15 @@
         "api",
         "web services",
         "api development"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "graphql",
       "name": "GraphQL",
       "category": "concept",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "microservices",
@@ -656,7 +727,8 @@
       "aliases": [
         "microservice architecture",
         "soa"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "kafka",
@@ -668,7 +740,8 @@
         "rabbitmq",
         "jms",
         "message queue"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "system-design",
@@ -680,7 +753,8 @@
         "system architecture",
         "application architecture",
         "software architecture"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "design-patterns",
@@ -689,7 +763,8 @@
       "aliases": [
         "design pattern",
         "software design patterns"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "mvc",
@@ -698,7 +773,8 @@
       "aliases": [
         "mvc framework",
         "mvvm"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "oop",
@@ -710,7 +786,8 @@
         "object oriented programming",
         "object oriented design",
         "object oriented"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "dsa",
@@ -721,7 +798,8 @@
         "algorithms",
         "dsa",
         "data structure"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "multithreading",
@@ -731,7 +809,8 @@
         "concurrency",
         "threading",
         "memory management"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "operating-systems",
@@ -740,7 +819,8 @@
       "aliases": [
         "os",
         "operating system"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "networking",
@@ -752,13 +832,15 @@
         "tcp",
         "tcp/ip",
         "ethernet"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "json",
       "name": "JSON",
       "category": "concept",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "xml",
@@ -767,13 +849,15 @@
       "aliases": [
         "xslt",
         "xsd"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "uml",
       "name": "UML",
       "category": "concept",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "testing",
@@ -789,7 +873,8 @@
         "system testing",
         "regression testing",
         "functional testing"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "tdd",
@@ -798,7 +883,8 @@
       "aliases": [
         "tdd",
         "test driven development"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "selenium",
@@ -808,7 +894,8 @@
         "automation testing",
         "automation framework",
         "test automation"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "manual-testing",
@@ -818,7 +905,8 @@
         "manual testing",
         "test planning",
         "test scripts"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "debugging",
@@ -827,7 +915,8 @@
       "aliases": [
         "troubleshooting",
         "diagnostics"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "agile",
@@ -840,7 +929,8 @@
         "agile scrum",
         "sdlc",
         "kanban"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "code-review",
@@ -848,19 +938,22 @@
       "category": "practice",
       "aliases": [
         "peer review"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "pandas",
       "name": "pandas",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "numpy",
       "name": "NumPy",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "scikit-learn",
@@ -869,7 +962,8 @@
       "aliases": [
         "sklearn",
         "scikit learn"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "matplotlib",
@@ -877,7 +971,8 @@
       "category": "data",
       "aliases": [
         "seaborn"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "machine-learning",
@@ -888,7 +983,8 @@
         "deep learning",
         "artificial intelligence",
         "ai"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "nlp",
@@ -898,7 +994,8 @@
         "nlp",
         "natural language processing",
         "text mining"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "data-analysis",
@@ -909,7 +1006,8 @@
         "analytics",
         "data mining",
         "business analysis"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "data-visualization",
@@ -918,7 +1016,8 @@
       "aliases": [
         "data visualization",
         "dashboards"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "excel",
@@ -929,13 +1028,15 @@
         "advanced excel",
         "spreadsheets",
         "macros"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "tableau",
       "name": "Tableau",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "power-bi",
@@ -944,7 +1045,8 @@
       "aliases": [
         "powerbi",
         "microsoft power bi"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "statistics",
@@ -954,7 +1056,8 @@
         "statistical analysis",
         "hypothesis testing",
         "mathematics"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "business-intelligence",
@@ -963,7 +1066,8 @@
       "aliases": [
         "bi",
         "sas"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "etl",
@@ -973,7 +1077,8 @@
         "data pipeline",
         "data processing",
         "data collection"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "data-quality",
@@ -982,7 +1087,8 @@
       "aliases": [
         "data validation",
         "data cleaning"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "android",
@@ -991,7 +1097,8 @@
       "aliases": [
         "android sdk",
         "android development"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "ios",
@@ -1000,7 +1107,8 @@
       "aliases": [
         "swift",
         "objective-c"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "react-native",
@@ -1008,7 +1116,8 @@
       "category": "mobile",
       "aliases": [
         "react native"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "flutter",
@@ -1016,7 +1125,8 @@
       "category": "mobile",
       "aliases": [
         "dart"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "wordpress",
@@ -1025,7 +1135,8 @@
       "aliases": [
         "drupal",
         "joomla"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "shopify",
@@ -1034,7 +1145,8 @@
       "aliases": [
         "magento",
         "woocommerce"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "salesforce",
@@ -1044,13 +1156,15 @@
         "apex",
         "visualforce",
         "crm"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "sap",
       "name": "SAP",
       "category": "platform",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "seo",
@@ -1059,7 +1173,8 @@
       "aliases": [
         "search engine optimization",
         "digital marketing"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "embedded",
@@ -1070,7 +1185,8 @@
         "firmware",
         "rtos",
         "microcontroller"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "information-security",
@@ -1080,7 +1196,8 @@
         "data security",
         "cybersecurity",
         "security"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "communication",
@@ -1089,13 +1206,15 @@
       "aliases": [
         "communication skills",
         "interpersonal skills"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "problem-solving",
       "name": "Problem Solving",
       "category": "soft",
-      "aliases": []
+      "aliases": [],
+      "actionable": false
     },
     {
       "id": "teamwork",
@@ -1104,7 +1223,8 @@
       "aliases": [
         "collaboration",
         "team player"
-      ]
+      ],
+      "actionable": false
     },
     {
       "id": "r",
@@ -1113,37 +1233,43 @@
       "aliases": [
         "r language",
         "rstudio"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "kotlin",
       "name": "Kotlin",
       "category": "language",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "groovy",
       "name": "Groovy",
       "category": "language",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "cypress",
       "name": "Cypress",
       "category": "testing",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "opengl",
       "name": "OpenGL",
       "category": "graphics",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "webflow",
       "name": "Webflow",
       "category": "cms",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "crystal-reports",
@@ -1151,7 +1277,8 @@
       "category": "data",
       "aliases": [
         "crystal report"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "business-objects",
@@ -1160,7 +1287,8 @@
       "aliases": [
         "business object",
         "business objects"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "pyspark",
@@ -1169,7 +1297,8 @@
       "aliases": [
         "apache spark",
         "spark"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "bigquery",
@@ -1177,7 +1306,8 @@
       "category": "data",
       "aliases": [
         "google bigquery"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "redshift",
@@ -1185,7 +1315,8 @@
       "category": "data",
       "aliases": [
         "redshift"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "nifi",
@@ -1193,25 +1324,29 @@
       "category": "data",
       "aliases": [
         "nifi"
-      ]
+      ],
+      "actionable": true
     },
     {
       "id": "cakephp",
       "name": "CakePHP",
       "category": "backend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "smarty",
       "name": "Smarty",
       "category": "backend",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     },
     {
       "id": "splunk",
       "name": "Splunk",
       "category": "devops",
-      "aliases": []
+      "aliases": [],
+      "actionable": true
     }
   ]
 }

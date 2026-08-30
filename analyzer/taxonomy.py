@@ -74,6 +74,15 @@ class Skill:
     name: str
     category: str
     aliases: tuple[str, ...] = ()
+    actionable: bool = True
+    """False for skills that are real demand but useless as advice.
+
+    Traits nobody can hand you a course for (Communication), and category
+    words that restate the job rather than name a next step -- "learn Data
+    Analysis" was the top recommendation for the Data Analyst role before
+    this existed. They still count toward coverage; they never appear in a
+    roadmap.
+    """
 
 
 @dataclass
@@ -94,6 +103,7 @@ class Taxonomy:
                 name=entry["name"],
                 category=entry["category"],
                 aliases=tuple(entry.get("aliases", [])),
+                actionable=entry.get("actionable", True),
             )
             tax.skills[skill.id] = skill
         tax._build_alias_index()

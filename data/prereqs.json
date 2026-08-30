@@ -1,25 +1,259 @@
 {
-  "_note": "Stage 4. skill_id -> skills that should be learned first. This is what stops the roadmap recommending Kubernetes before Docker. Hand-curated on purpose -- say so in the README. Must stay a DAG; roadmap.py fails loudly on cycles.",
-
-  "fastapi": ["python"],
-  "django": ["python"],
-  "flask": ["python"],
-  "pandas": ["python"],
-  "spring-boot": ["java"],
-  "nodejs": ["javascript"],
-  "express": ["nodejs"],
-  "react": ["javascript"],
-  "typescript": ["javascript"],
-  "kubernetes": ["docker", "linux"],
-  "docker": ["linux"],
-  "ci-cd": ["git", "docker"],
-  "microservices": ["rest-api", "docker"],
-  "kafka": ["microservices"],
-  "system-design": ["rest-api", "postgresql"],
-  "graphql": ["rest-api"],
-  "rest-api": [],
-  "tableau": ["sql"],
-  "power-bi": ["sql"],
-  "postgresql": ["sql"],
-  "mysql": ["sql"]
+  "_note": "Stage 4. skill_id -> skills to learn first. Hand-curated. Must stay a DAG; build_roadmap() fails loudly on a cycle rather than silently truncating the list.",
+  "fastapi": [
+    "python"
+  ],
+  "django": [
+    "python"
+  ],
+  "flask": [
+    "python"
+  ],
+  "pandas": [
+    "python"
+  ],
+  "numpy": [
+    "python"
+  ],
+  "matplotlib": [
+    "python"
+  ],
+  "scikit-learn": [
+    "python",
+    "numpy"
+  ],
+  "pyspark": [
+    "python"
+  ],
+  "machine-learning": [
+    "python",
+    "statistics"
+  ],
+  "nlp": [
+    "machine-learning"
+  ],
+  "spring": [
+    "java"
+  ],
+  "spring-boot": [
+    "java",
+    "spring"
+  ],
+  "hibernate": [
+    "java"
+  ],
+  "jsp": [
+    "java"
+  ],
+  "struts": [
+    "java"
+  ],
+  "jdbc": [
+    "java",
+    "sql"
+  ],
+  "maven": [
+    "java"
+  ],
+  "groovy": [
+    "java"
+  ],
+  "kotlin": [
+    "java"
+  ],
+  "android": [
+    "kotlin"
+  ],
+  "nodejs": [
+    "javascript"
+  ],
+  "express": [
+    "nodejs"
+  ],
+  "react": [
+    "javascript"
+  ],
+  "angular": [
+    "javascript",
+    "typescript"
+  ],
+  "vue": [
+    "javascript"
+  ],
+  "jquery": [
+    "javascript"
+  ],
+  "redux": [
+    "react"
+  ],
+  "typescript": [
+    "javascript"
+  ],
+  "react-native": [
+    "react"
+  ],
+  "mean-stack": [
+    "nodejs",
+    "mongodb"
+  ],
+  "ajax": [
+    "javascript"
+  ],
+  "dom": [
+    "javascript"
+  ],
+  "css": [
+    "html"
+  ],
+  "bootstrap": [
+    "css"
+  ],
+  "responsive-design": [
+    "css"
+  ],
+  "laravel": [
+    "php"
+  ],
+  "cakephp": [
+    "php"
+  ],
+  "smarty": [
+    "php"
+  ],
+  "wordpress": [
+    "php"
+  ],
+  "docker": [
+    "linux"
+  ],
+  "kubernetes": [
+    "docker"
+  ],
+  "shell": [
+    "linux"
+  ],
+  "ci-cd": [
+    "git",
+    "docker"
+  ],
+  "devops": [
+    "linux",
+    "ci-cd"
+  ],
+  "aws": [
+    "cloud"
+  ],
+  "azure": [
+    "cloud"
+  ],
+  "gcp": [
+    "cloud"
+  ],
+  "rest-api": [
+    "json"
+  ],
+  "graphql": [
+    "rest-api"
+  ],
+  "microservices": [
+    "rest-api",
+    "docker"
+  ],
+  "kafka": [
+    "microservices"
+  ],
+  "system-design": [
+    "rest-api",
+    "database-design"
+  ],
+  "design-patterns": [
+    "oop"
+  ],
+  "mvc": [
+    "oop"
+  ],
+  "flutter": [
+    "oop"
+  ],
+  "ios": [
+    "oop"
+  ],
+  "database-design": [
+    "sql"
+  ],
+  "mysql": [
+    "sql"
+  ],
+  "postgresql": [
+    "sql"
+  ],
+  "sql-server": [
+    "sql"
+  ],
+  "oracle-db": [
+    "sql"
+  ],
+  "sqlite": [
+    "sql"
+  ],
+  "stored-procedures": [
+    "sql"
+  ],
+  "query-optimization": [
+    "sql",
+    "database-design"
+  ],
+  "nosql": [
+    "database-design"
+  ],
+  "mongodb": [
+    "nosql"
+  ],
+  "redis": [
+    "nosql"
+  ],
+  "cassandra": [
+    "nosql"
+  ],
+  "tableau": [
+    "sql"
+  ],
+  "power-bi": [
+    "sql"
+  ],
+  "business-intelligence": [
+    "sql"
+  ],
+  "data-visualization": [
+    "excel"
+  ],
+  "data-analysis": [
+    "excel",
+    "sql"
+  ],
+  "etl": [
+    "sql"
+  ],
+  "bigquery": [
+    "sql"
+  ],
+  "redshift": [
+    "sql"
+  ],
+  "nifi": [
+    "etl"
+  ],
+  "testing": [
+    "debugging"
+  ],
+  "tdd": [
+    "testing"
+  ],
+  "selenium": [
+    "testing"
+  ],
+  "cypress": [
+    "testing",
+    "javascript"
+  ]
 }

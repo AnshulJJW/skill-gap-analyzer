@@ -1,17 +1,485 @@
 {
-  "_note": "Stage 4. Curated free resources per skill. Be honest in the README that this is curated, not learned -- a good hand-built map beats a bad recommender, and interviewers respect knowing the difference. Aim for 2-3 per skill, free only, and check the links before you ship.",
-
+  "_note": "Stage 4. Curated free resources per skill -- curated, NOT learned. A good hand-built map beats a bad recommender, and knowing the difference is the point. Free only; check links before shipping.",
+  "javascript": [
+    {
+      "title": "JavaScript.info",
+      "url": "https://javascript.info/",
+      "kind": "course",
+      "hours": 40
+    },
+    {
+      "title": "MDN JavaScript Guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+      "kind": "docs",
+      "hours": 20
+    }
+  ],
+  "typescript": [
+    {
+      "title": "TypeScript Handbook",
+      "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+      "kind": "docs",
+      "hours": 12
+    }
+  ],
+  "react": [
+    {
+      "title": "React official tutorial",
+      "url": "https://react.dev/learn",
+      "kind": "docs",
+      "hours": 20
+    }
+  ],
+  "angular": [
+    {
+      "title": "Angular Tutorials",
+      "url": "https://angular.dev/tutorials",
+      "kind": "course",
+      "hours": 20
+    }
+  ],
+  "vue": [
+    {
+      "title": "Vue.js Guide",
+      "url": "https://vuejs.org/guide/introduction.html",
+      "kind": "docs",
+      "hours": 15
+    }
+  ],
+  "jquery": [
+    {
+      "title": "jQuery Learning Center",
+      "url": "https://learn.jquery.com/",
+      "kind": "docs",
+      "hours": 8
+    }
+  ],
+  "html": [
+    {
+      "title": "MDN HTML basics",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn/HTML",
+      "kind": "docs",
+      "hours": 10
+    }
+  ],
+  "css": [
+    {
+      "title": "MDN CSS basics",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn/CSS",
+      "kind": "docs",
+      "hours": 15
+    },
+    {
+      "title": "Flexbox Froggy",
+      "url": "https://flexboxfroggy.com/",
+      "kind": "practice",
+      "hours": 2
+    }
+  ],
+  "bootstrap": [
+    {
+      "title": "Bootstrap docs",
+      "url": "https://getbootstrap.com/docs/",
+      "kind": "docs",
+      "hours": 6
+    }
+  ],
+  "responsive-design": [
+    {
+      "title": "MDN Responsive design",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design",
+      "kind": "docs",
+      "hours": 6
+    }
+  ],
+  "nodejs": [
+    {
+      "title": "Node.js Getting Started",
+      "url": "https://nodejs.org/en/learn",
+      "kind": "docs",
+      "hours": 15
+    }
+  ],
+  "rest-api": [
+    {
+      "title": "MDN HTTP overview",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
+      "kind": "docs",
+      "hours": 6
+    },
+    {
+      "title": "REST API Tutorial",
+      "url": "https://restfulapi.net/",
+      "kind": "docs",
+      "hours": 5
+    }
+  ],
+  "json": [
+    {
+      "title": "MDN Working with JSON",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON",
+      "kind": "docs",
+      "hours": 2
+    }
+  ],
   "python": [
-    {"title": "Automate the Boring Stuff", "url": "https://automatetheboringstuff.com/", "kind": "book", "hours": 20},
-    {"title": "Official Python Tutorial", "url": "https://docs.python.org/3/tutorial/", "kind": "docs", "hours": 10}
+    {
+      "title": "Automate the Boring Stuff",
+      "url": "https://automatetheboringstuff.com/",
+      "kind": "book",
+      "hours": 25
+    },
+    {
+      "title": "Official Python Tutorial",
+      "url": "https://docs.python.org/3/tutorial/",
+      "kind": "docs",
+      "hours": 12
+    }
   ],
-  "docker": [
-    {"title": "Docker Get Started", "url": "https://docs.docker.com/get-started/", "kind": "docs", "hours": 6}
+  "java": [
+    {
+      "title": "Java Tutorials",
+      "url": "https://dev.java/learn/",
+      "kind": "docs",
+      "hours": 30
+    }
   ],
-  "kafka": [
-    {"title": "Kafka Introduction", "url": "https://kafka.apache.org/intro", "kind": "docs", "hours": 4}
+  "spring-boot": [
+    {
+      "title": "Spring Boot Guides",
+      "url": "https://spring.io/guides",
+      "kind": "docs",
+      "hours": 20
+    }
+  ],
+  "hibernate": [
+    {
+      "title": "Hibernate Getting Started",
+      "url": "https://hibernate.org/orm/documentation/getting-started/",
+      "kind": "docs",
+      "hours": 10
+    }
   ],
   "sql": [
-    {"title": "SQLBolt", "url": "https://sqlbolt.com/", "kind": "practice", "hours": 6}
+    {
+      "title": "SQLBolt",
+      "url": "https://sqlbolt.com/",
+      "kind": "practice",
+      "hours": 6
+    },
+    {
+      "title": "Mode SQL Tutorial",
+      "url": "https://mode.com/sql-tutorial/",
+      "kind": "course",
+      "hours": 10
+    }
+  ],
+  "mysql": [
+    {
+      "title": "MySQL Tutorial",
+      "url": "https://dev.mysql.com/doc/refman/8.0/en/tutorial.html",
+      "kind": "docs",
+      "hours": 8
+    }
+  ],
+  "postgresql": [
+    {
+      "title": "PostgreSQL Tutorial",
+      "url": "https://www.postgresqltutorial.com/",
+      "kind": "course",
+      "hours": 10
+    }
+  ],
+  "mongodb": [
+    {
+      "title": "MongoDB University M001",
+      "url": "https://learn.mongodb.com/",
+      "kind": "course",
+      "hours": 12
+    }
+  ],
+  "nosql": [
+    {
+      "title": "NoSQL explained",
+      "url": "https://www.mongodb.com/nosql-explained",
+      "kind": "docs",
+      "hours": 2
+    }
+  ],
+  "git": [
+    {
+      "title": "Pro Git (free book)",
+      "url": "https://git-scm.com/book/en/v2",
+      "kind": "book",
+      "hours": 12
+    },
+    {
+      "title": "Learn Git Branching",
+      "url": "https://learngitbranching.js.org/",
+      "kind": "practice",
+      "hours": 4
+    }
+  ],
+  "docker": [
+    {
+      "title": "Docker Get Started",
+      "url": "https://docs.docker.com/get-started/",
+      "kind": "docs",
+      "hours": 8
+    }
+  ],
+  "kubernetes": [
+    {
+      "title": "Kubernetes Basics",
+      "url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/",
+      "kind": "docs",
+      "hours": 12
+    }
+  ],
+  "ci-cd": [
+    {
+      "title": "GitHub Actions quickstart",
+      "url": "https://docs.github.com/en/actions/quickstart",
+      "kind": "docs",
+      "hours": 5
+    }
+  ],
+  "linux": [
+    {
+      "title": "Linux Journey",
+      "url": "https://linuxjourney.com/",
+      "kind": "course",
+      "hours": 12
+    }
+  ],
+  "shell": [
+    {
+      "title": "Bash cheatsheet",
+      "url": "https://devhints.io/bash",
+      "kind": "docs",
+      "hours": 3
+    }
+  ],
+  "aws": [
+    {
+      "title": "AWS Cloud Practitioner Essentials",
+      "url": "https://explore.skillbuilder.aws/",
+      "kind": "course",
+      "hours": 15
+    }
+  ],
+  "cloud": [
+    {
+      "title": "What is cloud computing",
+      "url": "https://aws.amazon.com/what-is-cloud-computing/",
+      "kind": "docs",
+      "hours": 2
+    }
+  ],
+  "testing": [
+    {
+      "title": "pytest docs",
+      "url": "https://docs.pytest.org/",
+      "kind": "docs",
+      "hours": 8
+    },
+    {
+      "title": "JUnit 5 User Guide",
+      "url": "https://junit.org/junit5/docs/current/user-guide/",
+      "kind": "docs",
+      "hours": 8
+    }
+  ],
+  "tdd": [
+    {
+      "title": "Obey the Testing Goat",
+      "url": "https://www.obeythetestinggoat.com/",
+      "kind": "book",
+      "hours": 25
+    }
+  ],
+  "selenium": [
+    {
+      "title": "Selenium docs",
+      "url": "https://www.selenium.dev/documentation/",
+      "kind": "docs",
+      "hours": 10
+    }
+  ],
+  "cypress": [
+    {
+      "title": "Cypress docs",
+      "url": "https://docs.cypress.io/",
+      "kind": "docs",
+      "hours": 8
+    }
+  ],
+  "debugging": [
+    {
+      "title": "Python pdb",
+      "url": "https://docs.python.org/3/library/pdb.html",
+      "kind": "docs",
+      "hours": 2
+    }
+  ],
+  "agile": [
+    {
+      "title": "The Scrum Guide",
+      "url": "https://scrumguides.org/",
+      "kind": "docs",
+      "hours": 2
+    }
+  ],
+  "microservices": [
+    {
+      "title": "Microservices patterns",
+      "url": "https://microservices.io/patterns/",
+      "kind": "docs",
+      "hours": 8
+    }
+  ],
+  "kafka": [
+    {
+      "title": "Kafka Introduction",
+      "url": "https://kafka.apache.org/intro",
+      "kind": "docs",
+      "hours": 5
+    }
+  ],
+  "system-design": [
+    {
+      "title": "System Design Primer",
+      "url": "https://github.com/donnemartin/system-design-primer",
+      "kind": "book",
+      "hours": 30
+    }
+  ],
+  "design-patterns": [
+    {
+      "title": "Refactoring Guru: Design Patterns",
+      "url": "https://refactoring.guru/design-patterns",
+      "kind": "docs",
+      "hours": 15
+    }
+  ],
+  "oop": [
+    {
+      "title": "Refactoring Guru: OOP basics",
+      "url": "https://refactoring.guru/design-patterns/what-is-pattern",
+      "kind": "docs",
+      "hours": 6
+    }
+  ],
+  "dsa": [
+    {
+      "title": "NeetCode 150",
+      "url": "https://neetcode.io/practice",
+      "kind": "practice",
+      "hours": 80
+    }
+  ],
+  "excel": [
+    {
+      "title": "Excel Easy",
+      "url": "https://www.excel-easy.com/",
+      "kind": "course",
+      "hours": 10
+    }
+  ],
+  "power-bi": [
+    {
+      "title": "Microsoft Learn: Power BI",
+      "url": "https://learn.microsoft.com/en-us/training/powerplatform/power-bi",
+      "kind": "course",
+      "hours": 12
+    }
+  ],
+  "tableau": [
+    {
+      "title": "Tableau free training",
+      "url": "https://www.tableau.com/learn/training/",
+      "kind": "video",
+      "hours": 10
+    }
+  ],
+  "statistics": [
+    {
+      "title": "Khan Academy Statistics",
+      "url": "https://www.khanacademy.org/math/statistics-probability",
+      "kind": "course",
+      "hours": 25
+    }
+  ],
+  "data-visualization": [
+    {
+      "title": "Matplotlib tutorials",
+      "url": "https://matplotlib.org/stable/tutorials/",
+      "kind": "docs",
+      "hours": 8
+    }
+  ],
+  "pandas": [
+    {
+      "title": "10 minutes to pandas",
+      "url": "https://pandas.pydata.org/docs/user_guide/10min.html",
+      "kind": "docs",
+      "hours": 4
+    }
+  ],
+  "r": [
+    {
+      "title": "R for Data Science",
+      "url": "https://r4ds.hadley.nz/",
+      "kind": "book",
+      "hours": 30
+    }
+  ],
+  "dotnet": [
+    {
+      "title": "Microsoft Learn: C# and .NET",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "kind": "docs",
+      "hours": 25
+    }
+  ],
+  "cpp": [
+    {
+      "title": "learncpp.com",
+      "url": "https://www.learncpp.com/",
+      "kind": "course",
+      "hours": 50
+    }
+  ],
+  "php": [
+    {
+      "title": "PHP The Right Way",
+      "url": "https://phptherightway.com/",
+      "kind": "docs",
+      "hours": 15
+    }
+  ],
+  "kotlin": [
+    {
+      "title": "Kotlin Docs",
+      "url": "https://kotlinlang.org/docs/getting-started.html",
+      "kind": "docs",
+      "hours": 15
+    }
+  ],
+  "android": [
+    {
+      "title": "Android Basics with Compose",
+      "url": "https://developer.android.com/courses",
+      "kind": "course",
+      "hours": 40
+    }
+  ],
+  "etl": [
+    {
+      "title": "Airflow tutorial",
+      "url": "https://airflow.apache.org/docs/apache-airflow/stable/tutorial/",
+      "kind": "docs",
+      "hours": 10
+    }
   ]
 }

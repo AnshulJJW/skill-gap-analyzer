@@ -19,12 +19,20 @@ from pathlib import Path
 
 from analyzer.extract import Origin, extract, resolve_implications
 from analyzer.profiles import RoleProfile, SkillDemand
+from analyzer.roadmap import RoadmapStep, build_roadmap
 from analyzer.taxonomy import Taxonomy
 
-# Skills nobody can hand you a course for. They are real demand and they
-# count toward coverage, but a learning roadmap that says "acquire
-# communication" is useless, so they are excluded from recommendations.
-UNTEACHABLE = {"soft"}
+# How many of the role's top skills the headline number is measured against.
+#
+# Coverage across ALL demanded skills is mathematically defensible and
+# communicatively useless: a CV with Python, pandas, NumPy, scikit-learn,
+# SQL and ML scored 24% for Data Analyst, a role it genuinely suits, because
+# the long tail of 83 rarely-demanded skills dominates the denominator.
+#
+# Measuring against the top N answers the question a user is actually
+# asking -- "am I close?" -- rather than "do I know everything anyone ever
+# asked for?". 30 is a judgement call, recorded so it can be argued with.
+TOP_N_FOR_COVERAGE = 30
 
 
 @dataclass
@@ -46,18 +54,28 @@ class GapReport:
     market: str
     total_postings: int
     coverage: float
+    core_have: int = 0            # of the top-N demanded skills
+    core_total: int = 0
     have: list[str] = field(default_factory=list)
     have_names: list[str] = field(default_factory=list)
     unused: list[str] = field(default_factory=list)   # on the CV, not demanded
     gaps: list[Gap] = field(default_factory=list)
+    roadmap: list[RoadmapStep] = field(default_factory=list)
 
 
-def coverage_of(have: set[str], profile: RoleProfile) -> float:
-    """Fraction of the role's weighted demand the candidate already meets."""
-    total = profile.total_weight
+def core_demands(profile: RoleProfile, top_n: int = TOP_N_FOR_COVERAGE):
+    """The N most-demanded skills -- the ones a candidate is judged on."""
+    return profile.demands[:top_n]
+
+
+def coverage_of(have: set[str], profile: RoleProfile,
+                top_n: int = TOP_N_FOR_COVERAGE) -> float:
+    """Share of the role's core weighted demand the candidate already meets."""
+    core = core_demands(profile, top_n)
+    total = sum(d.weight for d in core)
     if not total:
         return 0.0
-    return sum(d.weight for d in profile.demands if d.skill_id in have) / total
+    return sum(d.weight for d in core if d.skill_id in have) / total
 
 
 def _evidence(demand: SkillDemand, profile: RoleProfile) -> str:
@@ -86,7 +104,7 @@ def rank_by_marginal_coverage(
     if not include_soft:
         missing = {
             sid: d for sid, d in missing.items()
-            if (tax.skills[sid].category if sid in tax.skills else "") not in UNTEACHABLE
+            if sid in tax.skills and tax.skills[sid].actionable
         }
 
     out: list[Gap] = []
@@ -127,7 +145,11 @@ def analyze(resume_text: str, role_id: str, taxonomy: Taxonomy,
     have |= resolve_implications(have)
 
     demanded = set(profile.by_id)
+    core = {d.skill_id for d in core_demands(profile)}
+    gaps = rank_by_marginal_coverage(have, profile, taxonomy, top_n)
     return GapReport(
+        core_have=len(have & core),
+        core_total=len(core),
         role_id=profile.role_id,
         role_name=profile.role_name,
         market=profile.market,
@@ -136,7 +158,8 @@ def analyze(resume_text: str, role_id: str, taxonomy: Taxonomy,
         have=sorted(have & demanded),
         have_names=sorted(taxonomy.name_of(s) for s in have & demanded),
         unused=sorted(taxonomy.name_of(s) for s in have - demanded),
-        gaps=rank_by_marginal_coverage(have, profile, taxonomy, top_n),
+        gaps=gaps,
+        roadmap=build_roadmap(gaps, have, taxonomy),
     )
 
 
@@ -163,11 +186,27 @@ def main() -> None:
         print("On your CV but not asked for in this role:")
         print("  " + ", ".join(report.unused) + "\n")
 
-    print("LEARN NEXT  (ranked by how much coverage each one adds)")
+    print("BIGGEST GAPS  (ranked by coverage each one adds)")
     print("-" * 78)
     for i, g in enumerate(report.gaps, 1):
-        print(f"{i:>2}. {g.skill_name:<26} +{g.marginal_gain:>5.1%} coverage")
-        print(f"    {g.evidence}")
+        print(f"{i:>2}. {g.skill_name:<26} +{g.marginal_gain:>5.1%}   {g.evidence}")
+
+    print("\nLEARNING ORDER  (prerequisites first -- start at the top)")
+    print("-" * 78)
+    total_hours = 0
+    for step in report.roadmap:
+        tag = "  [prerequisite]" if step.is_prerequisite else ""
+        print(f"{step.order:>2}. {step.skill_name}{tag}")
+        print(f"    {step.reason}")
+        for res in step.resources[:2]:
+            hrs = f"~{res.hours}h" if res.hours else ""
+            total_hours += res.hours or 0
+            print(f"      - {res.title}  ({res.kind}, {hrs})")
+            print(f"        {res.url}")
+        if not step.resources:
+            print("      - no curated resource yet")
+    if total_hours:
+        print(f"\n    roughly {total_hours} hours of listed material")
     print()
 
 
