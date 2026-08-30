@@ -115,11 +115,45 @@ by true corpus share gives **precision 0.839, recall 0.865** — about one
 point from the micro figures, because the three roles score similarly. Had
 they diverged, the weighting would have mattered a great deal.
 
-These figures are pre-fix. Every problem found during labelling is recorded
-in [eval/FINDINGS.md](eval/FINDINGS.md) and was deliberately **not** fixed
-before scoring — patching a taxonomy because an evaluation posting exposed
-a gap, then scoring against that posting, measures nothing. Post-fix numbers
-will be reported separately and labelled as tuned on this set.
+### Before and after the fixes
+
+Every problem found during labelling was recorded in
+[eval/FINDINGS.md](eval/FINDINGS.md) and deliberately **not** fixed until
+after the score above was locked in. Patching a taxonomy because an
+evaluation posting exposed a gap, then scoring against that posting,
+measures nothing.
+
+| | precision | recall | F1 |
+|---|---|---|---|
+| **pre-fix** — untuned, the honest baseline | 0.852 | 0.855 | 0.853 |
+| post-fix, counting newly-added skills as errors | 0.850 | 0.890 | 0.870 |
+| post-fix, like-for-like against the labels | **0.904** | **0.890** | **0.897** |
+
+**The post-fix figures are tuned on this set and are therefore optimistic.**
+A clean measurement would need a fresh sample.
+
+The middle row needs explaining, because it looks like precision stalled.
+Sixteen of its "false positives" are skills added *after* labelling — R,
+Kotlin, Cypress, OpenGL, Webflow, Crystal Reports, PySpark, BigQuery,
+Redshift, NiFi and others. Every one was identified during labelling as
+named in the posting but having no checkbox. The extractor now finds them
+correctly and is scored wrong for it, because the ground truth predates
+them. The bottom row removes that artefact.
+
+What the targeted fixes did:
+
+| false positive | before | after | | miss | before | after |
+|---|---|---|---|---|---|---|
+| Problem Solving | 7 | **0** | | JavaScript | 6 | **0** |
+| Cloud Fundamentals | 6 | **0** | | Responsive Design | 6 | 3 |
+| Computer Networks | 2 | **0** | | | | |
+
+All the false-positive fixes were one curation error repeated: a category
+term listed as an alias of a specific product (`analytical` → Problem
+Solving, `cloud` → Cloud Fundamentals, `http` → Computer Networks, `erp` →
+SAP, `cms` → WordPress). The JavaScript recall fix was the opposite
+problem — frameworks assert their language even when the language is never
+written.
 
 ## What it said about my own resume
 

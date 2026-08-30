@@ -21,7 +21,10 @@ from sqlalchemy import delete, insert, select
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from analyzer.db import get_engine, posting_skills, postings, provided_skills
-from analyzer.extract import Origin, extract, extract_from_tags
+from analyzer.extract import (
+    Origin, extract, extract_from_tags,
+    resolve_implications, suppress_generic_cloud,
+)
 from analyzer.taxonomy import Taxonomy, audit_aliases
 
 BATCH = 2000
@@ -53,7 +56,7 @@ def main() -> int:
 
     out: list[dict] = []
     per_posting = Counter()
-    from_tags = from_desc = 0
+    from_tags = from_desc = from_implied = suppressed = 0
 
     for pid, description in rows:
         seen: dict[str, dict] = {}
@@ -78,6 +81,22 @@ def main() -> int:
             }
             from_desc += 1
 
+        # A framework asserts its language even when the language is never
+        # written -- the largest recall loss measured in Stage 3.
+        for implied in resolve_implications(set(seen)):
+            seen[implied] = {
+                "posting_id": pid, "skill_id": implied,
+                "origin": Origin.DESCRIPTION.value, "method": "implied",
+                "confidence": 0.7,
+                "evidence": "implied by a framework named in this posting",
+            }
+            from_implied += 1
+
+        # "AWS Cloud" names one skill, not two.
+        for dropped in set(seen) - suppress_generic_cloud(set(seen)):
+            del seen[dropped]
+            suppressed += 1
+
         per_posting[len(seen)] += 1
         out.extend(seen.values())
 
@@ -92,6 +111,8 @@ def main() -> int:
     print(f"skill mentions written {len(out):>9,}")
     print(f"  from employer tags   {from_tags:>9,}")
     print(f"  from description     {from_desc:>9,}")
+    print(f"  implied by framework {from_implied:>9,}")
+    print(f"  generic cloud dropped{suppressed:>9,}")
     print(f"mean skills / posting  {mean:>9.1f}")
     print(f"postings with none     {empty:>9,}  ({empty / total:.1%})")
     return 0

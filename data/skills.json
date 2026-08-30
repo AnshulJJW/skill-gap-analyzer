@@ -4,7 +4,9 @@
     "A skill is something a person can learn and then claim. 'Docker' qualifies; 'development' does not.",
     "Job titles ('backend', 'software engineer'), degrees ('computer science', 'mca') and traits ('analytical') are not skills -- see stoplist.json.",
     "Where a generic tag maps cleanly onto a real skill, it becomes an alias: 'version control' -> git, 'web services' -> rest-api.",
-    "Deprecated or niche technologies are kept when they appear in the data. Struts and JSP are still being hired for in this market, and omitting them would misreport demand."
+    "Deprecated or niche technologies are kept when they appear in the data. Struts and JSP are still being hired for in this market, and omitting them would misreport demand.",
+    "A category term is NEVER an alias of a specific product. 'erp' is not SAP, 'cms' is not WordPress, 'analytical' is not Problem Solving. This single error produced 15 of the false positives measured in Stage 3.",
+    "Warehouse and platform products (Redshift, BigQuery) are their own skills, not aliases of AWS/GCP. The Stage 3 labeller treated 'Amazon Redshift' as naming Redshift, not AWS, and the taxonomy follows that."
   ],
   "skills": [
     {
@@ -236,9 +238,18 @@
       "name": "Responsive Design",
       "category": "frontend",
       "aliases": [
+        "adaptive design",
+        "responsive and adaptive design",
+        "responsive design",
         "responsive web design",
-        "web designing",
-        "user interface designing"
+        "ui design",
+        "ui ux",
+        "ui/ux",
+        "user experience design",
+        "user interface design",
+        "user interface designing",
+        "ux design",
+        "web designing"
       ]
     },
     {
@@ -543,11 +554,13 @@
       ]
     },
     {
-      "id": "apache",
-      "name": "Apache",
+      "id": "apache-http",
+      "name": "Apache HTTP Server",
       "category": "devops",
       "aliases": [
-        "apache http",
+        "apache http server",
+        "apache httpd",
+        "httpd",
         "nginx"
       ]
     },
@@ -738,7 +751,6 @@
         "computer networks",
         "tcp",
         "tcp/ip",
-        "http",
         "ethernet"
       ]
     },
@@ -1011,7 +1023,6 @@
       "name": "WordPress",
       "category": "cms",
       "aliases": [
-        "cms",
         "drupal",
         "joomla"
       ]
@@ -1039,9 +1050,7 @@
       "id": "sap",
       "name": "SAP",
       "category": "platform",
-      "aliases": [
-        "erp"
-      ]
+      "aliases": []
     },
     {
       "id": "seo",
@@ -1086,11 +1095,7 @@
       "id": "problem-solving",
       "name": "Problem Solving",
       "category": "soft",
-      "aliases": [
-        "problem solving",
-        "analytical skills",
-        "analytical"
-      ]
+      "aliases": []
     },
     {
       "id": "teamwork",
@@ -1100,6 +1105,113 @@
         "collaboration",
         "team player"
       ]
+    },
+    {
+      "id": "r",
+      "name": "R",
+      "category": "language",
+      "aliases": [
+        "r language",
+        "rstudio"
+      ]
+    },
+    {
+      "id": "kotlin",
+      "name": "Kotlin",
+      "category": "language",
+      "aliases": []
+    },
+    {
+      "id": "groovy",
+      "name": "Groovy",
+      "category": "language",
+      "aliases": []
+    },
+    {
+      "id": "cypress",
+      "name": "Cypress",
+      "category": "testing",
+      "aliases": []
+    },
+    {
+      "id": "opengl",
+      "name": "OpenGL",
+      "category": "graphics",
+      "aliases": []
+    },
+    {
+      "id": "webflow",
+      "name": "Webflow",
+      "category": "cms",
+      "aliases": []
+    },
+    {
+      "id": "crystal-reports",
+      "name": "Crystal Reports",
+      "category": "data",
+      "aliases": [
+        "crystal report"
+      ]
+    },
+    {
+      "id": "business-objects",
+      "name": "SAP BusinessObjects",
+      "category": "data",
+      "aliases": [
+        "business object",
+        "business objects"
+      ]
+    },
+    {
+      "id": "pyspark",
+      "name": "PySpark",
+      "category": "data",
+      "aliases": [
+        "apache spark",
+        "spark"
+      ]
+    },
+    {
+      "id": "bigquery",
+      "name": "BigQuery",
+      "category": "data",
+      "aliases": [
+        "google bigquery"
+      ]
+    },
+    {
+      "id": "redshift",
+      "name": "Amazon Redshift",
+      "category": "data",
+      "aliases": [
+        "redshift"
+      ]
+    },
+    {
+      "id": "nifi",
+      "name": "Apache NiFi",
+      "category": "data",
+      "aliases": [
+        "nifi"
+      ]
+    },
+    {
+      "id": "cakephp",
+      "name": "CakePHP",
+      "category": "backend",
+      "aliases": []
+    },
+    {
+      "id": "smarty",
+      "name": "Smarty",
+      "category": "backend",
+      "aliases": []
+    },
+    {
+      "id": "splunk",
+      "name": "Splunk",
+      "category": "devops",
+      "aliases": []
     }
   ]
 }

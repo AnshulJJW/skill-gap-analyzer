@@ -21,14 +21,54 @@ makes. Measured against a labelled set in Stage 3, not assumed.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 
-from analyzer.taxonomy import Taxonomy, normalize
+from analyzer.taxonomy import DATA, Taxonomy, normalize
 
 MAX_NGRAM = 3
+
+# Specific cloud providers. When one of these is present, the generic
+# "Cloud Fundamentals" entry is suppressed: a posting saying "AWS Cloud"
+# names one skill, not two. Six false positives in Stage 3 came from this.
+_SPECIFIC_CLOUDS = {"aws", "azure", "gcp"}
+_GENERIC_CLOUD = "cloud"
+
+
+def _load_implications() -> dict[str, str]:
+    """framework skill id -> language skill id it asserts."""
+    raw = json.loads((DATA / "implies.json").read_text(encoding="utf-8"))
+    out: dict[str, str] = {}
+    for language, frameworks in raw.items():
+        if language.startswith("_"):
+            continue
+        for fw in frameworks:
+            out[fw] = language
+    return out
+
+
+IMPLIES = _load_implications()
+
+
+def resolve_implications(skill_ids: set[str]) -> set[str]:
+    """Add languages asserted by the frameworks present.
+
+    A posting saying "React" asserts JavaScript without writing it. This was
+    the largest single recall loss in Stage 3 (JavaScript missed 6 times).
+    Kept deliberately narrow -- see data/implies.json for what is excluded
+    and why.
+    """
+    return {IMPLIES[s] for s in skill_ids if s in IMPLIES} - skill_ids
+
+
+def suppress_generic_cloud(skill_ids: set[str]) -> set[str]:
+    """Drop the generic cloud entry when a specific provider is named."""
+    if skill_ids & _SPECIFIC_CLOUDS:
+        return skill_ids - {_GENERIC_CLOUD}
+    return skill_ids
 
 
 class Section(str, Enum):

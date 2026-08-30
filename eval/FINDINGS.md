@@ -395,3 +395,56 @@ to do with the extractor.** Roughly one in six postings behind each demand
 profile is the wrong role. It was invisible from the outside — the pipeline
 ran clean and the percentages looked plausible — and only reading 40 real
 postings exposed it.
+
+---
+
+# POST-FIX RESULTS
+
+| | precision | recall | F1 |
+|---|---|---|---|
+| pre-fix (untuned baseline) | 0.852 | 0.855 | 0.853 |
+| post-fix, raw | 0.850 | 0.890 | 0.870 |
+| post-fix, like-for-like | **0.904** | **0.890** | **0.897** |
+
+Per role, post-fix raw: frontend 0.952/0.898, backend 0.814/0.901,
+data-analyst 0.769/0.833.
+
+## The measurement artefact worth understanding
+
+Post-fix raw precision looks flat (0.852 -> 0.850). It is not. Sixteen of
+its false positives are skills added *after* labelling: Redshift 2, plus
+Kotlin, Splunk, Cypress, Crystal Reports, OpenGL, Business Objects, Groovy,
+NiFi, CakePHP, Smarty, Webflow, BigQuery, PySpark and R.
+
+Every one of those was recorded during labelling as "named in this posting,
+no checkbox exists". The extractor now finds them correctly and is marked
+wrong, because the ground truth predates the taxonomy that can express them.
+
+**Adding a skill to the taxonomy after labelling silently converts correct
+extractions into false positives.** Excluding those 16 gives the like-for-like
+figure of 0.904.
+
+This is a general hazard of fixing coverage gaps found during evaluation,
+and it cuts the opposite way from the tuning bias everyone worries about:
+here the post-fix score is penalised rather than flattered. Both are reasons
+to re-sample rather than re-use.
+
+## What each fix achieved
+
+| fix | effect |
+|---|---|
+| dropped 5 category-to-product aliases | Problem Solving 7->0, Cloud Fundamentals 6->0, Computer Networks 2->0, SAP 2->1 |
+| framework implies its language | JavaScript 6 misses -> 0; 1,073 implications added across the corpus |
+| suppress generic cloud when a provider is named | 415 suppressed across the corpus |
+| broadened Responsive Design aliases | 6 misses -> 3 |
+| 15 skills added | 16 correct extractions the old ground truth cannot credit |
+
+## Still unfixed
+
+- **Database Design, 4 misses** — prose again: "data models", "data storage
+  structures", "reporting environment". No single phrase to alias.
+- **Teamwork, 3 misses** — "collaborate with", "work well in a team".
+- **Tags contradicted by the description** — SAP still asserted once on the
+  Android posting whose tags include `sap`. Removing the `erp` alias fixed
+  the category case, but a literal `sap` tag on an unrelated role still
+  fires. Needs corroboration logic, not an alias change.

@@ -1,0 +1,9 @@
+{
+  "_note": "Stage 3 fix. A framework named in a posting asserts its language even when the language is never written. This was the single largest recall loss: JavaScript was missed 6 times because postings say React or Node.js and never say JavaScript.",
+  "_scope": "Deliberately narrow. Only implications where the language is unavoidable to use the framework. NOT included: MySQL -> SQL (the Stage 3 labeller consistently did not treat naming a database product as naming SQL), and WordPress -> PHP (a WordPress role often needs no PHP authoring).",
+
+  "javascript": ["nodejs", "react", "angular", "vue", "jquery", "express", "redux", "react-native", "mean-stack", "typescript"],
+  "python": ["django", "flask", "fastapi", "pandas", "numpy", "scikit-learn", "matplotlib", "pyspark"],
+  "java": ["spring", "spring-boot", "hibernate", "jsp", "struts"],
+  "php": ["laravel", "cakephp", "smarty"]
+}
