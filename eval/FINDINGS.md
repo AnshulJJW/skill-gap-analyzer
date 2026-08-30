@@ -151,6 +151,7 @@ something else. Counted properly once labelling is complete.
 | 9 | Software Engineer - Power | hardware/firmware, power management ICs |
 | 15 | Software Engineer iPhone | iOS mobile development |
 | 18 | Web Developer/Software Engineer | PHP/CakePHP/Drupal/WordPress agency work — the exact segment the exclude list was meant to keep out |
+| 38 | Data analyst | business/sales analyst — economics degree, KPI scorecards, sales team support. No tool named anywhere. |
 
 Six of the first eighteen — a third of the sample so far. Three distinct
 causes:
