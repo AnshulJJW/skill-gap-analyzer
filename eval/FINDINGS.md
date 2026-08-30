@@ -113,3 +113,34 @@ Worth counting exactly once labelling is complete, and reporting the figure.
 
 Also seen here but out of taxonomy scope: Splunk (logging), Visual Studio
 (an editor, not a skill).
+
+## Scored at 10 postings: micro P 0.757 / R 0.889 / F1 0.818
+
+63 true skill mentions, backend role only. Up from P 0.700 / R 0.840 at
+four postings. Gate is R >= 0.70.
+
+The spurious list has stopped being noise and become three named causes,
+all of them over-greedy aliases in my own curation rather than faults in
+the matcher:
+
+| asserted | times | why |
+|---|---|---|
+| Problem Solving | 3 | `analytical` is an alias of problem-solving, and Naukri tags almost everything `analytical` |
+| Cloud Fundamentals | 3 | "AWS Cloud" matches both AWS and the generic cloud entry, so we claim two skills where the labeller sees one |
+| Computer Networks | 2 | `http` is an alias of networking; any posting tagged http acquires it |
+
+Recall losses split two ways:
+
+- **Git (2)** — hides behind "GitHub", "version control", "code versioning
+  tools". Some spellings are covered, not all.
+- **SQL, NoSQL, Database Design, System Design, JavaScript (1 each)** —
+  prose rather than names: "relational and non-relational databases",
+  "Architect, design, build", Node.js implying JavaScript.
+
+Candidate fixes, after the full 40:
+- drop `analytical` from problem-solving; it is a trait, not a claim
+- make Cloud Fundamentals fire only when no specific cloud is present
+- drop `http` from networking
+- add the missing Git spellings
+- decide whether framework-implies-language should be an extraction rule or
+  stay purely in the Stage 4 prerequisite graph
