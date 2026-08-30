@@ -32,9 +32,28 @@ flattery. It is the most common way people accidentally lie with a metric.
 | Apache NiFi | posting 17 | the entire subject of the role |
 | Groovy, Jolt, Hashicorp Vault | posting 17 | named in nice-to-haves |
 | CakePHP, Smarty | posting 18 | PHP ecosystem |
+| Webflow | posting 29 | no-code website builder |
 | Business Objects | posting 15 | SAP BI reporting tool |
 | Visual Studio | posting 6 | an editor, not a skill — correctly absent |
 | GIS / ESRI / ERDAS / remote sensing | posting 3 | whole adjacent profession; out of scope, not a gap to fill |
+
+## The single systematic curation error: category word -> specific product
+
+Four confirmed instances, all mine, all the same shape. A generic category
+term is listed as an alias of one specific product, so any posting
+mentioning the category acquires a product it never named.
+
+| alias | maps to | should be |
+|---|---|---|
+| `analytical` | Problem Solving | a trait, not a skill claim |
+| `erp` | SAP | ERP is a category; SAP is one vendor |
+| `cms` | WordPress | posting 29 names Webflow, not WordPress |
+| `cloud` | Cloud Fundamentals | double-counts when AWS/GCP is also named |
+| `http` | Computer Networks | sometimes right, often incidental |
+
+This is the dominant source of false positives, and it is one mistake
+repeated rather than five separate ones. Worth stating that way: the fix is
+a rule ("a category term is not an alias of a product"), not five patches.
 
 ## Taxonomy entries that are too vague to be skills
 
