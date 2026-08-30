@@ -204,7 +204,8 @@ python -m analyzer.extract --file resumes/me.txt            # stage 2
 python -m eval.score                                        # stage 3
 python scripts/build_profiles.py                            # stage 4
 python -m analyzer.gap --resume resumes/me.txt --role sde1-backend
-uvicorn api.main:app --reload                               # stage 5
+uvicorn api.main:app --reload         # stage 5 -- docs at localhost:8000/docs
+python scripts/measure_api.py         # stage 5 gate: cold start + memory
 ```
 
 ## Layout

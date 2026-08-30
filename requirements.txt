@@ -27,3 +27,6 @@ ruff>=0.8
 
 # after install, fetch the spaCy model:
 #   python -m spacy download en_core_web_sm
+
+# measuring the Stage 5 memory gate
+psutil>=6.0
