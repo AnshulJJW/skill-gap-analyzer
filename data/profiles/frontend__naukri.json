@@ -1,0 +1,717 @@
+{
+  "role_id": "frontend",
+  "role_name": "Frontend Engineer",
+  "source_id": "naukri",
+  "market": "india",
+  "total_postings": 1581,
+  "demands": [
+    {
+      "skill_id": "javascript",
+      "postings": 1425,
+      "tagged": 998,
+      "share": 0.9013282732447818
+    },
+    {
+      "skill_id": "html",
+      "postings": 914,
+      "tagged": 675,
+      "share": 0.5781151170145478
+    },
+    {
+      "skill_id": "css",
+      "postings": 880,
+      "tagged": 570,
+      "share": 0.5566097406704618
+    },
+    {
+      "skill_id": "react",
+      "postings": 621,
+      "tagged": 203,
+      "share": 0.3927893738140417
+    },
+    {
+      "skill_id": "git",
+      "postings": 454,
+      "tagged": 405,
+      "share": 0.28716002530044277
+    },
+    {
+      "skill_id": "jquery",
+      "postings": 395,
+      "tagged": 357,
+      "share": 0.24984187223276408
+    },
+    {
+      "skill_id": "angular",
+      "postings": 448,
+      "tagged": 170,
+      "share": 0.28336495888678054
+    },
+    {
+      "skill_id": "rest-api",
+      "postings": 328,
+      "tagged": 105,
+      "share": 0.20746363061353573
+    },
+    {
+      "skill_id": "debugging",
+      "postings": 294,
+      "tagged": 193,
+      "share": 0.1859582542694497
+    },
+    {
+      "skill_id": "responsive-design",
+      "postings": 305,
+      "tagged": 143,
+      "share": 0.19291587602783047
+    },
+    {
+      "skill_id": "bootstrap",
+      "postings": 286,
+      "tagged": 195,
+      "share": 0.18089816571790007
+    },
+    {
+      "skill_id": "testing",
+      "postings": 244,
+      "tagged": 95,
+      "share": 0.15433270082226438
+    },
+    {
+      "skill_id": "agile",
+      "postings": 194,
+      "tagged": 144,
+      "share": 0.12270714737507907
+    },
+    {
+      "skill_id": "communication",
+      "postings": 219,
+      "tagged": 34,
+      "share": 0.13851992409867173
+    },
+    {
+      "skill_id": "redux",
+      "postings": 202,
+      "tagged": 56,
+      "share": 0.12776723592662872
+    },
+    {
+      "skill_id": "system-design",
+      "postings": 204,
+      "tagged": 50,
+      "share": 0.12903225806451613
+    },
+    {
+      "skill_id": "typescript",
+      "postings": 155,
+      "tagged": 36,
+      "share": 0.09803921568627451
+    },
+    {
+      "skill_id": "dom",
+      "postings": 125,
+      "tagged": 117,
+      "share": 0.07906388361796332
+    },
+    {
+      "skill_id": "json",
+      "postings": 126,
+      "tagged": 96,
+      "share": 0.07969639468690702
+    },
+    {
+      "skill_id": "ajax",
+      "postings": 122,
+      "tagged": 77,
+      "share": 0.07716635041113219
+    },
+    {
+      "skill_id": "problem-solving",
+      "postings": 140,
+      "tagged": 5,
+      "share": 0.08855154965211891
+    },
+    {
+      "skill_id": "java",
+      "postings": 124,
+      "tagged": 46,
+      "share": 0.0784313725490196
+    },
+    {
+      "skill_id": "vue",
+      "postings": 115,
+      "tagged": 28,
+      "share": 0.07273877292852625
+    },
+    {
+      "skill_id": "nodejs",
+      "postings": 117,
+      "tagged": 18,
+      "share": 0.07400379506641366
+    },
+    {
+      "skill_id": "devops",
+      "postings": 93,
+      "tagged": 36,
+      "share": 0.058823529411764705
+    },
+    {
+      "skill_id": "php",
+      "postings": 80,
+      "tagged": 65,
+      "share": 0.05060088551549652
+    },
+    {
+      "skill_id": "teamwork",
+      "postings": 101,
+      "tagged": 0,
+      "share": 0.06388361796331436
+    },
+    {
+      "skill_id": "seo",
+      "postings": 77,
+      "tagged": 58,
+      "share": 0.048703352308665404
+    },
+    {
+      "skill_id": "mysql",
+      "postings": 73,
+      "tagged": 65,
+      "share": 0.046173308032890575
+    },
+    {
+      "skill_id": "wordpress",
+      "postings": 70,
+      "tagged": 69,
+      "share": 0.044275774826059454
+    },
+    {
+      "skill_id": "oop",
+      "postings": 71,
+      "tagged": 32,
+      "share": 0.04490828589500316
+    },
+    {
+      "skill_id": "mvc",
+      "postings": 57,
+      "tagged": 40,
+      "share": 0.036053130929791274
+    },
+    {
+      "skill_id": "monitoring",
+      "postings": 66,
+      "tagged": 9,
+      "share": 0.04174573055028463
+    },
+    {
+      "skill_id": "dsa",
+      "postings": 57,
+      "tagged": 30,
+      "share": 0.036053130929791274
+    },
+    {
+      "skill_id": "ci-cd",
+      "postings": 53,
+      "tagged": 28,
+      "share": 0.033523086654016446
+    },
+    {
+      "skill_id": "xml",
+      "postings": 47,
+      "tagged": 42,
+      "share": 0.029728020240354206
+    },
+    {
+      "skill_id": "sql",
+      "postings": 49,
+      "tagged": 31,
+      "share": 0.03099304237824162
+    },
+    {
+      "skill_id": "dotnet",
+      "postings": 42,
+      "tagged": 29,
+      "share": 0.026565464895635674
+    },
+    {
+      "skill_id": "react-native",
+      "postings": 45,
+      "tagged": 17,
+      "share": 0.028462998102466792
+    },
+    {
+      "skill_id": "cloud",
+      "postings": 36,
+      "tagged": 23,
+      "share": 0.022770398481973434
+    },
+    {
+      "skill_id": "tdd",
+      "postings": 32,
+      "tagged": 22,
+      "share": 0.02024035420619861
+    },
+    {
+      "skill_id": "mongodb",
+      "postings": 32,
+      "tagged": 22,
+      "share": 0.02024035420619861
+    },
+    {
+      "skill_id": "python",
+      "postings": 34,
+      "tagged": 12,
+      "share": 0.021505376344086023
+    },
+    {
+      "skill_id": "aws",
+      "postings": 34,
+      "tagged": 10,
+      "share": 0.021505376344086023
+    },
+    {
+      "skill_id": "jira",
+      "postings": 30,
+      "tagged": 22,
+      "share": 0.018975332068311195
+    },
+    {
+      "skill_id": "linux",
+      "postings": 29,
+      "tagged": 24,
+      "share": 0.018342820999367487
+    },
+    {
+      "skill_id": "salesforce",
+      "postings": 28,
+      "tagged": 24,
+      "share": 0.017710309930423784
+    },
+    {
+      "skill_id": "information-security",
+      "postings": 34,
+      "tagged": 3,
+      "share": 0.021505376344086023
+    },
+    {
+      "skill_id": "sql-server",
+      "postings": 30,
+      "tagged": 12,
+      "share": 0.018975332068311195
+    },
+    {
+      "skill_id": "c",
+      "postings": 24,
+      "tagged": 17,
+      "share": 0.015180265654648957
+    },
+    {
+      "skill_id": "csharp",
+      "postings": 25,
+      "tagged": 7,
+      "share": 0.015812776723592662
+    },
+    {
+      "skill_id": "android",
+      "postings": 23,
+      "tagged": 12,
+      "share": 0.01454775458570525
+    },
+    {
+      "skill_id": "graphql",
+      "postings": 25,
+      "tagged": 4,
+      "share": 0.015812776723592662
+    },
+    {
+      "skill_id": "data-analysis",
+      "postings": 20,
+      "tagged": 16,
+      "share": 0.01265022137887413
+    },
+    {
+      "skill_id": "ios",
+      "postings": 21,
+      "tagged": 12,
+      "share": 0.013282732447817837
+    },
+    {
+      "skill_id": "design-patterns",
+      "postings": 22,
+      "tagged": 0,
+      "share": 0.013915243516761544
+    },
+    {
+      "skill_id": "postgresql",
+      "postings": 18,
+      "tagged": 12,
+      "share": 0.011385199240986717
+    },
+    {
+      "skill_id": "database-design",
+      "postings": 15,
+      "tagged": 14,
+      "share": 0.009487666034155597
+    },
+    {
+      "skill_id": "networking",
+      "postings": 15,
+      "tagged": 14,
+      "share": 0.009487666034155597
+    },
+    {
+      "skill_id": "selenium",
+      "postings": 15,
+      "tagged": 14,
+      "share": 0.009487666034155597
+    },
+    {
+      "skill_id": "express",
+      "postings": 19,
+      "tagged": 1,
+      "share": 0.012017710309930424
+    },
+    {
+      "skill_id": "cpp",
+      "postings": 14,
+      "tagged": 13,
+      "share": 0.008855154965211892
+    },
+    {
+      "skill_id": "machine-learning",
+      "postings": 15,
+      "tagged": 9,
+      "share": 0.009487666034155597
+    },
+    {
+      "skill_id": "nosql",
+      "postings": 14,
+      "tagged": 9,
+      "share": 0.008855154965211892
+    },
+    {
+      "skill_id": "laravel",
+      "postings": 13,
+      "tagged": 5,
+      "share": 0.008222643896268185
+    },
+    {
+      "skill_id": "shopify",
+      "postings": 13,
+      "tagged": 5,
+      "share": 0.008222643896268185
+    },
+    {
+      "skill_id": "docker",
+      "postings": 14,
+      "tagged": 1,
+      "share": 0.008855154965211892
+    },
+    {
+      "skill_id": "multithreading",
+      "postings": 12,
+      "tagged": 7,
+      "share": 0.007590132827324478
+    },
+    {
+      "skill_id": "spring",
+      "postings": 11,
+      "tagged": 8,
+      "share": 0.006957621758380772
+    },
+    {
+      "skill_id": "jsp",
+      "postings": 10,
+      "tagged": 8,
+      "share": 0.006325110689437065
+    },
+    {
+      "skill_id": "oracle-db",
+      "postings": 10,
+      "tagged": 7,
+      "share": 0.006325110689437065
+    },
+    {
+      "skill_id": "manual-testing",
+      "postings": 9,
+      "tagged": 9,
+      "share": 0.0056925996204933585
+    },
+    {
+      "skill_id": "ruby",
+      "postings": 9,
+      "tagged": 7,
+      "share": 0.0056925996204933585
+    },
+    {
+      "skill_id": "sap",
+      "postings": 8,
+      "tagged": 8,
+      "share": 0.005060088551549652
+    },
+    {
+      "skill_id": "mean-stack",
+      "postings": 9,
+      "tagged": 5,
+      "share": 0.0056925996204933585
+    },
+    {
+      "skill_id": "query-optimization",
+      "postings": 8,
+      "tagged": 7,
+      "share": 0.005060088551549652
+    },
+    {
+      "skill_id": "django",
+      "postings": 8,
+      "tagged": 6,
+      "share": 0.005060088551549652
+    },
+    {
+      "skill_id": "kubernetes",
+      "postings": 9,
+      "tagged": 3,
+      "share": 0.0056925996204933585
+    },
+    {
+      "skill_id": "azure",
+      "postings": 10,
+      "tagged": 0,
+      "share": 0.006325110689437065
+    },
+    {
+      "skill_id": "hibernate",
+      "postings": 8,
+      "tagged": 6,
+      "share": 0.005060088551549652
+    },
+    {
+      "skill_id": "flutter",
+      "postings": 9,
+      "tagged": 2,
+      "share": 0.0056925996204933585
+    },
+    {
+      "skill_id": "microservices",
+      "postings": 9,
+      "tagged": 2,
+      "share": 0.0056925996204933585
+    },
+    {
+      "skill_id": "golang",
+      "postings": 9,
+      "tagged": 1,
+      "share": 0.0056925996204933585
+    },
+    {
+      "skill_id": "data-visualization",
+      "postings": 8,
+      "tagged": 3,
+      "share": 0.005060088551549652
+    },
+    {
+      "skill_id": "gcp",
+      "postings": 7,
+      "tagged": 3,
+      "share": 0.004427577482605946
+    },
+    {
+      "skill_id": "assembly",
+      "postings": 6,
+      "tagged": 6,
+      "share": 0.003795066413662239
+    },
+    {
+      "skill_id": "maven",
+      "postings": 7,
+      "tagged": 2,
+      "share": 0.004427577482605946
+    },
+    {
+      "skill_id": "cypress",
+      "postings": 7,
+      "tagged": 0,
+      "share": 0.004427577482605946
+    },
+    {
+      "skill_id": "shell",
+      "postings": 6,
+      "tagged": 2,
+      "share": 0.003795066413662239
+    },
+    {
+      "skill_id": "nlp",
+      "postings": 5,
+      "tagged": 5,
+      "share": 0.0031625553447185324
+    },
+    {
+      "skill_id": "uml",
+      "postings": 5,
+      "tagged": 5,
+      "share": 0.0031625553447185324
+    },
+    {
+      "skill_id": "spring-boot",
+      "postings": 5,
+      "tagged": 4,
+      "share": 0.0031625553447185324
+    },
+    {
+      "skill_id": "code-review",
+      "postings": 6,
+      "tagged": 0,
+      "share": 0.003795066413662239
+    },
+    {
+      "skill_id": "sqlite",
+      "postings": 4,
+      "tagged": 4,
+      "share": 0.002530044275774826
+    },
+    {
+      "skill_id": "stored-procedures",
+      "postings": 4,
+      "tagged": 3,
+      "share": 0.002530044275774826
+    },
+    {
+      "skill_id": "tomcat",
+      "postings": 4,
+      "tagged": 3,
+      "share": 0.002530044275774826
+    },
+    {
+      "skill_id": "embedded",
+      "postings": 4,
+      "tagged": 2,
+      "share": 0.002530044275774826
+    },
+    {
+      "skill_id": "operating-systems",
+      "postings": 4,
+      "tagged": 1,
+      "share": 0.002530044275774826
+    },
+    {
+      "skill_id": "r",
+      "postings": 4,
+      "tagged": 0,
+      "share": 0.002530044275774826
+    },
+    {
+      "skill_id": "opengl",
+      "postings": 3,
+      "tagged": 3,
+      "share": 0.0018975332068311196
+    },
+    {
+      "skill_id": "etl",
+      "postings": 3,
+      "tagged": 2,
+      "share": 0.0018975332068311196
+    },
+    {
+      "skill_id": "statistics",
+      "postings": 3,
+      "tagged": 1,
+      "share": 0.0018975332068311196
+    },
+    {
+      "skill_id": "excel",
+      "postings": 3,
+      "tagged": 1,
+      "share": 0.0018975332068311196
+    },
+    {
+      "skill_id": "flask",
+      "postings": 3,
+      "tagged": 0,
+      "share": 0.0018975332068311196
+    },
+    {
+      "skill_id": "redis",
+      "postings": 3,
+      "tagged": 0,
+      "share": 0.0018975332068311196
+    },
+    {
+      "skill_id": "bigquery",
+      "postings": 2,
+      "tagged": 2,
+      "share": 0.001265022137887413
+    },
+    {
+      "skill_id": "apache-http",
+      "postings": 2,
+      "tagged": 2,
+      "share": 0.001265022137887413
+    },
+    {
+      "skill_id": "struts",
+      "postings": 2,
+      "tagged": 2,
+      "share": 0.001265022137887413
+    },
+    {
+      "skill_id": "business-intelligence",
+      "postings": 2,
+      "tagged": 1,
+      "share": 0.001265022137887413
+    },
+    {
+      "skill_id": "redshift",
+      "postings": 2,
+      "tagged": 0,
+      "share": 0.001265022137887413
+    },
+    {
+      "skill_id": "power-bi",
+      "postings": 1,
+      "tagged": 1,
+      "share": 0.0006325110689437065
+    },
+    {
+      "skill_id": "scala",
+      "postings": 1,
+      "tagged": 1,
+      "share": 0.0006325110689437065
+    },
+    {
+      "skill_id": "webflow",
+      "postings": 1,
+      "tagged": 0,
+      "share": 0.0006325110689437065
+    },
+    {
+      "skill_id": "crystal-reports",
+      "postings": 1,
+      "tagged": 0,
+      "share": 0.0006325110689437065
+    },
+    {
+      "skill_id": "perl",
+      "postings": 1,
+      "tagged": 0,
+      "share": 0.0006325110689437065
+    },
+    {
+      "skill_id": "kafka",
+      "postings": 1,
+      "tagged": 0,
+      "share": 0.0006325110689437065
+    },
+    {
+      "skill_id": "cassandra",
+      "postings": 1,
+      "tagged": 0,
+      "share": 0.0006325110689437065
+    },
+    {
+      "skill_id": "kotlin",
+      "postings": 1,
+      "tagged": 0,
+      "share": 0.0006325110689437065
+    }
+  ]
+}

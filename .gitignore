@@ -15,8 +15,13 @@ resumes/*
 
 # generated artifacts
 data/postings.csv
-data/profiles/
 *.db
+
+# data/profiles/ is deliberately NOT ignored. It is 52KB of precomputed
+# role demand, and it is what the API loads at startup -- without it a fresh
+# clone cannot serve a single request. The 682MB of raw CSVs that produced
+# it stay out (data/raw/), so a clone can RUN the tool but must fetch the
+# Kaggle data to rebuild the profiles from scratch.
 
 # node / vite
 node_modules/
