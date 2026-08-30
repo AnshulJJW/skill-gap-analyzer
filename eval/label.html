@@ -46,7 +46,10 @@ label.s:hover{background:var(--accw)}
 label.s.on{background:var(--accw);color:var(--acc);font-weight:600}
 .picked{min-height:1.6rem;display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.6rem}
 .chip{background:var(--accw);color:var(--acc);border-radius:99px;
-padding:.1rem .55rem;font-size:.78rem;font-weight:600}
+padding:.1rem .55rem;font-size:.78rem;font-weight:600;cursor:pointer;
+border:1px solid transparent}
+.chip:hover{border-color:var(--acc);text-decoration:line-through}
+.chip::after{content:" ×";opacity:.6;font-weight:700}
 .done{color:var(--ok);font-weight:600}
 #out{width:100%;height:130px;font:12px monospace;margin-top:.6rem;
 border:1px solid var(--line);border-radius:5px;background:var(--bg);
@@ -107,8 +110,8 @@ function renderSkills(){
   }
   document.getElementById("skills").innerHTML = h;
   document.getElementById("picked").innerHTML =
-    [...cur].map(id => `<span class="chip">${(SKILLS.find(s=>s.id===id)||{}).name||id}</span>`).join("")
-    || `<span class="meta">nothing ticked yet</span>`;
+    [...cur].map(id => `<span class="chip" data-rm="${id}" title="click to remove">${(SKILLS.find(s=>s.id===id)||{}).name||id}</span>`).join("")
+    || `<span class="meta">nothing ticked yet — click a chip here to remove it</span>`;
 }
 
 function render(){
@@ -142,11 +145,18 @@ document.getElementById("skills").addEventListener("change", e => {
 document.getElementById("none").onclick = () => {
   const pid = POSTINGS[i].id;
   labels[pid] = []; seen.add(pid); save();
-  if(i < POSTINGS.length-1){ i++; } render();
+  if(i < POSTINGS.length-1){ go(i+1); } else { render(); }
 };
+document.getElementById("picked").addEventListener("click", e => {
+  const id = e.target.dataset.rm; if(!id) return;
+  const pid = POSTINGS[i].id;
+  labels[pid] = (labels[pid]||[]).filter(x => x !== id);
+  seen.add(pid); save(); render();
+});
 document.getElementById("find").addEventListener("input", renderSkills);
-document.getElementById("prev").onclick = () => { if(i>0){ i--; render(); } };
-document.getElementById("next").onclick = () => { if(i<POSTINGS.length-1){ i++; render(); } };
+function go(n){ i = n; document.getElementById("find").value = ""; render(); }
+document.getElementById("prev").onclick = () => { if(i>0) go(i-1); };
+document.getElementById("next").onclick = () => { if(i<POSTINGS.length-1) go(i+1); };
 document.addEventListener("keydown", e => {
   if(e.target.tagName === "INPUT") return;
   if(e.key === "ArrowRight") document.getElementById("next").click();
