@@ -161,7 +161,34 @@ written.
 
 ## Limitations
 
-<!-- Stage 8. Name these yourself, first. -->
+Named here deliberately, and measured where possible.
+
+**About one in six postings is filed under the wrong role.** Found by hand
+across 40 postings (17.5%) and independently corroborated by an automated
+filter across the whole corpus (16.0%). The filters now remove 6 of the 8
+cases found; the two survivors are a senior role rescued by a junior
+sub-requirement, and a business analyst with no disqualifying signal at all.
+
+**The ranking optimises for market coverage, not personal fit.** It answers
+"which skill unlocks the most postings", which is not the same as "which
+skill is the sensible next step for *this* person". For a Python/Java
+student it correctly places .NET and C++ in the top six, because the Indian
+entry-level market really does want them — but that is arguably poor advice.
+
+**Single market, single snapshot.** Naukri, December 2024. Core skills move
+slowly, but anything fast-moving will drift. The pipeline is source-agnostic,
+so refreshing is a data task rather than a code change.
+
+**The taxonomy inherited its corpus's bias.** It was built from tags
+appearing 20+ times in a corpus that is 73% backend, so data-analysis
+coverage was thinner — R, one of the two principal languages of that
+profession, was missing entirely until hand-labelling exposed it. A
+frequency-thresholded vocabulary is only as broad as what you counted.
+
+**Resource recommendations are hand-curated, not learned.** 55 skills have
+free resources attached because someone chose them. That is a deliberate
+choice — a good curated map beats a bad recommender — but it is not machine
+learning and is not described as such.
 
 ---
 
