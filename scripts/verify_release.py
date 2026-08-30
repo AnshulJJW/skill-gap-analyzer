@@ -178,8 +178,17 @@ def check_deep() -> None:
             "c.__enter__()\n"
             "roles = c.get('/roles').json()\n"
             "assert roles, 'no roles'\n"
-            "r = c.post('/analyze', json={'resume_text':'TECHNICAL SKILLS'+chr(10)+"
-            "'Python, Java, SQL, MySQL, Git'+chr(10),'role_id':roles[0]['id']})\n"
+            # The schema enforces a 50-character minimum on resume_text. The
+            # first version of this fixture was 45 characters, so the API
+            # correctly returned 422 and the check reported a failure that
+            # was the verifier's fault rather than the app's.
+            "cv = ('TECHNICAL SKILLS'+chr(10)"
+            "+'Languages: Python, Java, SQL'+chr(10)"
+            "+'Databases: MySQL'+chr(10)+'Tools: Git'+chr(10)"
+            "+'PROJECTS'+chr(10)+'Built a web application.'+chr(10))\n"
+            "assert len(cv) >= 50, 'fixture is shorter than the schema allows'\n"
+            "r = c.post('/analyze', json={'resume_text':cv,"
+            "'role_id':roles[0]['id']})\n"
             "assert r.status_code == 200, r.status_code\n"
             "print(len(roles), round(r.json()['coverage'],3))\n"
         )
