@@ -22,8 +22,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from analyzer.db import get_engine, posting_skills, postings, provided_skills
 from analyzer.extract import (
-    Origin, extract, extract_from_tags,
-    resolve_implications, suppress_generic_cloud,
+    Origin,
+    extract,
+    extract_from_tags,
+    resolve_implications,
+    suppress_generic_cloud,
 )
 from analyzer.taxonomy import Taxonomy, audit_aliases
 
