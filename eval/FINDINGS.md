@@ -29,9 +29,22 @@ flattery. It is the most common way people accidentally lie with a metric.
 | Splunk | posting 6 | logging/observability tool |
 | Crystal Reports | posting 13 | the entire subject of the role; BI reporting tool |
 | OpenGL | posting 15 | graphics library |
+| Apache NiFi | posting 17 | the entire subject of the role |
+| Groovy, Jolt, Hashicorp Vault | posting 17 | named in nice-to-haves |
 | Business Objects | posting 15 | SAP BI reporting tool |
 | Visual Studio | posting 6 | an editor, not a skill — correctly absent |
 | GIS / ESRI / ERDAS / remote sensing | posting 3 | whole adjacent profession; out of scope, not a gap to fill |
+
+## Taxonomy entries that are too vague to be skills
+
+**`apache`** is the clearest case. The entry is named "Apache" with alias
+`nginx`, so it means the web server — but "Apache" is a foundation, not a
+product. Posting 17 is an Apache NiFi role, and its `apache` tag will make
+the extractor assert web-server Apache for a data-integration job.
+
+The same shape as the over-greedy aliases, one level up: the entry itself
+names a category rather than a skill. Rename to "Apache HTTP Server" and
+drop the bare `apache` surface form.
 
 ## Normalisation gaps
 
