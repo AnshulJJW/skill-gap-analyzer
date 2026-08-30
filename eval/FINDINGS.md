@@ -67,3 +67,29 @@ Candidate fixes, after scoring:
 - add "staff", "principal", "sr", "iii", "iv" to the role exclude list
 - cross-check the description for "N+ years" and prefer it over the
   structured field when they disagree
+
+## Error patterns from the first 4 labelled postings
+
+Two distinct failure modes, both visible before the set is even a tenth done.
+
+**Recall losses are prose, not names.** System Design, Database Design, SQL
+and NoSQL were all missed on posting 5, where the posting says "relational
+and non-relational databases" and "Architect, design, build". The taxonomy
+knows the token `nosql`, not the phrase that means it. A human reads
+meaning; the matcher reads strings.
+
+**Precision losses come from trusting employer tags.** Posting 4 is an
+Android role whose Naukri tags include `sap`, `sas` and `social networking`.
+The extractor takes tags at confidence 1.0, so it asserted SAP and SAS for
+an Android job. The labeller correctly did not.
+
+That is the more interesting of the two, because tags were chosen as the
+high-confidence signal replacing required-vs-preferred. The evidence so far
+says they are noisier than assumed, and the weighting may need to invert:
+a tag corroborated by the description is strong, a tag appearing nowhere in
+the body text is weak.
+
+Candidate fixes, after scoring:
+- phrase aliases for the prose forms ("non-relational database" -> nosql)
+- down-weight a tag that never appears in the description, or require
+  corroboration for tags outside the posting's own role category

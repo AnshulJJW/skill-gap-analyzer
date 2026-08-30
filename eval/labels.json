@@ -1,0 +1,55 @@
+{
+  "_note": "Stage 3 hand labels. Ground truth for precision/recall.",
+  "reviewed": 4,
+  "total": 40,
+  "cases": [
+    {
+      "id": 1082,
+      "role": "sde1-backend",
+      "skills": [
+        "debugging",
+        "testing"
+      ]
+    },
+    {
+      "id": 2600,
+      "role": "sde1-backend",
+      "skills": []
+    },
+    {
+      "id": 2338,
+      "role": "sde1-backend",
+      "skills": [
+        "android",
+        "debugging",
+        "git",
+        "testing"
+      ]
+    },
+    {
+      "id": 2132,
+      "role": "sde1-backend",
+      "skills": [
+        "agile",
+        "aws",
+        "azure",
+        "ci-cd",
+        "communication",
+        "database-design",
+        "git",
+        "java",
+        "microservices",
+        "mysql",
+        "nosql",
+        "postgresql",
+        "problem-solving",
+        "python",
+        "rest-api",
+        "spring-boot",
+        "sql",
+        "system-design",
+        "testing"
+      ]
+    }
+  ]
+}
