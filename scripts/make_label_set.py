@@ -126,7 +126,11 @@ color:var(--ink);padding:.5rem;display:none}
 const POSTINGS = __POSTINGS__, SKILLS = __SKILLS__;
 const KEY = "sga_labels_v1";
 let i = 0, labels = JSON.parse(localStorage.getItem(KEY) || "{}");
-let seen = new Set(JSON.parse(localStorage.getItem(KEY + "_seen") || "[]"));
+let seen = new Set(JSON.parse(localStorage.getItem(KEY + "_seen") || "[]").map(Number));
+// Migration: reviewed-tracking was added after labelling began, so any
+// posting that already carries labels must count as reviewed. Without this
+// the earliest postings are silently dropped from the export.
+for(const k of Object.keys(labels)){ if((labels[k]||[]).length) seen.add(Number(k)); }
 
 const byCat = {};
 SKILLS.forEach(s => (byCat[s.category] ||= []).push(s));
@@ -179,19 +183,19 @@ document.getElementById("skills").addEventListener("change", e => {
   const set = new Set(labels[pid] || []);
   e.target.checked ? set.add(id) : set.delete(id);
   labels[pid] = [...set];
-  seen.add(pid);
+  seen.add(Number(pid));
   save(); render();
 });
 document.getElementById("none").onclick = () => {
   const pid = POSTINGS[i].id;
-  labels[pid] = []; seen.add(pid); save();
+  labels[pid] = []; seen.add(Number(pid)); save();
   if(i < POSTINGS.length-1){ go(i+1); } else { render(); }
 };
 document.getElementById("picked").addEventListener("click", e => {
   const id = e.target.dataset.rm; if(!id) return;
   const pid = POSTINGS[i].id;
   labels[pid] = (labels[pid]||[]).filter(x => x !== id);
-  seen.add(pid); save(); render();
+  seen.add(Number(pid)); save(); render();
 });
 document.getElementById("find").addEventListener("input", renderSkills);
 function go(n){ i = n; document.getElementById("find").value = ""; render(); }
@@ -208,7 +212,7 @@ document.getElementById("save").onclick = () => {
     _note: "Stage 3 hand labels. Ground truth for precision/recall.",
     reviewed: seen.size,
     total: POSTINGS.length,
-    cases: POSTINGS.filter(p => seen.has(p.id))
+    cases: POSTINGS.filter(p => seen.has(Number(p.id)))
       .map(p => ({ id: p.id, role: p.role, skills: (labels[p.id]||[]).sort() }))
   };
   const text = JSON.stringify(payload, null, 2);
