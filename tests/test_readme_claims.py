@@ -17,11 +17,37 @@ import re
 from pathlib import Path
 
 import pytest
+from sqlalchemy import inspect
 
+from analyzer.db import get_engine
 from eval.score import load_predictions, prf
 
 ROOT = Path(__file__).resolve().parent.parent
 README = (ROOT / "README.md").read_text(encoding="utf-8")
+
+
+def _corpus_available() -> bool:
+    """These checks recompute the score, which needs the postings database.
+
+    It is 16MB and rebuildable, so it is deliberately not in git -- see
+    data/README.md. On a fresh clone these tests SKIP with a reason rather
+    than erroring, because a test that cannot run has not failed.
+    """
+    try:
+        return "posting_skills" in inspect(get_engine()).get_table_names()
+    except Exception:
+        return False
+
+
+pytestmark = pytest.mark.skipif(
+    not _corpus_available(),
+    reason=(
+        "needs the postings database (16MB, not in git). Rebuild with: "
+        "kaggle datasets download -d muhammetakkurt/naukri-jobs-dataset "
+        "-p data/raw --unzip && python scripts/load_db.py && "
+        "python scripts/extract_skills.py"
+    ),
+)
 
 
 def _current_scores():
