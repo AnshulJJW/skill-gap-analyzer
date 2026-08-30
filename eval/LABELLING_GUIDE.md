@@ -13,6 +13,20 @@ would penalise the extractor for using data it was designed to use.
 The tags are noisy — roughly half are not skills — so they are filtered by
 the same test as everything else, not copied wholesale.
 
+**A tag counts only when the description does not contradict it.** Naukri's
+tagging is keyword-driven and regularly attaches skills from an unrelated
+role: `sap` and `sas` on an Android job (posting 4), `html` and
+`javascript` on a Goldman Sachs role about compiled languages, concurrency
+and memory management (posting 7).
+
+- tag supported by the description, or simply unmentioned but plausible for
+  the role → tick
+- tag that clashes with what the posting actually describes → skip
+
+This is a judgement call, and it is the judgement the extractor cannot make
+— it takes tags at face value. Where the labeller and the extractor
+disagree here, that disagreement is the finding, not an error.
+
 ## The test for ticking a skill
 
 > Can I point at words in this posting that name it?
