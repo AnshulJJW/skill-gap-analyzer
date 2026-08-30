@@ -301,3 +301,17 @@ inherited the corpus's bias, and only labelling the data block surfaced it.
 That is worth stating plainly as a limitation of the method, not just as a
 missing row: **a frequency-thresholded taxonomy is only as broad as the
 corpus it was counted from.**
+
+## Dataset truncation: measured, not assumed
+
+Posting 37 ends on the line "Technical Skills (Must have)" with nothing
+after it — the most important section is missing from the scrape.
+
+Measured across the corpus rather than generalised from one case:
+**69 of 7,593 postings (0.9%)** end on a section heading with no content
+following. The detector also produced at least one false positive in the
+40-posting sample, so the true rate is lower.
+
+Rare enough to be a footnote. It does not bias the precision/recall
+comparison — labeller and extractor read the same truncated text — but it
+does mean a small number of demand profiles are built on partial postings.
