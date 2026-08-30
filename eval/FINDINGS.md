@@ -93,3 +93,20 @@ Candidate fixes, after scoring:
 - phrase aliases for the prose forms ("non-relational database" -> nosql)
 - down-weight a tag that never appears in the description, or require
   corroboration for tags outside the posting's own role category
+
+## Seniority leakage is looking systematic, not incidental
+
+| posting | title | body says | Naukri field |
+|---|---|---|---|
+| 5 | Staff Software Engineer | 7+ years | 2-5 Yrs |
+| 6 | Software Engineer III | 5+ years | 2-5 Yrs |
+
+Two of the first six. If the rate holds across the sample it is a headline
+limitation, not a footnote: a meaningful share of the "entry-level" demand
+profile is built from senior postings, which would inflate demand for
+skills a fresher is not expected to have.
+
+Worth counting exactly once labelling is complete, and reporting the figure.
+
+Also seen here but out of taxonomy scope: Splunk (logging), Visual Studio
+(an editor, not a skill).
