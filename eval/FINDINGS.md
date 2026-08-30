@@ -33,6 +33,10 @@ flattery. It is the most common way people accidentally lie with a metric.
 | Groovy, Jolt, Hashicorp Vault | posting 17 | named in nice-to-haves |
 | CakePHP, Smarty | posting 18 | PHP ecosystem |
 | Webflow | posting 29 | no-code website builder |
+| PySpark | posting 33 | named beside Python |
+| BigQuery | posting 33 | GCP warehouse; also missing as an AWS/GCP alias |
+| Amazon Redshift | posting 33 | AWS warehouse; same |
+| Bloomberg Terminal, Refinitiv Eikon | posting 33 | finance data platforms |
 | Business Objects | posting 15 | SAP BI reporting tool |
 | Visual Studio | posting 6 | an editor, not a skill — correctly absent |
 | GIS / ESRI / ERDAS / remote sensing | posting 3 | whole adjacent profession; out of scope, not a gap to fill |
@@ -269,3 +273,20 @@ The same split shows in the tags: frontend postings tag `react.js` and
 
 False positives remain dominated by the category-to-product aliases:
 Problem Solving 5, Cloud Fundamentals 5, SAP 2, Computer Networks 2.
+
+
+## The data block has a different gap profile, as predicted
+
+Posting 33 (first data-analyst posting) names BigQuery, Amazon Redshift and
+PySpark. None are in the taxonomy, and crucially none are aliases of the
+cloud entries either -- so a posting can be deeply AWS-based without the
+extractor seeing AWS at all.
+
+That is the mirror image of the category-to-product error. There the
+taxonomy was too coarse (a category aliased to one product); here it is too
+narrow (a product not linked to its platform). Both are curation depth
+problems, in opposite directions.
+
+Data-domain coverage looks thinner than backend or frontend, which is
+consistent with the taxonomy having been curated from a corpus that is 73%
+backend postings.
