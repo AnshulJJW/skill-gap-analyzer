@@ -448,3 +448,37 @@ to re-sample rather than re-use.
   Android posting whose tags include `sap`. Removing the `erp` alias fixed
   the category case, but a literal `sap` tag on an unrelated role still
   fires. Needs corroboration logic, not an alias change.
+
+## Role-filter fixes: written, measured, NOT applied
+
+Three fixes for the 17.5% misfiling rate: seniority markers added to the
+exclude list ("staff", "principal", "III"...), exclusions extended to read
+the description rather than only the title, and a years-of-experience check
+that prefers the body text over Naukri's structured field when they disagree.
+
+Simulated across the full corpus without rebuilding:
+
+| role | now | removed | kept |
+|---|---|---|---|
+| sde1-backend | 5,518 | 18.8% | 4,482 |
+| frontend | 1,654 | 7.7% | 1,526 |
+| data-analyst | 421 | 11.9% | 371 |
+| **total** | **7,593** | **16.0%** | **6,379** |
+
+All three roles still clear the 250-posting gate.
+
+**The 16.0% independently corroborates the hand-labelled 17.5%.** Two
+unrelated methods — one human reading 40 postings, one pattern filter
+sweeping 7,593 — agree within 1.5 points. That is much stronger evidence
+than either alone, and it is the closest thing to external validation this
+project has.
+
+### Why it is not applied yet
+
+Rebuilding the postings table reassigns primary keys, which breaks the
+`posting_id` references in labels.json and destroys the evaluation set.
+
+Applying it belongs at the start of Stage 4, together with drawing a fresh
+sample — which is needed anyway, since the post-fix figures are tuned on the
+current one. Doing both at once means the next measurement is clean on both
+counts.

@@ -1,41 +1,130 @@
 {
-  "_note": "Stage 1. Patterns are derived from the actual title distribution in the Naukri snapshot (see docs/stage1-data-audit.md), not guessed. `exclude` matters as much as `include`: the Indian entry-level market has a large PHP/WordPress/agency segment whose skill profile is genuinely different from product-company backend work, and pooling them produces a profile that describes neither.",
+  "_note": "Stage 1. Patterns are derived from the actual title distribution in the Naukri snapshot (see docs/stage1-data-audit.md), not guessed. `exclude` matters as much as `include`: the Indian entry-level market has a large PHP/WordPress/agency segment whose skill profile is genuinely different from product-company backend work, and pooling them produces a profile that describes neither. SENIORITY AND DESCRIPTION FILTERS ADDED after Stage 3 labelling found 7 of 40 postings (17.5%) misfiled: GIS, firmware and iOS roles as backend, three senior roles as entry-level, a business analyst as a data analyst.",
   "entry_level_max_years": 2,
   "roles": [
     {
       "id": "sde1-backend",
       "name": "SDE-1 Backend",
       "include": [
-        "backend developer", "back end developer", "backend engineer",
-        "software engineer", "software developer",
-        "software development engineer", "sde",
-        "java developer", "python developer", "node js developer",
-        "nodejs developer", "golang developer", "spring boot"
+        "backend developer",
+        "back end developer",
+        "backend engineer",
+        "software engineer",
+        "software developer",
+        "software development engineer",
+        "sde",
+        "java developer",
+        "python developer",
+        "node js developer",
+        "nodejs developer",
+        "golang developer",
+        "spring boot"
       ],
       "exclude": [
-        "php", "wordpress", "shopify", "magento", "laravel",
-        "senior", "lead", "architect", "manager", "sr.", "sr "
+        " ii",
+        " iii",
+        " iv",
+        "architect",
+        "head of",
+        "iii",
+        "laravel",
+        "lead",
+        "magento",
+        "manager",
+        "php",
+        "principal",
+        "senior",
+        "shopify",
+        "specialist",
+        "sr ",
+        "sr.",
+        "staff",
+        "wordpress"
       ]
     },
     {
       "id": "frontend",
       "name": "Frontend Engineer",
       "include": [
-        "frontend developer", "front end developer", "frontend engineer",
-        "react js developer", "reactjs developer", "react developer",
-        "angular developer", "angularjs developer", "vue",
-        "ui developer", "javascript developer"
+        "frontend developer",
+        "front end developer",
+        "frontend engineer",
+        "react js developer",
+        "reactjs developer",
+        "react developer",
+        "angular developer",
+        "angularjs developer",
+        "vue",
+        "ui developer",
+        "javascript developer"
       ],
-      "exclude": ["senior", "lead", "architect", "manager", "sr.", "sr "]
+      "exclude": [
+        " ii",
+        " iii",
+        " iv",
+        "architect",
+        "head of",
+        "iii",
+        "lead",
+        "manager",
+        "principal",
+        "senior",
+        "specialist",
+        "sr ",
+        "sr.",
+        "staff"
+      ]
     },
     {
       "id": "data-analyst",
       "name": "Data Analyst",
       "include": [
-        "data analyst", "data analytics", "analytics analyst",
-        "reporting analyst", "bi analyst", "business intelligence analyst"
+        "data analyst",
+        "data analytics",
+        "analytics analyst",
+        "reporting analyst",
+        "bi analyst",
+        "business intelligence analyst"
       ],
-      "exclude": ["senior", "lead", "manager", "sr.", "sr "]
+      "exclude": [
+        " ii",
+        " iii",
+        " iv",
+        "architect",
+        "head of",
+        "iii",
+        "lead",
+        "manager",
+        "principal",
+        "senior",
+        "specialist",
+        "sr ",
+        "sr.",
+        "staff"
+      ]
     }
-  ]
+  ],
+  "exclude_description": {
+    "_note": "Exclusions previously read only the title. Posting 18 was PHP/CakePHP/Drupal agency work titled 'Web Developer/Software Engineer' -- every disqualifying word sat in the description, so no title pattern could have caught it.",
+    "sde1-backend": [
+      "cakephp",
+      "wordpress theme",
+      "drupal",
+      "magento",
+      "gis software",
+      "esri",
+      "erdas",
+      "remote sensing",
+      "geo-referencing",
+      "power supply",
+      "firmware",
+      "qualcomm",
+      "objective-c",
+      "opengl"
+    ]
+  },
+  "min_years_from_description": {
+    "_note": "Naukri's structured experience field disagreed with the body text on three sampled postings -- 'Staff Software Engineer' and 'Software Engineer III' both filed as 2-5 Yrs while asking for 5+ and 7+ years. Where the description states a minimum, prefer it over the structured field.",
+    "max_years": 3
+  }
 }
