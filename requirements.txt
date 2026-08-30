@@ -5,7 +5,10 @@
 # --- data + pipeline (Stages 1-4) ---
 pandas>=2.3
 rapidfuzz>=3.10          # fast alias / fuzzy matching
-spacy>=3.8               # tokenizing + sentence splitting (NOT skill NER)
+# spacy -- installed during Stage 2, then removed. Its NER does not
+# recognise technical skills, and its sentence splitting added nothing on
+# Naukri's short, already-line-broken descriptions. Reinstate only if a
+# measured need appears:  pip install spacy && python -m spacy download en_core_web_sm
 
 # --- database (Stage 1) ---
 psycopg[binary]>=3.2

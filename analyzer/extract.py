@@ -9,10 +9,13 @@ Matching is n-gram lookup against the taxonomy rather than one large regex.
 Longest match wins and consumes its tokens, so "spring boot" does not also
 register a separate "spring", and "data structures" does not register "data".
 
-Note what spaCy is NOT used for here: off-the-shelf NER is trained on people,
-places and organisations and will not tag Kafka or gRPC as skills. It earns
-its place at sentence segmentation, which is how the evidence string for each
-mention is found.
+On NLP libraries: this module deliberately uses none. spaCy was installed
+and then not used -- its off-the-shelf NER is trained on people, places and
+organisations and will not tag Kafka or gRPC as a skill, and its sentence
+segmentation buys nothing on Naukri descriptions, which are short and already
+line-broken. A curated taxonomy plus fuzzy matching does the job at a
+fraction of the cost and, unlike a model, can explain every decision it
+makes. Measured against a labelled set in Stage 3, not assumed.
 """
 
 from __future__ import annotations
