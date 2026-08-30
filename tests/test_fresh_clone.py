@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def tracked(path: str) -> list[str]:
     out = subprocess.run(["git", "ls-files", path], cwd=ROOT,
-                         capture_output=True, text=True).stdout
+                         capture_output=True, text=True, check=False).stdout
     return [line for line in out.splitlines() if line.strip()]
 
 
