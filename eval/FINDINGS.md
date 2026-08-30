@@ -28,6 +28,8 @@ flattery. It is the most common way people accidentally lie with a metric.
 | Cypress | posting 8 (Backend Developer) | named outright; end-to-end testing tool |
 | Splunk | posting 6 | logging/observability tool |
 | Crystal Reports | posting 13 | the entire subject of the role; BI reporting tool |
+| OpenGL | posting 15 | graphics library |
+| Business Objects | posting 15 | SAP BI reporting tool |
 | Visual Studio | posting 6 | an editor, not a skill — correctly absent |
 | GIS / ESRI / ERDAS / remote sensing | posting 3 | whole adjacent profession; out of scope, not a gap to fill |
 
@@ -97,6 +99,24 @@ Candidate fixes, after scoring:
 - phrase aliases for the prose forms ("non-relational database" -> nosql)
 - down-weight a tag that never appears in the description, or require
   corroboration for tags outside the posting's own role category
+
+## Misfiled postings, running count
+
+Postings whose title matched a role pattern but whose actual work is
+something else. Counted properly once labelling is complete.
+
+| posting | title | actually |
+|---|---|---|
+| 3 | Junior Software Developer | GIS specialist |
+| 5 | Staff Software Engineer | senior, 7+ years |
+| 6 | Software Engineer III | senior, 5+ years |
+| 9 | Software Engineer - Power | hardware/firmware, power management ICs |
+| 15 | Software Engineer iPhone | iOS mobile development |
+
+Five of the first fifteen — a third of the sample so far. Two distinct
+causes: `software engineer` and `software developer` are so generic they
+match any adjacent discipline, and seniority words like "staff" and "III"
+are not excluded. Both are cheap to fix; the value is knowing the rate.
 
 ## Seniority leakage is looking systematic, not incidental
 
