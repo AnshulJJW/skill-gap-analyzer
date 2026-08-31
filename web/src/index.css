@@ -1,9 +1,10 @@
-/* Deep plum and champagne.
+/* White ground, plum and champagne as accents only.
+   Colour appears in type, hairlines, badges and the score dial -- never as a
+   surface. An earlier draft tinted whole sections and read as a beige field.
+
    One stylesheet, no framework: the whole site is three views and roughly
    thirty elements, and a hand-written file is smaller and faster than
    shipping a utility framework to style them. */
-
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap");
 
 :root {
   --ink:        #1F1024;   /* deep aubergine, used instead of black */
@@ -27,27 +28,12 @@
   --body: "Karla", "Segoe UI", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, monospace;
 
+  /* Fixes native controls -- textarea, select, scrollbars -- which a dark-mode
+     OS would otherwise paint dark inside this light page. */
+  color-scheme: light;
+
   --r: 4px;                /* restrained corners: this is a document, not an app */
   --shadow: 0 1px 2px rgba(31,16,36,.05), 0 12px 32px -20px rgba(31,16,36,.35);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink:        #F2E9F0;
-    --ink-2:      #C3B0C6;
-    --ink-3:      #8E7B93;
-    --plum:       #D9A2C6;
-    --plum-lift:  #EBBBDA;
-    --plum-wash:  #2C1730;
-    --champagne:  #E8D5A9;
-    --champagne-2:#C9A961;
-    --cream:      #170C1A;
-    --card:       #21122612;
-    --card:       #241329;
-    --line:       #3A2340;
-    --line-2:     #4C3053;
-    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 12px 32px -20px rgba(0,0,0,.9);
-  }
 }
 
 * { box-sizing: border-box; }
@@ -106,10 +92,10 @@ a:hover { color: var(--plum-lift); }
 /* ------------------------------------------------------------------ hero */
 
 .hero { padding-block: 4.5rem 3rem; }
-/* Sections alternate white and near-white so the page has structure even
-   where there are no cards. */
+/* Every section sits on the same white ground. Structure comes from hairline
+   rules and space rather than tinted fills, so plum and champagne stay
+   accents -- type, borders, badges -- and never become surfaces. */
 section.band { background: var(--card); }
-section.band.tint { background: var(--plum-wash); }
 .eyebrow {
   font-family: var(--mono); font-size: .72rem; font-weight: 500;
   letter-spacing: .14em; text-transform: uppercase;
@@ -187,7 +173,6 @@ button.plain:hover { color: var(--plum); background: none; }
 /* --------------------------------------------------------------- sections */
 
 section.band { padding-block: 4rem; border-top: 1px solid var(--line); }
-section.band.tint { background: var(--plum-wash); }
 
 .section-head { max-width: 40ch; margin-bottom: 2.2rem; }
 .section-head h2 {
@@ -261,7 +246,8 @@ textarea { min-height: 18rem; resize: vertical; line-height: 1.55; }
 .hint { font-size: .82rem; color: var(--ink-3); margin: .45rem 0 0; }
 
 .error {
-  border: 1px solid var(--plum); background: var(--plum-wash);
+  border: 1px solid var(--line-2); border-left: 3px solid var(--plum);
+  background: var(--card); color: var(--ink);
   border-radius: var(--r); padding: .9rem 1.05rem; margin: 1.4rem 0;
   font-size: .92rem;
 }

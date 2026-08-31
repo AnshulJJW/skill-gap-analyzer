@@ -263,7 +263,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
         </div>
       </section>
 
-      <section className="band tint" id="how">
+      <section className="band" id="how">
         <div className="wrap">
           <div className="section-head">
             <h2>How it works</h2>
