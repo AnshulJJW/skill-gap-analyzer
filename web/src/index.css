@@ -216,3 +216,53 @@ footer {
   .gaps .ev { display: none; }
   .score { gap: 1rem; }
 }
+
+/* ---------- pdf upload ---------- */
+
+.dropzone {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.2rem;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  transition: border-color .12s, background .12s;
+}
+.dropzone.over { border-color: var(--accent); background: var(--accent-soft); }
+.dropzone span { font-size: .87rem; color: var(--soft); }
+
+button.ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: .5rem 1.1rem;
+  font-size: .9rem;
+}
+
+.notice {
+  font-size: .86rem;
+  line-height: 1.55;
+  color: var(--mid);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: .8rem 1rem;
+  margin-bottom: 1rem;
+}
+.notice strong { color: var(--ink); }
+.warn {
+  margin-top: .5rem;
+  padding: .45rem .6rem;
+  border-radius: 4px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropzone { transition: none; }
+}

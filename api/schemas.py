@@ -62,6 +62,13 @@ class AnalyzeOut(BaseModel):
     roadmap: list[RoadmapStepOut]
 
 
+class ParsedResumeOut(BaseModel):
+    text: str
+    pages: int
+    chars: int
+    warnings: list[str] = []
+
+
 class HealthOut(BaseModel):
     status: str
     roles_loaded: int

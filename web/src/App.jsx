@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { analyze, getRoles } from "./api.js";
+import { useEffect, useRef, useState } from "react";
+import { analyze, getRoles, parseResume } from "./api.js";
 
 const MIN_RESUME_CHARS = 50;
 
@@ -10,6 +10,37 @@ export default function App() {
   const [report, setReport] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(null);
+  const [dragging, setDragging] = useState(false);
+  const fileInput = useRef(null);
+
+  /** A PDF never goes straight to analysis. Its text lands in the textarea
+   *  so the user can read and fix it first -- extraction scrambles
+   *  two-column layouts and nothing reliably detects when it has. */
+  async function handleFile(file) {
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    setUploaded(null);
+    setReport(null);
+    try {
+      const parsed = await parseResume(file);
+      setResume(parsed.text);
+      setUploaded({ name: file.name, ...parsed });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
+  }
+
+  function onDrop(e) {
+    e.preventDefault();
+    setDragging(false);
+    handleFile(e.dataTransfer.files?.[0]);
+  }
 
   useEffect(() => {
     getRoles()
@@ -49,6 +80,51 @@ export default function App() {
       </header>
 
       <form onSubmit={onSubmit}>
+        <div
+          className={`dropzone${dragging ? " over" : ""}`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragging(true);
+          }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={onDrop}
+        >
+          <input
+            ref={fileInput}
+            id="pdf"
+            type="file"
+            accept="application/pdf,.pdf"
+            onChange={(e) => handleFile(e.target.files?.[0])}
+            hidden
+          />
+          <button
+            type="button"
+            className="ghost"
+            onClick={() => fileInput.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? "Reading PDF…" : "Choose a PDF"}
+          </button>
+          <span>or drop one here — or just paste the text below</span>
+        </div>
+
+        {uploaded && (
+          <div className="notice">
+            <strong>Read {uploaded.name}</strong> — {uploaded.pages} page
+            {uploaded.pages === 1 ? "" : "s"}, {uploaded.chars} characters.
+            <br />
+            <strong>Check the text below before analysing.</strong> PDF
+            extraction can jumble two-column layouts and text inside tables,
+            and there is no reliable way to detect when it has. Edit anything
+            that looks wrong.
+            {uploaded.warnings.map((w) => (
+              <div key={w} className="warn">
+                {w}
+              </div>
+            ))}
+          </div>
+        )}
+
         <label htmlFor="resume">Your resume, as plain text</label>
         <textarea
           id="resume"

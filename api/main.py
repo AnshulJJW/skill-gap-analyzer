@@ -18,14 +18,22 @@ from __future__ import annotations
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from analyzer.gap import analyze
 from analyzer.profiles import RoleProfile
+from analyzer.resume import MAX_BYTES, ResumeParseError, parse_pdf
 from analyzer.roadmap import load_resources
 from analyzer.taxonomy import Taxonomy
-from api.schemas import AnalyzeIn, AnalyzeOut, HealthOut, ResourceOut, RoleOut
+from api.schemas import (
+    AnalyzeIn,
+    AnalyzeOut,
+    HealthOut,
+    ParsedResumeOut,
+    ResourceOut,
+    RoleOut,
+)
 
 STATE: dict = {}
 
@@ -95,6 +103,23 @@ def resources(skill_id: str) -> list[ResourceOut]:
         raise HTTPException(404, f"unknown skill {skill_id!r}")
     return [ResourceOut(**vars(r))
             for r in STATE["resources"].get(skill_id, [])]
+
+
+@app.post("/parse-resume", response_model=ParsedResumeOut)
+async def parse_resume(file: UploadFile = File(...)) -> ParsedResumeOut:
+    """PDF in, text out. Deliberately does NOT analyse.
+
+    The text goes back to the browser for the user to read and correct
+    first. PDF extraction fails in ways nothing can reliably detect -- see
+    analyzer/resume.py -- and analysing a bad parse straight away would
+    produce a confident, wrong answer.
+    """
+    data = await file.read(MAX_BYTES + 1)
+    try:
+        parsed = parse_pdf(data, file.filename or "resume.pdf")
+    except ResumeParseError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return ParsedResumeOut(**vars(parsed))
 
 
 @app.post("/analyze", response_model=AnalyzeOut)

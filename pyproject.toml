@@ -6,3 +6,7 @@ line-length = 88
 # two entries; _check_shape() verifies every entry has exactly four fields at
 # runtime, which catches the same bug more directly.
 "scripts/build_interview_doc.py" = ["ISC004"]
+# B008 forbids a function call in an argument default. FastAPI's dependency
+# system is built on exactly that -- File(...), Depends(...), Query(...) --
+# so the rule is a false positive in route definitions, not a smell.
+"api/main.py" = ["B008"]

@@ -38,6 +38,15 @@ async function request(path, options) {
 
 export const getRoles = () => request("/roles");
 
+/** PDF in, text out. Deliberately separate from analyze(): the text is put
+ *  in the textarea for the user to check first, because PDF extraction can
+ *  scramble two-column layouts and nothing reliably detects that. */
+export const parseResume = (file) => {
+  const body = new FormData();
+  body.append("file", file);
+  return request("/parse-resume", { method: "POST", body });
+};
+
 export const analyze = (resumeText, roleId) =>
   request("/analyze", {
     method: "POST",

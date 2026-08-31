@@ -35,3 +35,12 @@ httpx>=0.27
 
 # measuring the Stage 5 memory gate
 psutil>=6.0
+
+# fastapi needs this to accept file uploads (PDF resumes)
+python-multipart>=0.0.9
+
+# reading uploaded PDF resumes
+pypdf>=6.0
+
+# test fixtures only: builds real PDFs to parse back
+fpdf2>=2.8
