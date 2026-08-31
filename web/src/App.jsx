@@ -1,46 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { analyze, getRoles, parseResume } from "./api.js";
+import Results from "./Results.jsx";
 
 const MIN_RESUME_CHARS = 50;
 
+/* Three views rather than one long page.
+   Landing sells and takes the upload. Review is the safety step -- PDF
+   extraction scrambles two-column layouts and nothing reliably detects
+   when it has, so the text is always shown before anything is analysed.
+   Results is a focused screen with the marketing gone. */
 export default function App() {
+  const [view, setView] = useState("landing");
   const [roles, setRoles] = useState([]);
   const [roleId, setRoleId] = useState("");
   const [resume, setResume] = useState("");
+  const [uploaded, setUploaded] = useState(null);
   const [report, setReport] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploaded, setUploaded] = useState(null);
-  const [dragging, setDragging] = useState(false);
   const fileInput = useRef(null);
-
-  /** A PDF never goes straight to analysis. Its text lands in the textarea
-   *  so the user can read and fix it first -- extraction scrambles
-   *  two-column layouts and nothing reliably detects when it has. */
-  async function handleFile(file) {
-    if (!file) return;
-    setUploading(true);
-    setError(null);
-    setUploaded(null);
-    setReport(null);
-    try {
-      const parsed = await parseResume(file);
-      setResume(parsed.text);
-      setUploaded({ name: file.name, ...parsed });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setUploading(false);
-      if (fileInput.current) fileInput.current.value = "";
-    }
-  }
-
-  function onDrop(e) {
-    e.preventDefault();
-    setDragging(false);
-    handleFile(e.dataTransfer.files?.[0]);
-  }
 
   useEffect(() => {
     getRoles()
@@ -51,15 +29,33 @@ export default function App() {
       .catch((e) => setError(e.message));
   }, []);
 
-  const tooShort = resume.trim().length < MIN_RESUME_CHARS;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
 
-  async function onSubmit(e) {
-    e.preventDefault();
+  async function handleFile(file) {
+    if (!file) return;
     setBusy(true);
     setError(null);
-    setReport(null);
+    try {
+      const parsed = await parseResume(file);
+      setResume(parsed.text);
+      setUploaded({ name: file.name, ...parsed });
+      setView("review");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
+  }
+
+  async function runAnalysis() {
+    setBusy(true);
+    setError(null);
     try {
       setReport(await analyze(resume, roleId));
+      setView("results");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -67,19 +63,121 @@ export default function App() {
     }
   }
 
-  const role = roles.find((r) => r.id === roleId);
+  function reset() {
+    setReport(null);
+    setResume("");
+    setUploaded(null);
+    setError(null);
+    setView("landing");
+  }
 
   return (
-    <div className="page">
-      <header>
-        <h1>Skill-Gap Analyzer</h1>
-        <p className="lede">
-          Paste your resume, pick a role, and see which skills the market
-          actually asks for — measured across real job postings, not guessed.
-        </p>
-      </header>
+    <>
+      <Topbar onHome={reset} showBack={view !== "landing"} />
+      {view === "landing" && (
+        <Landing
+          roles={roles}
+          busy={busy}
+          error={error}
+          fileInput={fileInput}
+          onFile={handleFile}
+          onPaste={() => setView("review")}
+        />
+      )}
+      {view === "review" && (
+        <Review
+          resume={resume}
+          setResume={setResume}
+          uploaded={uploaded}
+          roles={roles}
+          roleId={roleId}
+          setRoleId={setRoleId}
+          busy={busy}
+          error={error}
+          onRun={runAnalysis}
+          onBack={reset}
+        />
+      )}
+      {view === "results" && (
+        <Results
+          report={report}
+          roles={roles}
+          roleId={roleId}
+          onRole={async (id) => {
+            setRoleId(id);
+            setBusy(true);
+            try {
+              setReport(await analyze(resume, id));
+            } catch (e) {
+              setError(e.message);
+            } finally {
+              setBusy(false);
+            }
+          }}
+          busy={busy}
+          onEdit={() => setView("review")}
+          onReset={reset}
+        />
+      )}
+      <SiteFooter />
+    </>
+  );
+}
 
-      <form onSubmit={onSubmit}>
+function Topbar({ onHome, showBack }) {
+  return (
+    <header className="topbar">
+      <div className="wrap">
+        <div className="brand">
+          <span className="mark">SG</span> Skill-Gap Analyzer
+        </div>
+        <nav>
+          {showBack ? (
+            <button className="plain" onClick={onHome}>
+              Start over
+            </button>
+          ) : (
+            <>
+              <a href="#what">What you get</a>
+              <a href="#how">How it works</a>
+              <a href="#method">Method</a>
+            </>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
+  const [dragging, setDragging] = useState(false);
+  const total = roles.reduce((n, r) => n + r.total_postings, 0);
+
+  return (
+    <main>
+      <div className="wrap hero">
+        <p className="eyebrow">Measured, not guessed</p>
+        <h1>
+          Find out which skills are actually <em>costing you interviews</em>.
+        </h1>
+        <p className="sub">
+          Upload your resume and see it compared against thousands of real job
+          postings — with the evidence for every recommendation, and an honest
+          account of what the numbers cannot tell you.
+        </p>
+
+        <div className="trust">
+          <span>
+            <b>{total ? total.toLocaleString() : "—"}</b> real postings analysed
+          </span>
+          <span>
+            <b>{roles.length || "—"}</b> roles covered
+          </span>
+          <span>
+            <b>Free</b> · no account needed
+          </span>
+        </div>
+
         <div
           className={`dropzone${dragging ? " over" : ""}`}
           onDragOver={(e) => {
@@ -87,213 +185,256 @@ export default function App() {
             setDragging(true);
           }}
           onDragLeave={() => setDragging(false)}
-          onDrop={onDrop}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragging(false);
+            onFile(e.dataTransfer.files?.[0]);
+          }}
         >
           <input
             ref={fileInput}
-            id="pdf"
             type="file"
             accept="application/pdf,.pdf"
-            onChange={(e) => handleFile(e.target.files?.[0])}
+            onChange={(e) => onFile(e.target.files?.[0])}
             hidden
           />
-          <button
-            type="button"
-            className="ghost"
-            onClick={() => fileInput.current?.click()}
-            disabled={uploading}
-          >
-            {uploading ? "Reading PDF…" : "Choose a PDF"}
+          <span className="arrow">↑</span>
+          <h2>Drop your resume here</h2>
+          <p>PDF · stays on your machine · nothing is stored</p>
+          <button onClick={() => fileInput.current?.click()} disabled={busy}>
+            {busy ? "Reading your PDF…" : "Choose a PDF"}
           </button>
-          <span>or drop one here — or just paste the text below</span>
+          <div className="assure">
+            <span>No sign-up</span>
+            <span>No file kept after analysis</span>
+            <span>
+              <button className="plain" onClick={onPaste}>
+                or paste the text instead
+              </button>
+            </span>
+          </div>
         </div>
 
-        {uploaded && (
-          <div className="notice">
-            <strong>Read {uploaded.name}</strong> — {uploaded.pages} page
-            {uploaded.pages === 1 ? "" : "s"}, {uploaded.chars} characters.
-            <br />
-            <strong>Check the text below before analysing.</strong> PDF
-            extraction can jumble two-column layouts and text inside tables,
-            and there is no reliable way to detect when it has. Edit anything
-            that looks wrong.
-            {uploaded.warnings.map((w) => (
-              <div key={w} className="warn">
-                {w}
+        {error && <div className="error">{error}</div>}
+      </div>
+
+      <section className="band" id="what">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>What you get</h2>
+            <p>
+              Six things, each traceable back to a number you can check.
+            </p>
+          </div>
+          <div className="cards">
+            {WHAT.map((c, i) => (
+              <article key={c.title}>
+                <div className="n">0{i + 1}</div>
+                <h3>{c.title}</h3>
+                <p>{c.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="band tint" id="how">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>How it works</h2>
+            <p>Three steps. No sign-up, no card, nothing stored.</p>
+          </div>
+          <div className="steps">
+            {HOW.map((s, i) => (
+              <div className="step" key={s.title} data-n={i + 1}>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
               </div>
             ))}
           </div>
-        )}
+        </div>
+      </section>
 
-        <label htmlFor="resume">Your resume, as plain text</label>
-        <textarea
-          id="resume"
-          value={resume}
-          onChange={(e) => setResume(e.target.value)}
-          placeholder={
-            "TECHNICAL SKILLS\n" +
-            "Programming Languages: Python, Java, SQL\n" +
-            "Databases: MySQL\n" +
-            "Tools: Git, GitHub\n\n" +
-            "PROJECTS\n" +
-            "Built a web application using Django and MySQL."
-          }
-          rows={12}
-          spellCheck={false}
-        />
-        <p className="hint">
-          {resume.trim().length} characters
-          {tooShort && resume.length > 0 && ` — need at least ${MIN_RESUME_CHARS}`}
-        </p>
-
-        <div className="row">
-          <div>
-            <label htmlFor="role">Target role</label>
-            <select
-              id="role"
-              value={roleId}
-              onChange={(e) => setRoleId(e.target.value)}
-              disabled={!roles.length}
-            >
-              {roles.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
+      <section className="band" id="method">
+        <div className="wrap">
+          <div className="section-head">
+            <h2>How the numbers were checked</h2>
+            <p>
+              Most tools in this space ask you to take their accuracy on
+              trust. This one was measured, and the measurement is published.
+            </p>
           </div>
-          <button type="submit" disabled={busy || tooShort || !roleId}>
-            {busy ? "Analysing…" : "Analyse"}
-          </button>
+          <div className="prose">
+            <p>
+              Forty job postings were read and labelled by hand — 255 skill
+              mentions — by a person who could not see what the extractor had
+              produced. The extractor was then scored against those labels:{" "}
+              <strong>precision 0.86, recall 0.90</strong>.
+            </p>
+            <p>
+              That process also found a problem the code could not: roughly one
+              posting in six had been filed under the wrong role — GIS and
+              firmware jobs sitting in a backend bucket, senior roles labelled
+              entry-level. Those are now filtered out, and the rate is
+              published rather than hidden.
+            </p>
+            <p>
+              Demand comes from a frozen snapshot of Naukri postings, so the
+              percentages describe the Indian entry-level market specifically.
+              The full method, the numbers and the limitations are in the{" "}
+              <a
+                href="https://github.com/AnshulJJW/skill-gap-analyzer"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                repository
+              </a>
+              .
+            </p>
+          </div>
         </div>
-
-        {role && (
-          <p className="hint">
-            Compared against {role.total_postings.toLocaleString()} real{" "}
-            {role.name} postings ({role.market} market).
-          </p>
-        )}
-      </form>
-
-      {busy && (
-        <p className="status">
-          Reading your resume and comparing it against the demand profile…
-        </p>
-      )}
-
-      {error && (
-        <div className="error" role="alert">
-          <strong>Something went wrong.</strong> {error}
-        </div>
-      )}
-
-      {report && <Report report={report} />}
-
-      <footer>
-        Demand measured from a frozen snapshot of Naukri postings. Extraction
-        accuracy is hand-measured — see the README for precision, recall and
-        the limitations.
-      </footer>
-    </div>
+      </section>
+    </main>
   );
 }
 
-function Report({ report }) {
-  const pct = Math.round(report.coverage * 100);
+const WHAT = [
+  {
+    title: "Coverage score",
+    body: "How much of what this role actually demands you already meet, measured against its thirty most-requested skills rather than a long tail nobody has.",
+  },
+  {
+    title: "The skills it found",
+    body: "Everything read off your resume, shown openly — so when the parser gets something wrong you can see it, instead of it hiding inside a confident number.",
+  },
+  {
+    title: "Ranked gaps",
+    body: "Not the most common missing skill, but the one that unlocks the most postings you currently fail. Each pick is chosen given the ones before it.",
+  },
+  {
+    title: "A learning order",
+    body: "Prerequisites first. It will never tell you to learn Kubernetes before Docker, or a framework before its language.",
+  },
+  {
+    title: "Free resources",
+    body: "A curated free resource for each step, with a rough time cost. Hand-picked, not generated — and the README says so plainly.",
+  },
+  {
+    title: "The evidence",
+    body: "Every recommendation carries its count: appears in 42% of 4,837 postings. A percentage without a denominator is an assertion, not a measurement.",
+  },
+];
+
+const HOW = [
+  {
+    title: "Upload your resume",
+    body: "Drop in a PDF, or paste the text. Nothing is uploaded anywhere permanent and nothing is stored after the analysis runs.",
+  },
+  {
+    title: "Check what was read",
+    body: "The extracted text is shown to you first. PDF layouts scramble in ways nothing can reliably detect, so you get to correct it before anything is measured.",
+  },
+  {
+    title: "Read the gap",
+    body: "Pick a role and get your coverage, your ranked gaps with evidence, and a prerequisite-ordered path with resources attached.",
+  },
+];
+
+function Review({
+  resume, setResume, uploaded, roles, roleId, setRoleId,
+  busy, error, onRun, onBack,
+}) {
+  const tooShort = resume.trim().length < MIN_RESUME_CHARS;
+  const role = roles.find((r) => r.id === roleId);
+
   return (
-    <section className="report">
-      <div className="score">
-        <div className="dial" style={{ "--pct": pct }}>
-          <span>{pct}%</span>
-        </div>
-        <div>
-          <h2>{report.role_name}</h2>
-          <p>
-            You have <strong>{report.core_have}</strong> of the{" "}
-            <strong>{report.core_total}</strong> most-demanded skills for this
-            role, across {report.total_postings.toLocaleString()} postings.
-          </p>
-        </div>
+    <main className="wrap narrow review">
+      <p className="eyebrow">Step 2 of 3</p>
+      <div className="section-head">
+        <h2>Check what we read</h2>
+        <p>
+          Edit anything that looks wrong before analysing — this is the whole
+          reason the step exists.
+        </p>
       </div>
 
-      {/* Showing what WAS found matters as much as what is missing: it lets
-          the user see when extraction got something wrong, instead of hiding
-          it behind a confident-looking score. */}
-      <details open>
-        <summary>Skills found on your resume ({report.have.length})</summary>
-        <ul className="chips">
-          {report.have.map((s) => (
-            <li key={s} className="chip have">
-              {s}
-            </li>
+      {uploaded && (
+        <div className="notice">
+          <strong>Read {uploaded.name}</strong> — {uploaded.pages} page
+          {uploaded.pages === 1 ? "" : "s"}, {uploaded.chars} characters.
+          <br />
+          PDF extraction can interleave two-column layouts and scramble text
+          inside tables, and there is no reliable way to detect when it has.
+          {uploaded.warnings.map((w) => (
+            <div key={w} className="warn">{w}</div>
           ))}
-        </ul>
-        {report.unused.length > 0 && (
-          <>
-            <p className="hint">On your resume, but not asked for in this role:</p>
-            <ul className="chips">
-              {report.unused.map((s) => (
-                <li key={s} className="chip muted">
-                  {s}
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </details>
+        </div>
+      )}
 
-      <h3>Learn next</h3>
+      <label htmlFor="resume">Your resume text</label>
+      <textarea
+        id="resume"
+        value={resume}
+        onChange={(e) => setResume(e.target.value)}
+        spellCheck={false}
+        placeholder={
+          "TECHNICAL SKILLS\nProgramming Languages: Python, Java, SQL\n" +
+          "Databases: MySQL\nTools: Git, GitHub\n\nPROJECTS\n" +
+          "Built a web application using Django and MySQL."
+        }
+      />
       <p className="hint">
-        Ordered so prerequisites come first — start at the top.
+        {resume.trim().length} characters
+        {tooShort && resume.length > 0 && ` — need at least ${MIN_RESUME_CHARS}`}
       </p>
-      <ol className="roadmap">
-        {report.roadmap.map((step) => (
-          <li key={step.skill_id}>
-            <div className="step-head">
-              <span className="step-name">{step.skill_name}</span>
-              {step.is_prerequisite && (
-                <span className="tag">prerequisite</span>
-              )}
-            </div>
-            <p className="reason">{step.reason}</p>
-            {step.resources.map((r) => (
-              <a
-                key={r.url}
-                href={r.url}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="resource"
-              >
-                {r.title}
-                <span className="meta">
-                  {r.kind}
-                  {r.hours ? ` · ~${r.hours}h` : ""}
-                </span>
-              </a>
-            ))}
-          </li>
-        ))}
-      </ol>
 
-      <h3>Biggest gaps, with the evidence</h3>
-      <table className="gaps">
-        <thead>
-          <tr>
-            <th>Skill</th>
-            <th>Coverage added</th>
-            <th>Why</th>
-          </tr>
-        </thead>
-        <tbody>
-          {report.gaps.map((g) => (
-            <tr key={g.skill_id}>
-              <td className="skill">{g.skill_name}</td>
-              <td className="num">+{(g.marginal_gain * 100).toFixed(1)}%</td>
-              <td className="ev">{g.evidence}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+      <div className="controls">
+        <div>
+          <label htmlFor="role">Target role</label>
+          <select
+            id="role"
+            value={roleId}
+            onChange={(e) => setRoleId(e.target.value)}
+          >
+            {roles.map((r) => (
+              <option key={r.id} value={r.id}>{r.name}</option>
+            ))}
+          </select>
+        </div>
+        <button onClick={onRun} disabled={busy || tooShort || !roleId}>
+          {busy ? "Analysing…" : "Analyse my gap"}
+        </button>
+        <button className="plain" onClick={onBack}>Start over</button>
+      </div>
+
+      {role && (
+        <p className="hint">
+          Compared against {role.total_postings.toLocaleString()} real{" "}
+          {role.name} postings from the {role.market} market.
+        </p>
+      )}
+
+      {error && <div className="error">{error}</div>}
+    </main>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="site">
+      <div className="wrap">
+        Demand measured from a frozen snapshot of Naukri postings, December
+        2024. Extraction accuracy is hand-measured and the limitations are
+        published —{" "}
+        <a
+          href="https://github.com/AnshulJJW/skill-gap-analyzer"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          see the repository
+        </a>
+        .
+      </div>
+    </footer>
   );
 }

@@ -57,6 +57,7 @@ class AnalyzeOut(BaseModel):
     core_have: int
     core_total: int
     have: list[str]
+    have_names: list[str]
     unused: list[str]
     gaps: list[GapOut]
     roadmap: list[RoadmapStepOut]
