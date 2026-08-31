@@ -93,3 +93,50 @@ def test_no_heavy_ml_import_reaches_the_api():
     forbidden = {"torch", "sentence_transformers", "transformers", "spacy"}
     assert not (forbidden & set(sys.modules)), (
         f"heavy import leaked in: {forbidden & set(sys.modules)}")
+
+
+JD = (
+    "We are hiring a Backend Engineer. You will build and maintain REST APIs "
+    "using Java and Spring Boot. Requirements: strong knowledge of Java, SQL "
+    "and MySQL. Experience with Docker, Kubernetes and AWS is required. "
+    "Familiarity with Redis caching and Kafka. Good communication and Git."
+)
+
+
+def test_analyze_jd_returns_a_usable_report(client):
+    r = client.post("/analyze-jd", json={
+        "resume_text": RESUME,
+        "job_description": JD,
+        "role_id": "sde1-backend",
+    })
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert 0.0 <= body["coverage"] <= 1.0
+    assert body["matched"] and body["missing"]
+    assert body["role_name"] and body["market_postings"] > 0
+    assert all(s["market_note"] for s in body["missing"])
+
+
+def test_analyze_jd_works_without_a_role(client):
+    """Market context is optional; the comparison must still run."""
+    r = client.post("/analyze-jd", json={
+        "resume_text": RESUME, "job_description": JD,
+    })
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["role_name"] is None
+    assert body["market_postings"] == 0
+
+
+def test_analyze_jd_rejects_an_unknown_role(client):
+    r = client.post("/analyze-jd", json={
+        "resume_text": RESUME, "job_description": JD, "role_id": "no-such-role",
+    })
+    assert r.status_code == 404
+
+
+def test_analyze_jd_rejects_a_job_description_too_short_to_read(client):
+    r = client.post("/analyze-jd", json={
+        "resume_text": RESUME, "job_description": "Java dev needed.",
+    })
+    assert r.status_code == 422

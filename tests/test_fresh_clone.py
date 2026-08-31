@@ -73,3 +73,46 @@ def test_large_rebuildable_artefacts_stay_out_of_git():
 def test_personal_resume_is_never_committed():
     for rel in tracked("resumes"):
         assert not rel.endswith("me.txt"), "a personal resume must stay local"
+
+
+def test_readme_route_count_matches_the_api():
+    """The count drifted the moment a route was added -- pin it.
+
+    Lives here rather than with the other README checks because it needs no
+    corpus, and a stale route count is exactly what a fresh clone shows off.
+    """
+    import re
+
+    from api.main import app
+
+    paths = [r.path for r in app.routes if getattr(r, "include_in_schema", False)]
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    m = re.search(r"FastAPI, (\d+) routes", text)
+    assert m, "README no longer states a route count"
+    assert int(m.group(1)) == len(paths), (
+        f"README says {m.group(1)} routes, API has {len(paths)}: {paths}"
+    )
+
+
+def test_readme_install_steps_only_use_declared_dependencies():
+    """The README told people to run `spacy download`; spacy is not installed.
+
+    Anyone following the instructions hit a failure on step four.
+    """
+    reqs = (ROOT / "requirements.txt").read_text(encoding="utf-8")
+    declared = {ln.split("[")[0].split(">")[0].split("=")[0].strip().lower()
+                for ln in reqs.splitlines()
+                if ln.strip() and not ln.strip().startswith("#")}
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for line in readme.splitlines():
+        s = line.strip()
+        if s.startswith("#") or not s.startswith("python -m "):
+            continue
+        module = s.split()[2]
+        # First-party modules ship in the repo; stdlib ones always resolve.
+        if (ROOT / module.split(".")[0]).is_dir():
+            continue
+        assert module in declared or module in {"venv", "http.server"}, (
+            f"README install step runs {module!r}, which is not in "
+            f"requirements.txt: {s!r}"
+        )

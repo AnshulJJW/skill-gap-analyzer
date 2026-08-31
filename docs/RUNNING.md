@@ -152,13 +152,56 @@ python scripts/load_db.py
 
 ---
 
-## 7. What is NOT runnable yet
+## 7. Running the whole app
 
-Five files are deliberately still skeletons — function names and comments,
-with the logic marked `TODO`. Running them raises `NotImplementedError`,
-which is intentional, not a bug:
+Two terminals, both with the virtual environment turned on (section 2).
 
-- `analyzer/taxonomy.py`, `analyzer/extract.py` — Stage 2
-- `analyzer/profiles.py`, `analyzer/gap.py`, `analyzer/roadmap.py` — Stage 4
+**Terminal 1 — the backend:**
 
-The API in `api/` starts but its routes return "501 Stage 5" until then.
+```
+python -m uvicorn api.main:app --reload --port 8000
+```
+
+Leave it running. Check it with http://127.0.0.1:8000/docs — that page lists
+every route and lets you try each one without the frontend.
+
+**Terminal 2 — the frontend:**
+
+```
+cd web
+npm install     (first time only)
+npm run dev
+```
+
+Open http://localhost:5173. The frontend calls the backend, so if the first
+terminal is not running you will see "Failed to fetch".
+
+### If the backend seems to ignore your changes
+
+`--reload` restarts the server when a file changes, but if the reloader is
+killed without its worker, the old worker keeps the port and keeps serving
+the OLD code. Symptom: a route you just added returns 404 while
+`/docs` shows the old list. Fix — find what is really holding the port:
+
+```
+python -c "import urllib.request,json; print(list(json.load(urllib.request.urlopen('http://127.0.0.1:8000/openapi.json'))['paths']))"
+```
+
+If that list is missing your new route, stop every stray Python process and
+start the server again. This cost an hour once; it is not your code.
+
+### The two analysis modes
+
+Both start from the same resume text, and both are reachable from the one
+page:
+
+- **Compare against a role** — scores you against thousands of postings and
+  ranks gaps by marginal coverage.
+- **Compare against one job description** — paste a single posting; each of
+  its requirements is annotated with how often the wider market asks for it
+  too, so you can tell a real gap from this employer's quirk.
+
+## 8. What is NOT built yet
+
+Stages 7 and 8: deployment, and the demo write-up. Everything described
+above runs locally today.

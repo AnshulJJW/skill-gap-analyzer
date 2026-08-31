@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { analyze, getRoles, parseResume } from "./api.js";
+import { analyze, analyzeJD, getRoles, parseResume } from "./api.js";
+import JDResults from "./JDResults.jsx";
 import Results from "./Results.jsx";
 
 const MIN_RESUME_CHARS = 50;
+const MIN_JD_CHARS = 80;
 
 /* Three views rather than one long page.
    Landing sells and takes the upload. Review is the safety step -- PDF
@@ -16,6 +18,9 @@ export default function App() {
   const [resume, setResume] = useState("");
   const [uploaded, setUploaded] = useState(null);
   const [report, setReport] = useState(null);
+  const [jdReport, setJdReport] = useState(null);
+  const [mode, setMode] = useState("role");   // "role" | "jd"
+  const [jd, setJd] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const fileInput = useRef(null);
@@ -54,8 +59,15 @@ export default function App() {
     setBusy(true);
     setError(null);
     try {
-      setReport(await analyze(resume, roleId));
-      setView("results");
+      if (mode === "jd") {
+        setJdReport(await analyzeJD(resume, jd, roleId));
+        setReport(null);
+        setView("jdresults");
+      } else {
+        setReport(await analyze(resume, roleId));
+        setJdReport(null);
+        setView("results");
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -65,7 +77,9 @@ export default function App() {
 
   function reset() {
     setReport(null);
+    setJdReport(null);
     setResume("");
+    setJd("");
     setUploaded(null);
     setError(null);
     setView("landing");
@@ -94,8 +108,19 @@ export default function App() {
           setRoleId={setRoleId}
           busy={busy}
           error={error}
+          mode={mode}
+          setMode={setMode}
+          jd={jd}
+          setJd={setJd}
           onRun={runAnalysis}
           onBack={reset}
+        />
+      )}
+      {view === "jdresults" && (
+        <JDResults
+          report={jdReport}
+          onEdit={() => setView("review")}
+          onReset={reset}
         />
       )}
       {view === "results" && (
@@ -342,9 +367,10 @@ const HOW = [
 
 function Review({
   resume, setResume, uploaded, roles, roleId, setRoleId,
-  busy, error, onRun, onBack,
+  busy, error, mode, setMode, jd, setJd, onRun, onBack,
 }) {
   const tooShort = resume.trim().length < MIN_RESUME_CHARS;
+  const jdTooShort = mode === "jd" && jd.trim().length < MIN_JD_CHARS;
   const role = roles.find((r) => r.id === roleId);
 
   return (
@@ -388,9 +414,55 @@ function Review({
         {tooShort && resume.length > 0 && ` — need at least ${MIN_RESUME_CHARS}`}
       </p>
 
+      <div className="modes">
+        <button
+          type="button"
+          className={mode === "role" ? "on" : ""}
+          onClick={() => setMode("role")}
+        >
+          Compare against a role
+        </button>
+        <button
+          type="button"
+          className={mode === "jd" ? "on" : ""}
+          onClick={() => setMode("jd")}
+        >
+          Compare against one job description
+        </button>
+      </div>
+      <p className="hint" style={{ marginTop: "-.6rem", marginBottom: "1rem" }}>
+        {mode === "role"
+          ? "Measures you against what thousands of postings for this role demand."
+          : "Measures you against one specific posting — and tells you which of its requirements the wider market wants too."}
+      </p>
+
+      {mode === "jd" && (
+        <div className="jd-box">
+          <label htmlFor="jd">Paste the job description</label>
+          <textarea
+            id="jd"
+            value={jd}
+            onChange={(e) => setJd(e.target.value)}
+            spellCheck={false}
+            placeholder={
+              "We are hiring a Backend Engineer.\n\nRequirements:\n" +
+              "- Strong Python and Django experience\n" +
+              "- PostgreSQL and Redis\n- Docker for deployment\n" +
+              "- Experience building REST APIs"
+            }
+          />
+          <p className="hint">
+            {jd.trim().length} characters
+            {jdTooShort && jd.length > 0 && ` — need at least ${MIN_JD_CHARS}`}
+          </p>
+        </div>
+      )}
+
       <div className="controls">
         <div>
-          <label htmlFor="role">Target role</label>
+          <label htmlFor="role">
+            {mode === "role" ? "Target role" : "Role, for market context"}
+          </label>
           <select
             id="role"
             value={roleId}
@@ -401,13 +473,13 @@ function Review({
             ))}
           </select>
         </div>
-        <button onClick={onRun} disabled={busy || tooShort || !roleId}>
+        <button onClick={onRun} disabled={busy || tooShort || jdTooShort || !roleId}>
           {busy ? "Analysing…" : "Analyse my gap"}
         </button>
         <button className="plain" onClick={onBack}>Start over</button>
       </div>
 
-      {role && (
+      {role && mode === "role" && (
         <p className="hint">
           Compared against {role.total_postings.toLocaleString()} real{" "}
           {role.name} postings from the {role.market} market.

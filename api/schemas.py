@@ -63,6 +63,32 @@ class AnalyzeOut(BaseModel):
     roadmap: list[RoadmapStepOut]
 
 
+class JDSkillOut(BaseModel):
+    skill_id: str
+    skill_name: str
+    category: str
+    have: bool
+    market_share: float | None = None
+    market_note: str
+
+
+class AnalyzeJDIn(BaseModel):
+    resume_text: str = Field(min_length=50, max_length=40_000)
+    job_description: str = Field(min_length=80, max_length=40_000)
+    role_id: str | None = None
+
+
+class AnalyzeJDOut(BaseModel):
+    role_id: str | None = None
+    role_name: str | None = None
+    market_postings: int
+    coverage: float
+    matched: list[JDSkillOut]
+    missing: list[JDSkillOut]
+    unmatched_note: str = ""
+    roadmap: list[RoadmapStepOut]
+
+
 class ParsedResumeOut(BaseModel):
     text: str
     pages: int

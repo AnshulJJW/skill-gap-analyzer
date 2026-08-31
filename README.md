@@ -30,8 +30,10 @@ resume first.
   │                                       │
   │  taxonomy.py   canonical skills       │
   │  extract.py    text → skill ids       │
+  │  resume.py     PDF → text             │
   │  profiles.py   role demand (offline)  │
   │  gap.py        coverage + ranking     │
+  │  jd.py         one posting + context  │
   │  roadmap.py    prereq DAG + resources │
   └───────────────────────────────────────┘
         │                         │
@@ -40,21 +42,32 @@ resume first.
    (precomputed)                  │
         └──────────┬──────────────┘
                    ▼
-            api/  FastAPI, 3 routes
+            api/  FastAPI, 6 routes
                    ▼
             web/  React + Vite, one page
 ```
 
-**Extraction is a hybrid, on purpose.** A curated skill taxonomy does most of
-the work; spaCy handles tokenizing and section splitting; embeddings
-(`all-MiniLM-L6-v2`) resolve only the variants the dictionary misses.
-Off-the-shelf NER is *not* used to find skills — it is trained on people,
-places and organisations, and will not tag `Kafka` or `gRPC`.
+**Extraction uses no NLP library, and that was a measured decision.** spaCy
+was installed in Stage 2 and then removed: its off-the-shelf NER is trained
+on people, places and organisations and will not tag `Kafka` or `gRPC`, and
+its sentence segmentation buys nothing on Naukri descriptions, which are
+short and already line-broken. What ships instead is n-gram lookup against a
+curated taxonomy — longest match wins and consumes its tokens, so
+`spring boot` does not also register `spring`. Precision and recall are
+hand-measured against a labelled set (see Results), not assumed.
 
 **Ranking is by marginal coverage, not frequency.** Greedy set cover over the
 postings you currently fail: which single skill, learned next, unlocks the
 most of them? That is why the output says *"learn Kafka next"* rather than
 listing the forty most common skills you lack.
+
+**Two modes, two different questions.** Role mode asks *what does this market
+want?* and ranks by marginal coverage over thousands of postings. Job-description
+mode asks *what does this one employer want?* — and there frequency ranking is
+meaningless, because every skill in a single posting appears exactly once. So
+that mode reports something a plain keyword matcher cannot: for each requirement,
+how often the wider market asks for it too. A gap in 23% of similar postings is
+worth your month; one in 1% is a detail of this employer's stack.
 
 **Role profiles are precomputed offline.** The API reads them; it never scans
 the postings table at request time.
@@ -173,9 +186,9 @@ learning and is not described as such.
 | layer | choice | why |
 |---|---|---|
 | Backend | FastAPI | serving an ML pipeline; Django's ORM and admin buy nothing here |
-| Database | Postgres (Supabase) | the data is deeply relational; `pgvector` is there if needed |
+| Database | SQLite now, Postgres planned | build-time only — the API reads precomputed JSON, never the DB |
 | Frontend | React + Vite | one page, no router, no state library |
-| Skills | curated taxonomy + embeddings | dictionary first, embeddings as fallback |
+| Skills | curated taxonomy, n-gram lookup | no NLP library ships; spaCy was tried and removed |
 | Job data | frozen snapshot | no scraper in the request path |
 
 ## Running it locally
@@ -191,7 +204,6 @@ have.
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-python -m spacy download en_core_web_sm
 # requirements-ml.txt (PyTorch, ~2.5GB) is Stage 2 only -- skip for now
 cp .env.example .env
 ```

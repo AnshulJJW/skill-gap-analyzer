@@ -14,10 +14,14 @@
   --plum-wash:  #F3E9F0;
   --champagne:  #E8D5A9;
   --champagne-2:#C9A961;
-  --cream:      #FAF6EF;
+  /* The ground reads as white with only a trace of warmth. An earlier
+     value (#FAF6EF) was warm enough that the hero -- which carries no white
+     cards to break it up -- looked like a solid beige field. Champagne now
+     appears only as an accent, never as a surface. */
+  --cream:      #FDFCFA;
   --card:       #FFFFFF;
-  --line:       #E7DFD4;
-  --line-2:     #D6CABA;
+  --line:       #E8E2DA;
+  --line-2:     #D3CABF;
 
   --display: "Fraunces", Georgia, serif;
   --body: "Karla", "Segoe UI", system-ui, sans-serif;
@@ -102,6 +106,10 @@ a:hover { color: var(--plum-lift); }
 /* ------------------------------------------------------------------ hero */
 
 .hero { padding-block: 4.5rem 3rem; }
+/* Sections alternate white and near-white so the page has structure even
+   where there are no cards. */
+section.band { background: var(--card); }
+section.band.tint { background: var(--plum-wash); }
 .eyebrow {
   font-family: var(--mono); font-size: .72rem; font-weight: 500;
   letter-spacing: .14em; text-transform: uppercase;
@@ -363,3 +371,34 @@ footer.site a { color: var(--plum); }
   .hero { padding-block: 3rem 2rem; }
   .topbar nav { gap: .9rem; font-size: .84rem; }
 }
+
+/* ---------- mode switch ---------- */
+
+.modes {
+  display: inline-flex; margin: 1.6rem 0 1.2rem;
+  border: 1px solid var(--line-2); border-radius: var(--r);
+  overflow: hidden; background: var(--card);
+}
+.modes button {
+  border: none; border-radius: 0; background: none;
+  color: var(--ink-2); font-weight: 600; font-size: .88rem;
+  padding: .55rem 1.1rem;
+}
+.modes button.on { background: var(--plum); color: var(--cream); }
+.modes button:hover:not(.on) { background: var(--plum-wash); color: var(--plum); }
+
+.jd-box { margin-top: 1.4rem; }
+.jd-box textarea { min-height: 11rem; }
+
+/* ---------- jd results ---------- */
+
+.jd-list { list-style: none; padding: 0; margin: .9rem 0 0; }
+.jd-list li {
+  display: flex; justify-content: space-between; gap: 1rem;
+  align-items: baseline; flex-wrap: wrap;
+  padding: .6rem 0; border-bottom: 1px solid var(--line);
+}
+.jd-list .name { font-family: var(--display); font-weight: 600; font-size: 1rem; }
+.jd-list .note { font-size: .84rem; color: var(--ink-3); }
+.jd-list .note.broad { color: var(--plum); font-weight: 600; }
+.jd-list .note.narrow { color: var(--ink-3); font-style: italic; }

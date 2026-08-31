@@ -22,12 +22,15 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from analyzer.gap import analyze
+from analyzer.jd import analyze_jd
 from analyzer.profiles import RoleProfile
 from analyzer.resume import MAX_BYTES, ResumeParseError, parse_pdf
 from analyzer.roadmap import load_resources
 from analyzer.taxonomy import Taxonomy
 from api.schemas import (
     AnalyzeIn,
+    AnalyzeJDIn,
+    AnalyzeJDOut,
     AnalyzeOut,
     HealthOut,
     ParsedResumeOut,
@@ -103,6 +106,24 @@ def resources(skill_id: str) -> list[ResourceOut]:
         raise HTTPException(404, f"unknown skill {skill_id!r}")
     return [ResourceOut(**vars(r))
             for r in STATE["resources"].get(skill_id, [])]
+
+
+@app.post("/analyze-jd", response_model=AnalyzeJDOut)
+def analyze_against_jd(payload: AnalyzeJDIn) -> AnalyzeJDOut:
+    """Compare a resume against ONE job description.
+
+    role_id is optional and used only for market context: it lets each
+    requirement be reported as typical or unusual, which is the half a plain
+    JD matcher cannot do.
+    """
+    if payload.role_id and payload.role_id not in STATE["profiles"]:
+        raise HTTPException(404, f"unknown role {payload.role_id!r}")
+    try:
+        report = analyze_jd(payload.resume_text, payload.job_description,
+                            STATE["taxonomy"], payload.role_id)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return AnalyzeJDOut.model_validate(report, from_attributes=True)
 
 
 @app.post("/parse-resume", response_model=ParsedResumeOut)

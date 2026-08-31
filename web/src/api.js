@@ -47,6 +47,20 @@ export const parseResume = (file) => {
   return request("/parse-resume", { method: "POST", body });
 };
 
+/** Compare against ONE job description. roleId is optional and used only
+ *  for market context -- it lets each requirement be reported as typical or
+ *  unusual, which a plain JD matcher cannot do. */
+export const analyzeJD = (resumeText, jobDescription, roleId) =>
+  request("/analyze-jd", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      resume_text: resumeText,
+      job_description: jobDescription,
+      role_id: roleId || null,
+    }),
+  });
+
 export const analyze = (resumeText, roleId) =>
   request("/analyze", {
     method: "POST",
