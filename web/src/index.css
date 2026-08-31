@@ -195,8 +195,14 @@ section.band { padding-block: 4rem; border-top: 1px solid var(--line); }
             margin: .5rem 0 .4rem; }
 .cards p { margin: 0; font-size: .92rem; color: var(--ink-2); }
 
-.steps { display: grid; gap: 2rem;
-         grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+/* Three columns or one, never two. auto-fit dropped to two columns at
+   mid-widths and left step 3 orphaned in the left cell with a hole beside
+   it -- which also breaks the reading order of a numbered sequence.
+   52rem is where three 15rem columns stop fitting inside .wrap. */
+.steps { display: grid; gap: 2rem; grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 52rem) {
+  .steps { grid-template-columns: 1fr; gap: 1.75rem; }
+}
 .steps .step { position: relative; padding-top: 2.6rem; }
 .steps .step::before {
   content: attr(data-n);

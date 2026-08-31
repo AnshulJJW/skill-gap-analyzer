@@ -47,3 +47,15 @@ def test_every_font_family_declares_a_real_fallback():
         assert line.rstrip().rstrip(";").endswith(fallback), (
             f"{var} has no generic fallback: {line.strip()!r}"
         )
+
+
+def test_the_three_steps_never_lay_out_two_across():
+    """auto-fit dropped to two columns at mid-widths, orphaning step 3 in the
+    left cell with a hole beside it -- and breaking the reading order of a
+    numbered sequence. Three or one, never two."""
+    css = CSS.read_text(encoding="utf-8")
+    rule = next(ln for ln in css.splitlines() if ln.strip().startswith(".steps {"))
+    assert "auto-fit" not in rule, (
+        f".steps is back on an auto-fit track and can orphan step 3: {rule.strip()!r}"
+    )
+    assert "repeat(3, 1fr)" in rule, rule.strip()
