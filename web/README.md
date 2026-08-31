@@ -1,19 +1,38 @@
 # web/ — Stage 6
 
-Empty until Stage 6. Do not start it early; the frontend is packaging, and
-building it before Stage 4 means building a UI around logic that may still
-change shape.
+One page. A textarea, a role dropdown, a button, and the results.
+No router, no state library, no component framework — the page has about a
+dozen elements, and a single CSS file is smaller and faster than pulling in
+Tailwind for it.
 
-    npm create vite@latest . -- --template react
-    npm install
-    npm run dev
+## Running it
 
-One page. A textarea, a role dropdown, an Analyze button, a results view.
-No router, no state library.
+The API must be running first:
 
-Three things the results view must do:
-- show the coverage number first, then the ranked gaps as cards
-- show a real loading state — the first request hits a cold backend and takes
-  several seconds; a frozen button reads as broken
-- show the skills that WERE found in the resume, not just the missing ones —
-  it builds trust and makes extraction errors visible instead of hidden
+```bash
+uvicorn api.main:app --reload      # from the project root
+npm install && npm run dev         # from web/
+```
+
+Then http://localhost:5173
+
+## How it reaches the API
+
+In development the Vite dev server proxies `/api` to `http://127.0.0.1:8000`,
+so the browser sees a single origin and CORS never arises. In production
+`VITE_API_URL` is set at build time to the deployed API — see
+`src/api.js`.
+
+## Three decisions worth knowing
+
+**It shows what was found, not only what is missing.** The skills the
+extractor picked up are listed alongside the gaps. Hiding them would mean a
+wrong extraction looks like a confident score; showing them lets the user
+catch it.
+
+**Every recommendation carries its evidence.** "appears in 42% of 4,837
+postings" sits next to the number, because a percentage with no denominator
+is just an assertion.
+
+**There is a real loading state.** The first request after the API has been
+idle pays a cold start, and a frozen button reads as broken.

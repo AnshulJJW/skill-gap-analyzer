@@ -41,3 +41,6 @@ data/raw/
 
 # local database
 data/skillgap.db
+
+web/node_modules/
+web/dist/
