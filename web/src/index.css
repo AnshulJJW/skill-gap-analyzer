@@ -364,6 +364,66 @@ footer.site a { color: var(--plum); }
   .topbar nav { gap: .9rem; font-size: .84rem; }
 }
 
+/* ------------------------------------------------------------------ motion
+
+   Every rule here is scoped to .motion-on, a class only src/motion.js adds,
+   and only after it has checked prefers-reduced-motion. Nothing below can
+   hide content from a reader whose JavaScript did not run.
+
+   Distances are small on purpose -- 12px and 2px. The page makes measured,
+   checkable claims, and motion that draws attention to itself would be at
+   odds with that. */
+
+.motion-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.motion-on [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22, .68, .3, 1);
+}
+
+/* The hero is above the fold, so it plays on load rather than on scroll.
+   Each child follows the one before it by 70ms: enough to read as a
+   sequence, not enough to feel like waiting. */
+.motion-on .hero > * {
+  animation: rise .62s cubic-bezier(.22, .68, .3, 1) both;
+}
+.motion-on .hero > *:nth-child(2) { animation-delay: .07s; }
+.motion-on .hero > *:nth-child(3) { animation-delay: .14s; }
+.motion-on .hero > *:nth-child(4) { animation-delay: .21s; }
+.motion-on .hero > *:nth-child(5) { animation-delay: .28s; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Hover lift. Pointer-only: on a touch screen :hover sticks after a tap,
+   leaving a card raised until something else is touched. */
+@media (hover: hover) {
+  .motion-on .cards article,
+  .motion-on .roadmap > li {
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .motion-on .cards article:hover,
+  .motion-on .roadmap > li:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+}
+
+/* A button that dips under the cursor confirms the press before the network
+   does -- which matters most on the analyse step, the one action here that
+   takes long enough to leave you wondering. */
+.motion-on button:not(:disabled):active { transform: translateY(1px); }
+.motion-on button { transition: background .12s, border-color .12s, transform .08s; }
+
+/* The dial's sweep is driven from JS (see useCountUp) so the arc and the
+   digits advance on the same value and cannot drift apart. */
+
 /* ---------- mode switch ---------- */
 
 .modes {

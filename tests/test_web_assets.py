@@ -59,3 +59,38 @@ def test_the_three_steps_never_lay_out_two_across():
         f".steps is back on an auto-fit track and can orphan step 3: {rule.strip()!r}"
     )
     assert "repeat(3, 1fr)" in rule, rule.strip()
+
+
+JS = ROOT / "web" / "src" / "motion.js"
+
+
+def test_nothing_is_hidden_unless_javascript_asked_for_it():
+    """The reveal animation must never be able to blank the page.
+
+    Hiding lives behind .motion-on, a class only motion.js adds. If the
+    script does not run, every selector below simply never matches and the
+    page renders finished.
+    """
+    for line in CSS.read_text(encoding="utf-8").splitlines():
+        if "[data-reveal]" in line:
+            assert ".motion-on" in line, (
+                f"reveal rule is not gated on .motion-on: {line.strip()!r}"
+            )
+
+
+def test_motion_yields_to_the_reduced_motion_setting():
+    """Scroll-triggered movement is genuinely unpleasant with a vestibular
+    disorder, and the media query is the reader saying so."""
+    js = JS.read_text(encoding="utf-8")
+    assert "prefers-reduced-motion" in js
+    # Both entry points must consult it, not just the scroll reveal.
+    assert js.count("prefersReducedMotion()") >= 3, (
+        "useReveal and useCountUp must each check before animating"
+    )
+
+
+def test_hover_lift_is_pointer_only():
+    """On a touch screen :hover sticks after a tap, leaving a card raised
+    until something else is touched."""
+    css = CSS.read_text(encoding="utf-8")
+    assert "@media (hover: hover)" in css

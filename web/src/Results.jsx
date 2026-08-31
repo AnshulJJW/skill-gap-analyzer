@@ -2,19 +2,23 @@
    has a report, the marketing copy is noise and the screen should be about
    their answer. */
 
+import { useCountUp } from "./motion.js";
+
 export default function Results({
   report, roles, roleId, onRole, busy, onEdit, onReset,
 }) {
+  const pct = Math.round((report?.coverage ?? 0) * 100);
+  // Hooks run before the early return below, so this cannot be conditional.
+  const shown = useCountUp(pct);
   if (!report) return null;
-  const pct = Math.round(report.coverage * 100);
 
   return (
     <main className="wrap results">
       <p className="eyebrow">Step 3 of 3 · your result</p>
 
       <div className="scoreline">
-        <div className="dial" style={{ "--pct": pct }}>
-          <span>{pct}%</span>
+        <div className="dial" style={{ "--pct": shown }}>
+          <span>{shown}%</span>
         </div>
         <div>
           <h1>{report.role_name}</h1>
@@ -48,7 +52,7 @@ export default function Results({
 
       {/* Showing what WAS found matters as much as the gaps: it lets a wrong
           extraction be spotted instead of hiding inside a confident score. */}
-      <section className="res-section">
+      <section className="res-section" data-reveal>
         <h2>What we found on your resume</h2>
         <p className="hint">
           If something here is wrong, the score is wrong too — go back and
@@ -74,7 +78,7 @@ export default function Results({
         )}
       </section>
 
-      <section className="res-section">
+      <section className="res-section" data-reveal>
         <h2>Learn these, in this order</h2>
         <p className="hint">
           Prerequisites come first, so you can start at the top. Steps marked
@@ -108,7 +112,7 @@ export default function Results({
         </ol>
       </section>
 
-      <section className="res-section">
+      <section className="res-section" data-reveal>
         <h2>The evidence behind each gap</h2>
         <p className="hint">
           Coverage added is what learning that skill next would gain you, given

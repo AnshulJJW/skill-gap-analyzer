@@ -4,9 +4,13 @@
    typical each requirement is across the wider market. That is what turns
    "you are missing ten things" into "two of these are worth your month". */
 
+import { useCountUp } from "./motion.js";
+
 export default function JDResults({ report, onEdit, onReset }) {
+  const pct = Math.round((report?.coverage ?? 0) * 100);
+  // Hooks run before the early return below, so this cannot be conditional.
+  const shown = useCountUp(pct);
   if (!report) return null;
-  const pct = Math.round(report.coverage * 100);
   const total = report.matched.length + report.missing.length;
 
   return (
@@ -14,8 +18,8 @@ export default function JDResults({ report, onEdit, onReset }) {
       <p className="eyebrow">Your result · one job description</p>
 
       <div className="scoreline">
-        <div className="dial" style={{ "--pct": pct }}>
-          <span>{pct}%</span>
+        <div className="dial" style={{ "--pct": shown }}>
+          <span>{shown}%</span>
         </div>
         <div>
           <h1>This posting</h1>
@@ -43,7 +47,7 @@ export default function JDResults({ report, onEdit, onReset }) {
         <div className="notice">{report.unmatched_note}</div>
       )}
 
-      <section className="res-section">
+      <section className="res-section" data-reveal>
         <h2>What this posting wants that you are missing</h2>
         <p className="hint">
           Ordered by how much the wider market wants each one — so you can see
@@ -65,7 +69,7 @@ export default function JDResults({ report, onEdit, onReset }) {
       </section>
 
       {report.roadmap.length > 0 && (
-        <section className="res-section">
+        <section className="res-section" data-reveal>
           <h2>Where to start</h2>
           <p className="hint">
             Prerequisites first. Skills nobody can hand you a course for —
@@ -100,7 +104,7 @@ export default function JDResults({ report, onEdit, onReset }) {
         </section>
       )}
 
-      <section className="res-section">
+      <section className="res-section" data-reveal>
         <h2>What you already match</h2>
         <ul className="jd-list">
           {report.matched.map((s) => (

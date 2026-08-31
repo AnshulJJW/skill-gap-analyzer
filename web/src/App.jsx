@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { analyze, analyzeJD, getRoles, parseResume } from "./api.js";
 import JDResults from "./JDResults.jsx";
+import { useReveal } from "./motion.js";
 import Results from "./Results.jsx";
 
 const MIN_RESUME_CHARS = 50;
@@ -24,6 +25,9 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const fileInput = useRef(null);
+
+  // Keyed on the view: each one mounts nodes the previous observer never saw.
+  useReveal(view);
 
   useEffect(() => {
     getRoles()
@@ -243,7 +247,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
         {error && <div className="error">{error}</div>}
       </div>
 
-      <section className="band" id="what">
+      <section className="band" id="what" data-reveal>
         <div className="wrap">
           <div className="section-head">
             <h2>What you get</h2>
@@ -263,7 +267,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
         </div>
       </section>
 
-      <section className="band" id="how">
+      <section className="band" id="how" data-reveal>
         <div className="wrap">
           <div className="section-head">
             <h2>How it works</h2>
@@ -280,7 +284,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
         </div>
       </section>
 
-      <section className="band" id="method">
+      <section className="band" id="method" data-reveal>
         <div className="wrap">
           <div className="section-head">
             <h2>How the numbers were checked</h2>
