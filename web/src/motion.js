@@ -82,3 +82,65 @@ export function useCountUp(target, ms = 900) {
 
   return value;
 }
+
+/* True after the first paint. Lets a bar render at zero width and then get
+   its real width, so the CSS transition has something to animate from.
+   Setting the final width on the first render would just paint it there. */
+export function useMounted(delay = 60) {
+  const [mounted, setMounted] = useState(() => prefersReducedMotion());
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+    const t = setTimeout(() => setMounted(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
+
+  return mounted;
+}
+
+/* Depth on pointer move: writes --rx / --ry onto the element for a CSS
+   transform to pick up.
+
+   Kept deliberately shallow. The point is that the panel has a surface and
+   sits in space -- not that it swings around. Anything past a few degrees
+   stops reading as depth and starts reading as a gimmick.
+
+   Pointer-only and reduced-motion-aware: a touch device has no hover to
+   drive it, and a tilting panel is exactly the kind of movement the reduced
+   -motion setting is asking us not to make. */
+export function useTilt(ref, max = 5) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    if (prefersReducedMotion()) return undefined;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return undefined;
+
+    let raf = 0;
+
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      // -0.5 .. 0.5 from the centre of the element.
+      const dx = (e.clientX - r.left) / r.width - 0.5;
+      const dy = (e.clientY - r.top) / r.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.setProperty("--ry", `${(dx * max * 2).toFixed(2)}deg`);
+        el.style.setProperty("--rx", `${(-dy * max * 2).toFixed(2)}deg`);
+      });
+    };
+
+    const onLeave = () => {
+      cancelAnimationFrame(raf);
+      el.style.setProperty("--rx", "0deg");
+      el.style.setProperty("--ry", "0deg");
+    };
+
+    el.addEventListener("pointermove", onMove);
+    el.addEventListener("pointerleave", onLeave);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerleave", onLeave);
+    };
+  }, [ref, max]);
+}

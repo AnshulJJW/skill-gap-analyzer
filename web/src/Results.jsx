@@ -1,17 +1,19 @@
 import { encouragement } from "./encouragement.js";
-import { useCountUp } from "./motion.js";
-import { Button, Callout, Empty, Flow, Icon, Loading, SkillRow } from "./ui.jsx";
+import { useCountUp, useMounted } from "./motion.js";
+import {
+  Button, Callout, Empty, Flow, GapCard, Icon, Loading, Ring, Tile,
+} from "./ui.jsx";
 
 /* The results screen, ordered by the questions someone actually arrives with:
 
-     1. How close am I?          -> the score panel
-     2. What should I learn?     -> the ranked list, first
-     3. What am I missing, and
-        what do I already have?  -> the skill comparison
-     4. Where do these numbers
+     1. How close am I?          -> the score panel, above the fold
+     2. What should I learn?     -> the ranked path
+     3. Where are my gaps, and
+        what have I already got? -> gap cards, then strengths
+     4. Where do the numbers
         come from?               -> the evidence table, last and collapsed
 
-   The old version led with a chip cloud of found skills, which answered a
+   An earlier version led with a chip cloud of skills found, which answers a
    question nobody opens the page to ask. */
 export default function Results({
   report, roles, roleId, onRole, busy, error, onEdit, onReset,
@@ -19,15 +21,14 @@ export default function Results({
   const pct = Math.round((report?.coverage ?? 0) * 100);
   // Hooks cannot sit behind the early return below.
   const shown = useCountUp(pct);
+  const mounted = useMounted();
   if (!report) return null;
 
   const gaps = report.gaps ?? [];
-  const note = encouragement(report.coverage, gaps.length);
-
-  // Skills on the resume that this role actually asks for. Shown as the
-  // second half of the comparison, after the gaps -- gaps are the part you
-  // can act on, so they lead.
+  // Skills on the resume that this role actually asks for. Shown after the
+  // gaps: gaps are the part you can act on, so they lead.
   const have = report.have_names ?? [];
+  const note = encouragement(report.coverage, gaps.length);
 
   return (
     <main className="wrap md view">
@@ -37,10 +38,11 @@ export default function Results({
         <div>
           <h1>{report.role_name}</h1>
           <p className="sub">
-            {report.total_postings.toLocaleString()} postings · {report.market} market
+            Measured against {report.total_postings.toLocaleString()} postings
+            in the {report.market} market
           </p>
         </div>
-        <div style={{ display: "flex", gap: ".5rem", alignItems: "center" }}>
+        <div className="role-pick">
           <label htmlFor="role2" className="small muted" style={{ margin: 0 }}>Role</label>
           <select
             id="role2"
@@ -55,15 +57,7 @@ export default function Results({
       </div>
 
       <section className="score">
-        <div className="dial" style={{ "--pct": shown }} role="img"
-             aria-label={`Coverage ${pct} percent`}>
-          <div className="face">
-            <div>
-              <div className="v">{shown}%</div>
-              <div className="l">covered</div>
-            </div>
-          </div>
-        </div>
+        <Ring value={shown} label="covered" />
         <div>
           <div className="headline">
             You have {report.core_have} of the {report.core_total} skills this
@@ -73,6 +67,13 @@ export default function Results({
             Weighted by how often each skill appears, that covers {pct}% of
             what employers ask for.
           </div>
+
+          <div className="tiles">
+            <Tile tone="ok" value={have.length} label="skills you have" />
+            <Tile tone="warn" value={gaps.length} label="gaps to close" />
+            <Tile value={report.roadmap.length} label="steps to take" />
+          </div>
+
           <div className="encourage">
             <span className="ico"><Icon.trend /></span>
             <span>{note}</span>
@@ -80,21 +81,24 @@ export default function Results({
         </div>
       </section>
 
-      {error && <div style={{ marginTop: "1rem" }}><Callout tone="danger">{error}</Callout></div>}
+      {error && <div className="res-block"><Callout tone="danger">{error}</Callout></div>}
 
       {busy ? <Loading label="Recalculating for this role" /> : (
         <>
           <section className="res-block" data-reveal>
             <div className="section-head">
               <h2>What to learn next</h2>
-              <p>In order. Anything marked <em>needed first</em> is there because a step below it depends on it.</p>
+              <p>
+                In order. Anything marked <em>needed first</em> is there
+                because a step below it depends on it.
+              </p>
             </div>
             {report.roadmap.length === 0 ? (
               <Empty icon="route">Nothing to add for this role.</Empty>
             ) : (
               <ol className="roadmap">
                 {report.roadmap.map((step, i) => (
-                  <li key={step.skill_id}>
+                  <li key={step.skill_id} data-stagger>
                     <div className="head">
                       <span className="n">{i + 1}</span>
                       <span className="name">{step.skill_name}</span>
@@ -122,7 +126,7 @@ export default function Results({
 
           <section className="res-block" data-reveal>
             <div className="section-head">
-              <h2>Your skills against this role</h2>
+              <h2>Your skills, side by side</h2>
               <p>
                 Gaps first, because that is what you can act on. The bar is
                 how many postings ask for that skill — the order is by how
@@ -137,22 +141,41 @@ export default function Results({
               <>
                 {gaps.length > 0 && (
                   <>
-                    <h3 className="group">Missing <span>{gaps.length}</span></h3>
-                    <ul className="skill-list">
-                      {gaps.map((g) => (
-                        <SkillRow key={g.skill_id} name={g.skill_name} have={false} share={g.share} />
+                    <h3 className="group">
+                      Skills to improve <span className="count warn">{gaps.length}</span>
+                    </h3>
+                    <ul className="gap-grid" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                      {gaps.map((g, i) => (
+                        <GapCard
+                          key={g.skill_id}
+                          rank={i}
+                          name={g.skill_name}
+                          category={g.category}
+                          share={g.share}
+                          gain={g.marginal_gain}
+                          mounted={mounted}
+                        />
                       ))}
                     </ul>
                   </>
                 )}
+
                 {have.length > 0 && (
                   <>
-                    {/* Chips rather than rows: these carry no demand figure to
-                        show, and a column of empty dashes reads as broken. */}
-                    <h3 className="group">Already on your resume <span>{have.length}</span></h3>
-                    <ul className="chips">
-                      {have.map((name) => <li key={name} className="chip">{name}</li>)}
-                    </ul>
+                    <h3 className="group">
+                      Skills you already have <span className="count ok">{have.length}</span>
+                    </h3>
+                    {/* Compact tiles rather than metered rows: these carry no
+                        demand figure, and a column of empty dashes reads as
+                        broken. */}
+                    <div className="have-grid">
+                      {have.map((name) => (
+                        <div className="have-item" key={name}>
+                          <span className="ico"><Icon.check width={14} height={14} /></span>
+                          {name}
+                        </div>
+                      ))}
+                    </div>
                   </>
                 )}
               </>
@@ -165,7 +188,7 @@ export default function Results({
                   {report.unused.length} other skills on your resume this role does not ask for
                 </summary>
                 <ul className="chips">
-                  {report.unused.map((s) => <li key={s} className="chip muted">{s}</li>)}
+                  {report.unused.map((s) => <li key={s} className="chip">{s}</li>)}
                 </ul>
               </details>
             )}

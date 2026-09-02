@@ -1,6 +1,6 @@
 import { encouragementForJD } from "./encouragement.js";
 import { useCountUp } from "./motion.js";
-import { Button, Callout, Empty, Flow, Icon, SkillRow } from "./ui.jsx";
+import { Button, Callout, Empty, Flow, Icon, Ring, SkillRow, Tile } from "./ui.jsx";
 
 /* Results for a single job posting.
 
@@ -37,15 +37,7 @@ export default function JDResults({ report, onEdit, onReset }) {
       </div>
 
       <section className="score">
-        <div className="dial" style={{ "--pct": shown }} role="img"
-             aria-label={`Match ${pct} percent`}>
-          <div className="face">
-            <div>
-              <div className="v">{shown}%</div>
-              <div className="l">match</div>
-            </div>
-          </div>
-        </div>
+        <Ring value={shown} label="match" />
         <div>
           <div className="headline">
             You have {report.matched.length} of the {total} skills this posting names.
@@ -54,6 +46,13 @@ export default function JDResults({ report, onEdit, onReset }) {
             The percentage beside each skill is how many similar postings ask
             for it too.
           </div>
+
+          <div className="tiles">
+            <Tile tone="ok" value={report.matched.length} label="you have" />
+            <Tile tone="warn" value={report.missing.length} label="missing" />
+            <Tile value={report.roadmap.length} label="steps to take" />
+          </div>
+
           <div className="encourage">
             <span className="ico"><Icon.trend /></span>
             <span>{note}</span>
@@ -77,7 +76,7 @@ export default function JDResults({ report, onEdit, onReset }) {
         ) : (
           <ol className="roadmap">
             {report.roadmap.map((step, i) => (
-              <li key={step.skill_id}>
+              <li key={step.skill_id} data-stagger>
                 <div className="head">
                   <span className="n">{i + 1}</span>
                   <span className="name">{step.skill_name}</span>
@@ -116,7 +115,7 @@ export default function JDResults({ report, onEdit, onReset }) {
           <>
             {report.missing.length > 0 && (
               <>
-                <h3 className="group">Missing <span>{report.missing.length}</span></h3>
+                <h3 className="group">Skills to improve <span className="count warn">{report.missing.length}</span></h3>
                 <ul className="skill-list">
                   {report.missing.map((s) => (
                     <SkillRow key={s.skill_id} name={s.skill_name} have={false} share={s.market_share} />
@@ -126,7 +125,7 @@ export default function JDResults({ report, onEdit, onReset }) {
             )}
             {report.matched.length > 0 && (
               <>
-                <h3 className="group">You already have <span>{report.matched.length}</span></h3>
+                <h3 className="group">Skills you already have <span className="count ok">{report.matched.length}</span></h3>
                 <ul className="skill-list">
                   {report.matched.map((s) => (
                     <SkillRow key={s.skill_id} name={s.skill_name} have share={s.market_share} />

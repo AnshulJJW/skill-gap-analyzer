@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { analyze, analyzeJD, getRoles, parseResume } from "./api.js";
 import JDResults from "./JDResults.jsx";
-import { useReveal } from "./motion.js";
+import { useMounted, useReveal, useTilt } from "./motion.js";
 import Results from "./Results.jsx";
-import { Button, Callout, Flow, Icon } from "./ui.jsx";
+import { Bar, Button, Callout, Flow, Icon, Ring } from "./ui.jsx";
 
 const MIN_RESUME_CHARS = 50;
 const MIN_JD_CHARS = 80;
@@ -182,28 +182,50 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
 
   return (
     <main>
-      <div className="wrap hero">
-        <h1>Find the skills you need for the job you want.</h1>
-        <p className="sub">
-          Upload your resume. We compare it with real job postings and show
-          you what to learn next.
-        </p>
+      <div className="hero-band">
+        <div className="wrap hero">
+          <div>
+            <span className="eyebrow">
+              <Icon.shield width={13} height={13} />
+              Measured against real postings
+            </span>
+            <h1>Find the skills you need for the job you want.</h1>
+            <p className="sub">
+              Upload your resume. We compare it with real job postings and
+              show you what to learn next.
+            </p>
 
-        <div className="facts">
-          <div className="fact">
-            <div className="v">{postings ? postings.toLocaleString() : "—"}</div>
-            <div className="k">job postings</div>
+            <div className="hero-cta">
+              <Button size="lg" onClick={() => fileInput.current?.click()} disabled={busy}>
+                {busy && <span className="spinner" />}
+                {busy ? "Reading your PDF" : "Upload your resume"}
+              </Button>
+              <Button variant="neutral" size="lg" onClick={onPaste}>
+                Paste text instead
+              </Button>
+            </div>
+
+            <div className="facts">
+              <div className="fact">
+                <div className="v">{postings ? postings.toLocaleString() : "—"}</div>
+                <div className="k">job postings</div>
+              </div>
+              <div className="fact">
+                <div className="v">{roles.length || "—"}</div>
+                <div className="k">roles</div>
+              </div>
+              <div className="fact">
+                <div className="v">Free</div>
+                <div className="k">no sign-up</div>
+              </div>
+            </div>
           </div>
-          <div className="fact">
-            <div className="v">{roles.length || "—"}</div>
-            <div className="k">roles</div>
-          </div>
-          <div className="fact">
-            <div className="v">Free</div>
-            <div className="k">no sign-up</div>
-          </div>
+
+          <Preview />
         </div>
+      </div>
 
+      <div className="wrap" style={{ marginTop: "-2.25rem", position: "relative", zIndex: 1 }}>
         <div
           className={`dropzone${dragging ? " over" : ""}`}
           onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -213,6 +235,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
             setDragging(false);
             onFile(e.dataTransfer.files?.[0]);
           }}
+          style={{ boxShadow: "var(--shadow-md)" }}
         >
           <input
             ref={fileInput}
@@ -221,10 +244,10 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
             onChange={(e) => onFile(e.target.files?.[0])}
             hidden
           />
-          <div className="ico"><Icon.upload width={22} height={22} /></div>
+          <div className="ico"><Icon.upload width={20} height={20} /></div>
           <h2>Drop your resume here</h2>
           <p>PDF only. Your file is not saved.</p>
-          <Button size="lg" onClick={() => fileInput.current?.click()} disabled={busy}>
+          <Button onClick={() => fileInput.current?.click()} disabled={busy}>
             {busy && <span className="spinner" />}
             {busy ? "Reading your PDF" : "Choose a file"}
           </Button>
@@ -250,7 +273,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
             {WHAT.map((c) => {
               const Ico = Icon[c.icon];
               return (
-                <div className="feature" key={c.title}>
+                <div className="feature" key={c.title} data-stagger>
                   <span className="ico"><Ico width={18} height={18} /></span>
                   <h3>{c.title}</h3>
                   <p>{c.body}</p>
@@ -261,7 +284,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
         </div>
       </section>
 
-      <section className="band" id="how" data-reveal>
+      <section className="band tint" id="how" data-reveal>
         <div className="wrap">
           <div className="section-head">
             <h2>How it works</h2>
@@ -269,7 +292,7 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
           </div>
           <div className="grid-3">
             {HOW.map((s, i) => (
-              <div className="step" key={s.title}>
+              <div className="step" key={s.title} data-stagger>
                 <span className="n">{i + 1}</span>
                 <div>
                   <h3>{s.title}</h3>
@@ -326,6 +349,62 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
     </main>
   );
 }
+
+/* A miniature of the results screen, sitting beside the headline.
+
+   It earns its place by showing what the product produces -- a score and a
+   ranked set of gaps -- which is faster to grasp than another paragraph
+   describing it. Built from the same Ring and Bar the real screen uses, so
+   it cannot drift away from what the product actually looks like.
+
+   The numbers are a fixed illustrative example, not a live analysis, and
+   the caption underneath says so. Dressing a sample up as real output would
+   be the one dishonest thing on a page whose whole argument is that its
+   numbers are checkable.
+
+   The tilt follows the pointer by a few degrees. useTilt does nothing on a
+   touch device or under prefers-reduced-motion, so the panel simply sits
+   flat there. */
+function Preview() {
+  const ref = useRef(null);
+  const mounted = useMounted(320);
+  useTilt(ref, 5);
+
+  return (
+    <div className="preview-stage">
+      <div className="preview" ref={ref}>
+        <div className="preview-head">
+          <span className="preview-title">SDE-1 Backend</span>
+          <span className="preview-dots"><i /><i /><i /></span>
+        </div>
+        <div className="preview-body">
+          <Ring value={mounted ? 31 : 0} label="covered" size={92} stroke={9} />
+          <div className="preview-rows">
+            {PREVIEW_ROWS.map((r) => (
+              <div className="preview-row" key={r.name}>
+                <div>
+                  <div className="lbl">{r.name}</div>
+                  <Bar pct={r.pct} tone={r.tone} mounted={mounted} />
+                </div>
+                <span className="pc">{r.pct}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="small muted" style={{ textAlign: "center", marginTop: ".7rem" }}>
+        Example result
+      </p>
+    </div>
+  );
+}
+
+const PREVIEW_ROWS = [
+  { name: "JavaScript", pct: 42, tone: "warn" },
+  { name: "Automated Testing", pct: 26 },
+  { name: "REST APIs", pct: 23 },
+  { name: "Java", pct: 31, tone: "ok" },
+];
 
 const REPO = "https://github.com/AnshulJJW/skill-gap-analyzer";
 

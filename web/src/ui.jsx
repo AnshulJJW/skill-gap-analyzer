@@ -58,7 +58,109 @@ export const Icon = {
   file: (p) => (
     <svg {...S} {...p}><path d="M9 2.5H4.2a.7.7 0 0 0-.7.7v9.6a.7.7 0 0 0 .7.7h7.6a.7.7 0 0 0 .7-.7V6Z" /><path d="M9 2.5V6h3.5" /></svg>
   ),
+  spark: (p) => (
+    <svg {...S} {...p}><path d="M8 2.5 9.4 6.6 13.5 8 9.4 9.4 8 13.5 6.6 9.4 2.5 8l4.1-1.4Z" /></svg>
+  ),
+  layers: (p) => (
+    <svg {...S} {...p}><path d="M8 2.5 14 5.5 8 8.5 2 5.5 8 2.5Z" /><path d="m2 8.5 6 3 6-3" /></svg>
+  ),
+  shield: (p) => (
+    <svg {...S} {...p}><path d="M8 2.2 13 4v4c0 3-2.2 5-5 5.8C5.2 13 3 11 3 8V4l5-1.8Z" /></svg>
+  ),
 };
+
+/* The score ring.
+
+   An SVG arc rather than a conic gradient: stroke-dashoffset animates
+   smoothly, takes a round cap, and can carry a gradient along its length.
+   `value` is 0-100 and comes from useCountUp, so the arc and the digits in
+   the middle advance on the same number. */
+export function Ring({ value, label = "covered", size = 118, stroke = 10 }) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - Math.min(Math.max(value, 0), 100) / 100);
+  const id = `ringGrad-${label.replace(/\W/g, "")}`;
+
+  return (
+    <div className="ring" style={{ width: size, height: size }}>
+      <svg width={size} height={size} aria-hidden="true">
+        <defs>
+          <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--brand-light)" />
+            <stop offset="100%" stopColor="var(--brand)" />
+          </linearGradient>
+        </defs>
+        <circle className="track" cx={size / 2} cy={size / 2} r={r}
+                fill="none" strokeWidth={stroke} />
+        <circle className="fill" cx={size / 2} cy={size / 2} r={r}
+                fill="none" strokeWidth={stroke} stroke={`url(#${id})`}
+                strokeDasharray={c} strokeDashoffset={offset} />
+      </svg>
+      <div className="mid">
+        <div>
+          <div className="v">{value}%</div>
+          <div className="l">{label}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Tile({ tone, value, label }) {
+  return (
+    <div className={["tile", tone].filter(Boolean).join(" ")}>
+      <div className="v">{value}</div>
+      <div className="k">{label}</div>
+    </div>
+  );
+}
+
+/* A bar that animates from zero once mounted. `mounted` comes from
+   useMounted: rendering the final width on the first paint would just draw
+   it there with nothing to transition from. */
+export function Bar({ pct, tone, mounted = true }) {
+  return (
+    <span className={["bar", tone].filter(Boolean).join(" ")} aria-hidden="true">
+      <i style={{ width: mounted ? `${Math.max(pct, 2)}%` : 0 }} />
+    </span>
+  );
+}
+
+/* One gap, as a card.
+
+   Priority is the position in the ranked list, which is what the ranking
+   already means -- the first few are the ones that unlock the most postings
+   you currently fail. It is not a separate judgement invented for display.
+
+   There is deliberately no "your level vs required level": the analyzer
+   knows whether a skill is present, not how good you are at it, and drawing
+   a proficiency bar would be inventing a measurement. */
+export function GapCard({ rank, name, category, share, gain, mounted }) {
+  const p = rank === 0 ? "p1" : rank < 3 ? "p2" : "";
+  const badge = rank === 0 ? "Start here" : rank < 3 ? "High impact" : null;
+  const pct = share == null ? null : Math.round(share * 100);
+
+  return (
+    <li className={["gap-card", p].filter(Boolean).join(" ")} data-stagger>
+      <div className="gap-top">
+        <div>
+          <div className="gap-name">{name}</div>
+          {category && <div className="gap-cat">{category}</div>}
+        </div>
+        {badge && <span className={`gap-badge ${p}`}>{badge}</span>}
+      </div>
+      {pct != null && (
+        <div className="gap-meter">
+          <div className="lab">
+            <span>Asked for in <b>{pct}%</b> of postings</span>
+            {gain != null && <span>+{(gain * 100).toFixed(1)}% score</span>}
+          </div>
+          <Bar pct={pct} tone={rank === 0 ? "warn" : undefined} mounted={mounted} />
+        </div>
+      )}
+    </li>
+  );
+}
 
 export function Button({ variant, size, children, ...rest }) {
   const cls = ["btn", variant, size].filter(Boolean).join(" ");
@@ -104,9 +206,7 @@ export function SkillRow({ name, have, share }) {
         {have ? <Icon.check className="have-ico" /> : <Icon.dash className="miss-ico" />}
       </span>
       <span className="name">{name}</span>
-      {pct == null ? <span /> : (
-        <span className="bar" aria-hidden="true"><i style={{ width: `${Math.max(pct, 2)}%` }} /></span>
-      )}
+      {pct == null ? <span /> : <Bar pct={pct} tone={have ? "ok" : undefined} />}
       <span className="share">{pct == null ? "—" : `${pct}%`}</span>
     </li>
   );

@@ -143,3 +143,39 @@ def test_the_supportive_note_never_judges_the_reader():
     for phrase in ("not qualified", "insufficient", "far behind", "poor",
                    "you lack", "weak", "failure", "unfortunately"):
         assert phrase not in text, f"judgemental wording in the note: {phrase!r}"
+
+
+def test_animated_bars_are_not_stuck_at_zero_without_motion():
+    """useMounted gates the bar width so a CSS transition has somewhere to
+    animate from. Under reduced motion the transition is disabled, so if the
+    hook still started at false every bar would render empty and the gap
+    cards would silently lose their only visualisation.
+    """
+    js = JS.read_text(encoding="utf-8")
+    body = js[js.index("export function useMounted"):]
+    body = body[: body.index("export function useTilt")]
+    assert "useState(() => prefersReducedMotion())" in body, (
+        "useMounted must start true under reduced motion, or bars stay at zero"
+    )
+
+
+def test_the_tilt_never_runs_where_it_would_be_unwelcome():
+    """A panel that follows the pointer is exactly the movement the reduced
+    -motion setting asks us not to make, and on a touch screen there is no
+    pointer to drive it."""
+    js = JS.read_text(encoding="utf-8")
+    body = js[js.index("export function useTilt"):]
+    assert "prefersReducedMotion()" in body
+    assert "(hover: hover)" in body and "(pointer: fine)" in body
+
+
+def test_the_hero_preview_is_labelled_as_an_example():
+    """The panel beside the headline shows fixed sample numbers. On a page
+    whose whole argument is that its figures are checkable, presenting a
+    mock-up as real output would be the one dishonest thing on it."""
+    app = (SRC / "App.jsx").read_text(encoding="utf-8")
+    preview = app[app.index("function Preview()"):]
+    preview = preview[: preview.index("const PREVIEW_ROWS")]
+    assert "Example result" in preview, (
+        "the sample dashboard must say it is an example"
+    )
