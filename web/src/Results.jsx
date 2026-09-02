@@ -218,7 +218,7 @@ export default function Results({
               <details className="more">
                 <summary>
                   <Icon.chevron className="chev" width={12} height={12} />
-                  {report.unused.length} other skills on your resume this role does not ask for
+                  {report.unused.length} other skill{report.unused.length === 1 ? "" : "s"} on your resume this role does not ask for
                 </summary>
                 <ul className="chips">
                   {report.unused.map((s) => <li key={s} className="chip">{s}</li>)}

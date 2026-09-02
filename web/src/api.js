@@ -8,16 +8,25 @@
  */
 
 const BASE = import.meta.env.VITE_API_URL ?? "/api";
+// Set only in a production build, where /api has no dev proxy behind it.
+const DEPLOYED = Boolean(import.meta.env.VITE_API_URL);
 
 async function request(path, options) {
   let res;
   try {
     res = await fetch(`${BASE}${path}`, options);
   } catch {
-    // fetch only rejects when the request never reached a server
+    // fetch only rejects when the request never reached a server at all.
+    // The advice differs by environment: telling a visitor on the deployed
+    // site to start uvicorn is nonsense, and the free instance sleeps after
+    // inactivity, so the first request after a quiet spell really does time
+    // out once and then work.
     throw new Error(
-      "Could not reach the analyzer. If you are running this locally, " +
-        "start the API with: uvicorn api.main:app --reload"
+      DEPLOYED
+        ? "Could not reach the analyzer. It may be waking up after a quiet " +
+          "spell — wait a few seconds and try again."
+        : "Could not reach the analyzer. If you are running this locally, " +
+          "start the API with: uvicorn api.main:app --reload"
     );
   }
 

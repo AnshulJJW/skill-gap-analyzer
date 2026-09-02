@@ -1,0 +1,24 @@
+# Render blueprint for the API.
+#
+# The service is stateless: it loads the taxonomy and the precomputed role
+# profiles from data/ at startup and serves from memory. There is no database
+# to attach, no migration to run and no disk to persist -- which is what makes
+# a free instance viable.
+#
+# CORS_ORIGINS has sync:false so it is set in the dashboard rather than
+# committed. It is not a secret; it just is not known until the frontend has
+# a URL.
+services:
+  - type: web
+    name: skill-gap-api
+    runtime: python
+    plan: free
+    region: singapore          # closest to the Indian market this data describes
+    buildCommand: pip install -r requirements-api.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: CORS_ORIGINS
+        sync: false

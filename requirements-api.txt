@@ -1,0 +1,21 @@
+# Runtime dependencies for the deployed API. Nothing else.
+#
+# requirements.txt covers the whole project: the data pipeline, the eval
+# harness, the test suite. The server needs none of that. pandas, SQLAlchemy
+# and psycopg together are the bulk of that install and the API imports none
+# of them -- role profiles are precomputed into data/profiles/*.json at build
+# time, so nothing touches a database at request time.
+#
+# Installing only what the server imports keeps the free-tier build short and
+# the resident memory inside the 512MB the instance gets.
+#
+# Verified by importing api.main in a venv built from this file alone; the
+# check lives in tests/test_deploy.py so it cannot silently drift.
+
+fastapi>=0.115
+uvicorn[standard]>=0.32
+pydantic>=2.10
+
+rapidfuzz>=3.10          # alias and fuzzy matching in the taxonomy
+pypdf>=6.0               # reading uploaded PDF resumes
+python-multipart>=0.0.9  # fastapi needs this to accept file uploads

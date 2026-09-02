@@ -205,3 +205,49 @@ page:
 
 Stages 7 and 8: deployment, and the demo write-up. Everything described
 above runs locally today.
+
+## 9. Deploying
+
+Two services, both on free tiers, both fed from this GitHub repository.
+
+```
+   GitHub (AnshulJJW/skill-gap-analyzer)
+        |                        |
+        | root dir: web/         | root dir: repo root
+        v                        v
+   Vercel  ──── HTTPS ────>  Render
+   static bundle            FastAPI + uvicorn
+   (dist/)                  reads data/*.json into memory at startup
+```
+
+The API is stateless. It loads the taxonomy and the precomputed role profiles
+from `data/` at boot and serves everything from memory, so there is no
+database to attach and no disk to persist.
+
+### Backend, on Render
+
+`render.yaml` in the repo root describes the service. Render reads it when you
+create a Blueprint from the repository, so the build command, start command
+and health check do not need typing into a form.
+
+It installs `requirements-api.txt`, not `requirements.txt`. The server imports
+neither pandas, SQLAlchemy nor psycopg -- those belong to the data pipeline
+that runs offline -- and leaving them out is the difference between a short
+build and a slow one on a free instance.
+
+### Frontend, on Vercel
+
+Root directory `web`. `VITE_API_URL` is read at BUILD time, not at runtime, so
+changing it requires a redeploy rather than a restart.
+
+### The one ordering constraint
+
+The frontend needs the API's URL, and the API needs the frontend's origin for
+CORS. So: deploy the API first, build the frontend against it, then set
+`CORS_ORIGINS` on the API to the Vercel URL and let it restart.
+
+### Redeploying
+
+Push to `main`. Both services rebuild automatically. If you change
+`VITE_API_URL` or `CORS_ORIGINS`, the service that owns it must redeploy --
+for Vercel that means a fresh build, because the value is compiled in.
