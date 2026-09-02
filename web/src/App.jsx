@@ -3,15 +3,19 @@ import { analyze, analyzeJD, getRoles, parseResume } from "./api.js";
 import JDResults from "./JDResults.jsx";
 import { useReveal } from "./motion.js";
 import Results from "./Results.jsx";
+import { Button, Callout, Flow, Icon } from "./ui.jsx";
 
 const MIN_RESUME_CHARS = 50;
 const MIN_JD_CHARS = 80;
 
-/* Three views rather than one long page.
-   Landing sells and takes the upload. Review is the safety step -- PDF
-   extraction scrambles two-column layouts and nothing reliably detects
-   when it has, so the text is always shown before anything is analysed.
-   Results is a focused screen with the marketing gone. */
+/* Four screens driven by one state value rather than a router.
+   The flow is linear and short, nothing is deep-linkable, and a router
+   would add a dependency to manage three transitions.
+
+   Landing takes the resume. Check is the safety step: PDF extraction
+   scrambles two-column layouts and nothing reliably detects when it has, so
+   the text is always shown before anything is measured. Results drops the
+   marketing and shows only the answer. */
 export default function App() {
   const [view, setView] = useState("landing");
   const [roles, setRoles] = useState([]);
@@ -38,9 +42,7 @@ export default function App() {
       .catch((e) => setError(e.message));
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [view]);
+  useEffect(() => { window.scrollTo(0, 0); }, [view]);
 
   async function handleFile(file) {
     if (!file) return;
@@ -91,7 +93,8 @@ export default function App() {
 
   return (
     <>
-      <Topbar onHome={reset} showBack={view !== "landing"} />
+      <Topbar onHome={reset} inFlow={view !== "landing"} />
+
       {view === "landing" && (
         <Landing
           roles={roles}
@@ -102,31 +105,23 @@ export default function App() {
           onPaste={() => setView("review")}
         />
       )}
+
       {view === "review" && (
         <Review
-          resume={resume}
-          setResume={setResume}
+          resume={resume} setResume={setResume}
           uploaded={uploaded}
-          roles={roles}
-          roleId={roleId}
-          setRoleId={setRoleId}
-          busy={busy}
-          error={error}
-          mode={mode}
-          setMode={setMode}
-          jd={jd}
-          setJd={setJd}
-          onRun={runAnalysis}
-          onBack={reset}
+          roles={roles} roleId={roleId} setRoleId={setRoleId}
+          busy={busy} error={error}
+          mode={mode} setMode={setMode}
+          jd={jd} setJd={setJd}
+          onRun={runAnalysis} onBack={reset}
         />
       )}
+
       {view === "jdresults" && (
-        <JDResults
-          report={jdReport}
-          onEdit={() => setView("review")}
-          onReset={reset}
-        />
+        <JDResults report={jdReport} onEdit={() => setView("review")} onReset={reset} />
       )}
+
       {view === "results" && (
         <Results
           report={report}
@@ -144,32 +139,33 @@ export default function App() {
             }
           }}
           busy={busy}
+          error={error}
           onEdit={() => setView("review")}
           onReset={reset}
         />
       )}
+
       <SiteFooter />
     </>
   );
 }
 
-function Topbar({ onHome, showBack }) {
+function Topbar({ onHome, inFlow }) {
   return (
     <header className="topbar">
-      <div className="wrap">
-        <div className="brand">
-          <span className="mark">SG</span> Skill-Gap Analyzer
-        </div>
+      <div className="wrap inner">
+        <button className="brand" onClick={onHome}>
+          <span className="mark">SG</span>
+          Skill-Gap Analyzer
+        </button>
         <nav>
-          {showBack ? (
-            <button className="plain" onClick={onHome}>
-              Start over
-            </button>
+          {inFlow ? (
+            <Button variant="quiet" onClick={onHome}>Start over</Button>
           ) : (
             <>
               <a href="#what">What you get</a>
               <a href="#how">How it works</a>
-              <a href="#method">Method</a>
+              <a href="#method">Accuracy</a>
             </>
           )}
         </nav>
@@ -178,41 +174,39 @@ function Topbar({ onHome, showBack }) {
   );
 }
 
+/* ------------------------------------------------------------------ landing */
+
 function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
   const [dragging, setDragging] = useState(false);
-  const total = roles.reduce((n, r) => n + r.total_postings, 0);
+  const postings = roles.reduce((n, r) => n + r.total_postings, 0);
 
   return (
     <main>
       <div className="wrap hero">
-        <p className="eyebrow">Measured, not guessed</p>
-        <h1>
-          Find out which skills are actually <em>costing you interviews</em>.
-        </h1>
+        <h1>Find the skills you need for the job you want.</h1>
         <p className="sub">
-          Upload your resume and see it compared against thousands of real job
-          postings — with the evidence for every recommendation, and an honest
-          account of what the numbers cannot tell you.
+          Upload your resume. We compare it with real job postings and show
+          you what to learn next.
         </p>
 
-        <div className="trust">
-          <span>
-            <b>{total ? total.toLocaleString() : "—"}</b> real postings analysed
-          </span>
-          <span>
-            <b>{roles.length || "—"}</b> roles covered
-          </span>
-          <span>
-            <b>Free</b> · no account needed
-          </span>
+        <div className="facts">
+          <div className="fact">
+            <div className="v">{postings ? postings.toLocaleString() : "—"}</div>
+            <div className="k">job postings</div>
+          </div>
+          <div className="fact">
+            <div className="v">{roles.length || "—"}</div>
+            <div className="k">roles</div>
+          </div>
+          <div className="fact">
+            <div className="v">Free</div>
+            <div className="k">no sign-up</div>
+          </div>
         </div>
 
         <div
           className={`dropzone${dragging ? " over" : ""}`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragging(true);
-          }}
+          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
           onDragLeave={() => setDragging(false)}
           onDrop={(e) => {
             e.preventDefault();
@@ -227,42 +221,42 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
             onChange={(e) => onFile(e.target.files?.[0])}
             hidden
           />
-          <span className="arrow">↑</span>
+          <div className="ico"><Icon.upload width={22} height={22} /></div>
           <h2>Drop your resume here</h2>
-          <p>PDF · stays on your machine · nothing is stored</p>
-          <button onClick={() => fileInput.current?.click()} disabled={busy}>
-            {busy ? "Reading your PDF…" : "Choose a PDF"}
-          </button>
-          <div className="assure">
-            <span>No sign-up</span>
-            <span>No file kept after analysis</span>
-            <span>
-              <button className="plain" onClick={onPaste}>
-                or paste the text instead
-              </button>
-            </span>
+          <p>PDF only. Your file is not saved.</p>
+          <Button size="lg" onClick={() => fileInput.current?.click()} disabled={busy}>
+            {busy && <span className="spinner" />}
+            {busy ? "Reading your PDF" : "Choose a file"}
+          </Button>
+          <div className="alt">
+            or <button className="btn link" onClick={onPaste}>paste the text instead</button>
           </div>
         </div>
 
-        {error && <div className="error">{error}</div>}
+        {error && (
+          <div style={{ marginTop: "1.25rem" }}>
+            <Callout tone="danger">{error}</Callout>
+          </div>
+        )}
       </div>
 
       <section className="band" id="what" data-reveal>
         <div className="wrap">
           <div className="section-head">
             <h2>What you get</h2>
-            <p>
-              Six things, each traceable back to a number you can check.
-            </p>
+            <p>Every number comes from job postings you can check.</p>
           </div>
-          <div className="cards">
-            {WHAT.map((c, i) => (
-              <article key={c.title}>
-                <div className="n">0{i + 1}</div>
-                <h3>{c.title}</h3>
-                <p>{c.body}</p>
-              </article>
-            ))}
+          <div className="grid-3">
+            {WHAT.map((c) => {
+              const Ico = Icon[c.icon];
+              return (
+                <div className="feature" key={c.title}>
+                  <span className="ico"><Ico width={18} height={18} /></span>
+                  <h3>{c.title}</h3>
+                  <p>{c.body}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -271,13 +265,16 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
         <div className="wrap">
           <div className="section-head">
             <h2>How it works</h2>
-            <p>Three steps. No sign-up, no card, nothing stored.</p>
+            <p>Three steps. Nothing is stored.</p>
           </div>
-          <div className="steps">
+          <div className="grid-3">
             {HOW.map((s, i) => (
-              <div className="step" key={s.title} data-n={i + 1}>
-                <h3>{s.title}</h3>
-                <p>{s.body}</p>
+              <div className="step" key={s.title}>
+                <span className="n">{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.body}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -287,39 +284,42 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
       <section className="band" id="method" data-reveal>
         <div className="wrap">
           <div className="section-head">
-            <h2>How the numbers were checked</h2>
-            <p>
-              Most tools in this space ask you to take their accuracy on
-              trust. This one was measured, and the measurement is published.
-            </p>
+            <h2>How accurate is it?</h2>
+            <p>We measured it instead of asking you to trust it.</p>
           </div>
-          <div className="prose">
-            <p>
-              Forty job postings were read and labelled by hand — 255 skill
-              mentions — by a person who could not see what the extractor had
-              produced. The extractor was then scored against those labels:{" "}
-              <strong>precision 0.86, recall 0.90</strong>.
-            </p>
-            <p>
-              That process also found a problem the code could not: roughly one
-              posting in six had been filed under the wrong role — GIS and
-              firmware jobs sitting in a backend bucket, senior roles labelled
-              entry-level. Those are now filtered out, and the rate is
-              published rather than hidden.
-            </p>
-            <p>
-              Demand comes from a frozen snapshot of Naukri postings, so the
-              percentages describe the Indian entry-level market specifically.
-              The full method, the numbers and the limitations are in the{" "}
-              <a
-                href="https://github.com/AnshulJJW/skill-gap-analyzer"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                repository
-              </a>
-              .
-            </p>
+          <div className="grid-2">
+            <div>
+              <p className="muted" style={{ fontSize: ".9rem" }}>
+                Someone read 40 job postings by hand and marked every skill in
+                them — 255 in total — without seeing what the tool had found.
+                We then scored the tool against those marks.
+              </p>
+              <div className="facts" style={{ marginTop: "1.25rem" }}>
+                <div className="fact">
+                  <div className="v">0.86</div>
+                  <div className="k">precision</div>
+                </div>
+                <div className="fact">
+                  <div className="v">0.90</div>
+                  <div className="k">recall</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p className="muted" style={{ fontSize: ".9rem" }}>
+                That check also caught about one posting in six filed under the
+                wrong job title. Those are now removed rather than quietly
+                counted.
+              </p>
+              <p className="muted" style={{ fontSize: ".9rem", marginTop: ".8rem" }}>
+                Postings come from a fixed Naukri snapshot, so the numbers
+                describe entry-level hiring in India.{" "}
+                <a href={REPO} target="_blank" rel="noreferrer noopener">
+                  Full method and limits
+                </a>
+                .
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -327,47 +327,48 @@ function Landing({ roles, busy, error, fileInput, onFile, onPaste }) {
   );
 }
 
+const REPO = "https://github.com/AnshulJJW/skill-gap-analyzer";
+
 const WHAT = [
   {
-    title: "Coverage score",
-    body: "How much of what this role actually demands you already meet, measured against its thirty most-requested skills rather than a long tail nobody has.",
+    icon: "target",
+    title: "Your score",
+    body: "How many of the skills this role asks for most are already on your resume.",
   },
   {
-    title: "The skills it found",
-    body: "Everything read off your resume, shown openly — so when the parser gets something wrong you can see it, instead of it hiding inside a confident number.",
+    icon: "list",
+    title: "What we found",
+    body: "Every skill we read from your resume, so you can spot anything we got wrong.",
   },
   {
-    title: "Ranked gaps",
-    body: "Not the most common missing skill, but the one that unlocks the most postings you currently fail. Each pick is chosen given the ones before it.",
+    icon: "trend",
+    title: "What to learn first",
+    body: "The skill that opens the most jobs you currently miss out on — not just the most common one.",
   },
   {
-    title: "A learning order",
-    body: "Prerequisites first. It will never tell you to learn Kubernetes before Docker, or a framework before its language.",
+    icon: "route",
+    title: "In a sensible order",
+    body: "Basics before advanced. It will not tell you to learn Kubernetes before Docker.",
   },
   {
-    title: "Free resources",
-    body: "A curated free resource for each step, with a rough time cost. Hand-picked, not generated — and the README says so plainly.",
+    icon: "book",
+    title: "Free links",
+    body: "One free resource per skill, with a rough time to finish.",
   },
   {
+    icon: "info",
     title: "The evidence",
-    body: "Every recommendation carries its count: appears in 42% of 4,837 postings. A percentage without a denominator is an assertion, not a measurement.",
+    body: "Each result shows how many postings it came from, so you can judge it yourself.",
   },
 ];
 
 const HOW = [
-  {
-    title: "Upload your resume",
-    body: "Drop in a PDF, or paste the text. Nothing is uploaded anywhere permanent and nothing is stored after the analysis runs.",
-  },
-  {
-    title: "Check what was read",
-    body: "The extracted text is shown to you first. PDF layouts scramble in ways nothing can reliably detect, so you get to correct it before anything is measured.",
-  },
-  {
-    title: "Read the gap",
-    body: "Pick a role and get your coverage, your ranked gaps with evidence, and a prerequisite-ordered path with resources attached.",
-  },
+  { title: "Add your resume", body: "Upload a PDF or paste the text." },
+  { title: "Check the text", body: "PDFs often come out scrambled. Fix anything wrong before we measure." },
+  { title: "See your gap", body: "Your score, what to learn, and where to learn it." },
 ];
+
+/* ------------------------------------------------------------------- check */
 
 function Review({
   resume, setResume, uploaded, roles, roleId, setRoleId,
@@ -378,119 +379,114 @@ function Review({
   const role = roles.find((r) => r.id === roleId);
 
   return (
-    <main className="wrap narrow review">
-      <p className="eyebrow">Step 2 of 3</p>
+    <main className="wrap sm view">
+      <Flow step={2} />
+
       <div className="section-head">
-        <h2>Check what we read</h2>
-        <p>
-          Edit anything that looks wrong before analysing — this is the whole
-          reason the step exists.
-        </p>
+        <h2>Check the text</h2>
+        <p>Fix anything that looks wrong. We measure exactly what is here.</p>
       </div>
 
-      {uploaded && (
-        <div className="notice">
-          <strong>Read {uploaded.name}</strong> — {uploaded.pages} page
-          {uploaded.pages === 1 ? "" : "s"}, {uploaded.chars} characters.
-          <br />
-          PDF extraction can interleave two-column layouts and scramble text
-          inside tables, and there is no reliable way to detect when it has.
-          {uploaded.warnings.map((w) => (
-            <div key={w} className="warn">{w}</div>
-          ))}
-        </div>
-      )}
+      <div className="stack-lg">
+        {uploaded && (
+          <Callout icon="file">
+            <strong>{uploaded.name}</strong> — {uploaded.pages} page
+            {uploaded.pages === 1 ? "" : "s"}, {uploaded.chars} characters.
+            <div style={{ marginTop: ".3rem" }}>
+              PDFs with two columns or tables often come out jumbled, and there
+              is no reliable way to detect it.
+            </div>
+            {uploaded.warnings.map((w) => (
+              <div key={w} style={{ marginTop: ".5rem", color: "var(--warn)" }}>{w}</div>
+            ))}
+          </Callout>
+        )}
 
-      <label htmlFor="resume">Your resume text</label>
-      <textarea
-        id="resume"
-        value={resume}
-        onChange={(e) => setResume(e.target.value)}
-        spellCheck={false}
-        placeholder={
-          "TECHNICAL SKILLS\nProgramming Languages: Python, Java, SQL\n" +
-          "Databases: MySQL\nTools: Git, GitHub\n\nPROJECTS\n" +
-          "Built a web application using Django and MySQL."
-        }
-      />
-      <p className="hint">
-        {resume.trim().length} characters
-        {tooShort && resume.length > 0 && ` — need at least ${MIN_RESUME_CHARS}`}
-      </p>
-
-      <div className="modes">
-        <button
-          type="button"
-          className={mode === "role" ? "on" : ""}
-          onClick={() => setMode("role")}
-        >
-          Compare against a role
-        </button>
-        <button
-          type="button"
-          className={mode === "jd" ? "on" : ""}
-          onClick={() => setMode("jd")}
-        >
-          Compare against one job description
-        </button>
-      </div>
-      <p className="hint" style={{ marginTop: "-.6rem", marginBottom: "1rem" }}>
-        {mode === "role"
-          ? "Measures you against what thousands of postings for this role demand."
-          : "Measures you against one specific posting — and tells you which of its requirements the wider market wants too."}
-      </p>
-
-      {mode === "jd" && (
-        <div className="jd-box">
-          <label htmlFor="jd">Paste the job description</label>
+        <div>
+          <label htmlFor="resume">Your resume text</label>
           <textarea
-            id="jd"
-            value={jd}
-            onChange={(e) => setJd(e.target.value)}
+            id="resume"
+            value={resume}
+            onChange={(e) => setResume(e.target.value)}
             spellCheck={false}
-            placeholder={
-              "We are hiring a Backend Engineer.\n\nRequirements:\n" +
-              "- Strong Python and Django experience\n" +
-              "- PostgreSQL and Redis\n- Docker for deployment\n" +
-              "- Experience building REST APIs"
-            }
+            placeholder={"TECHNICAL SKILLS\nLanguages: Python, Java, SQL\nDatabases: MySQL\nTools: Git\n\nPROJECTS\nBuilt a web app with Django and MySQL."}
           />
-          <p className="hint">
-            {jd.trim().length} characters
-            {jdTooShort && jd.length > 0 && ` — need at least ${MIN_JD_CHARS}`}
+          <div className="field-foot">
+            <span>{tooShort && resume.length > 0 ? `Need at least ${MIN_RESUME_CHARS} characters` : ""}</span>
+            <span className="mono">{resume.trim().length}</span>
+          </div>
+        </div>
+
+        <div>
+          <label>Compare against</label>
+          <div className="segmented" role="group">
+            <button
+              type="button"
+              className={mode === "role" ? "on" : ""}
+              onClick={() => setMode("role")}
+            >
+              A role
+            </button>
+            <button
+              type="button"
+              className={mode === "jd" ? "on" : ""}
+              onClick={() => setMode("jd")}
+            >
+              One job posting
+            </button>
+          </div>
+          <p className="small muted" style={{ marginTop: ".55rem" }}>
+            {mode === "role"
+              ? "Measures you against thousands of postings for this role."
+              : "Measures you against one posting, and shows which of its asks the wider market shares."}
           </p>
         </div>
-      )}
 
-      <div className="controls">
+        {mode === "jd" && (
+          <div>
+            <label htmlFor="jd">Paste the job posting</label>
+            <textarea
+              id="jd"
+              value={jd}
+              onChange={(e) => setJd(e.target.value)}
+              spellCheck={false}
+              style={{ minHeight: "10rem" }}
+              placeholder={"We are hiring a Backend Engineer.\n\nRequirements:\n- Strong Python and Django\n- PostgreSQL and Redis\n- Docker\n- REST APIs"}
+            />
+            <div className="field-foot">
+              <span>{jdTooShort && jd.length > 0 ? `Need at least ${MIN_JD_CHARS} characters` : ""}</span>
+              <span className="mono">{jd.trim().length}</span>
+            </div>
+          </div>
+        )}
+
         <div>
           <label htmlFor="role">
             {mode === "role" ? "Target role" : "Role, for market context"}
           </label>
-          <select
-            id="role"
-            value={roleId}
-            onChange={(e) => setRoleId(e.target.value)}
-          >
+          <select id="role" value={roleId} onChange={(e) => setRoleId(e.target.value)}>
             {roles.map((r) => (
               <option key={r.id} value={r.id}>{r.name}</option>
             ))}
           </select>
+          {role && mode === "role" && (
+            <p className="small muted" style={{ marginTop: ".45rem" }}>
+              {role.total_postings.toLocaleString()} postings, {role.market} market.
+            </p>
+          )}
         </div>
-        <button onClick={onRun} disabled={busy || tooShort || jdTooShort || !roleId}>
-          {busy ? "Analysing…" : "Analyse my gap"}
-        </button>
-        <button className="plain" onClick={onBack}>Start over</button>
+
+        {error && <Callout tone="danger">{error}</Callout>}
+
+        <div className="actions">
+          <Button onClick={onRun} disabled={busy || tooShort || jdTooShort || !roleId}>
+            {busy && <span className="spinner" />}
+            {busy ? "Analysing" : "See my results"}
+          </Button>
+          <span className="spacer" />
+          <Button variant="quiet" onClick={onBack}>Start over</Button>
+        </div>
       </div>
-
-      {role && mode === "role" && (
-        <p className="hint">
-          Compared against {role.total_postings.toLocaleString()} real{" "}
-          {role.name} postings from the {role.market} market.
-        </p>
-      )}
-
-      {error && <div className="error">{error}</div>}
     </main>
   );
 }
@@ -499,17 +495,9 @@ function SiteFooter() {
   return (
     <footer className="site">
       <div className="wrap">
-        Demand measured from a frozen snapshot of Naukri postings, December
-        2024. Extraction accuracy is hand-measured and the limitations are
-        published —{" "}
-        <a
-          href="https://github.com/AnshulJJW/skill-gap-analyzer"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          see the repository
-        </a>
-        .
+        Job postings from a fixed Naukri snapshot, December 2024. Accuracy is
+        measured by hand and the limits are written down —{" "}
+        <a href={REPO} target="_blank" rel="noreferrer noopener">see the repository</a>.
       </div>
     </footer>
   );
