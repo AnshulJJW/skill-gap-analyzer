@@ -90,3 +90,99 @@ def test_report_is_coherent_on_a_real_resume(tax):
     assert "java" in report.have
     assert report.core_total == 30
     assert not ({g.skill_id for g in report.gaps} & set(report.have))
+
+
+# ---------------------------------------------------- evidence strength
+
+
+def test_a_skill_only_named_under_education_is_not_confirmed(tax):
+    """"Coursework included Java" is not the same claim as listing Java.
+
+    extract() has always scored sections differently; the gap report used to
+    discard that score and treat the two identically.
+    """
+    resume = (
+        "TECHNICAL SKILLS\nPython, SQL\n\n"
+        "EDUCATION\nB.E. Computer Science. Coursework included Docker.\n"
+    )
+    held = {h.skill_name: h for h in analyze(resume, "sde1-backend", tax).held}
+    assert held["Python"].confirmed is True
+    assert held["Docker"].confirmed is False
+    assert held["Docker"].section == "education"
+
+
+def test_a_skill_shown_in_a_project_counts_as_confirmed(tax):
+    """Demonstrated use is at least as strong as a self-declared list."""
+    resume = "EXPERIENCE\nBuilt and shipped a REST service in Java.\n"
+    held = {h.skill_name: h for h in analyze(resume, "sde1-backend", tax).held}
+    assert held["Java"].confirmed is True
+    assert held["Java"].section == "experience"
+
+
+def test_evidence_level_does_not_change_the_score(tax):
+    """Coverage stays presence-based on purpose.
+
+    Down-weighting weak evidence in the headline number is tempting, but
+    there is no labelled ground truth to validate a weighting against, so it
+    would move the number on a guess. The level is reported beside the score
+    instead.
+    """
+    listed = "TECHNICAL SKILLS\nPython, SQL, Docker\n"
+    schooled = (
+        "TECHNICAL SKILLS\nPython, SQL\n\n"
+        "EDUCATION\nCoursework included Docker.\n"
+    )
+    assert analyze(listed, "sde1-backend", tax).coverage == pytest.approx(
+        analyze(schooled, "sde1-backend", tax).coverage
+    )
+
+
+def test_held_lists_unconfirmed_skills_last(tax):
+    """The weak ones sort to the end so they read as a caveat, not a claim."""
+    resume = (
+        "TECHNICAL SKILLS\nPython\n\n"
+        "EDUCATION\nCoursework included Docker and Machine Learning.\n"
+    )
+    flags = [h.confirmed for h in analyze(resume, "sde1-backend", tax).held]
+    assert flags == sorted(flags, reverse=True)
+
+
+# ------------------------------------------------- resume/posting parity
+
+
+def test_a_named_cloud_provider_does_not_also_credit_generic_cloud(tax):
+    """Postings are processed with suppress_generic_cloud; resumes were not.
+
+    That asymmetry meant a resume saying "AWS" scored against a profile
+    built from postings where the same phrase counted once.
+    """
+    # The text must actually contain a generic cloud phrase, or the test
+    # passes for the wrong reason -- nothing to suppress.
+    resume = "TECHNICAL SKILLS\nAWS, cloud computing, Python, SQL\n"
+    from analyzer.extract import Origin, extract
+    raw = {m.skill_id for m in extract(resume, tax, origin=Origin.RESUME)}
+    assert {"aws", "cloud"} <= raw, "fixture no longer triggers the case"
+
+    report = analyze(resume, "sde1-backend", tax)
+    assert "aws" in report.have
+    assert "cloud" not in report.have
+    assert "Cloud Fundamentals" not in report.have_names
+
+
+# ----------------------------------------------------- empty extraction
+
+
+def test_a_resume_with_no_recognisable_skills_says_so(tax):
+    """A scrambled PDF used to return a confident 0% with a full learning
+    plan attached and nothing to say the input was the problem."""
+    report = analyze("I enjoy long walks and reading poetry. " * 4,
+                     "sde1-backend", tax)
+    assert report.skills_detected == 0
+    assert report.empty_note
+    assert report.coverage == 0.0
+
+
+def test_a_normal_resume_carries_no_empty_note(tax):
+    report = analyze("TECHNICAL SKILLS\nJava, MySQL, Git\n", "sde1-backend", tax)
+    assert report.skills_detected > 0
+    assert report.empty_note == ""

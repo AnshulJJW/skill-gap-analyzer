@@ -48,6 +48,13 @@ class AnalyzeIn(BaseModel):
     top_n: int = Field(default=10, ge=1, le=25)
 
 
+class HeldSkillOut(BaseModel):
+    skill_id: str
+    skill_name: str
+    confirmed: bool
+    section: str
+
+
 class AnalyzeOut(BaseModel):
     role_id: str
     role_name: str
@@ -58,9 +65,12 @@ class AnalyzeOut(BaseModel):
     core_total: int
     have: list[str]
     have_names: list[str]
+    held: list[HeldSkillOut] = []
     unused: list[str]
     gaps: list[GapOut]
     roadmap: list[RoadmapStepOut]
+    skills_detected: int = 0
+    empty_note: str = ""
 
 
 class JDSkillOut(BaseModel):

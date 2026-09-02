@@ -17,7 +17,13 @@ import argparse
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from analyzer.extract import Origin, extract, resolve_implications
+from analyzer.extract import (
+    Origin,
+    Section,
+    extract,
+    resolve_implications,
+    suppress_generic_cloud,
+)
 from analyzer.profiles import RoleProfile, SkillDemand
 from analyzer.roadmap import RoadmapStep, build_roadmap
 from analyzer.taxonomy import Taxonomy
@@ -33,6 +39,26 @@ from analyzer.taxonomy import Taxonomy
 # asking -- "am I close?" -- rather than "do I know everything anyone ever
 # asked for?". 30 is a judgement call, recorded so it can be argued with.
 TOP_N_FOR_COVERAGE = 30
+
+
+# Sections where naming a skill is a claim about what you can do: an explicit
+# skills list, or a project you built. A mention under EDUCATION is usually a
+# course title, and OTHER is unheaded text we could not place -- both are
+# weaker evidence that you actually hold the skill.
+#
+# extract() already scores these; the gap report used to throw the score away
+# and treat "coursework included Java" as equal to listing Java outright.
+_CLAIMED_SECTIONS = {Section.SKILLS, Section.EXPERIENCE}
+
+
+@dataclass
+class HeldSkill:
+    """A skill the resume shows, and how well it shows it."""
+
+    skill_id: str
+    skill_name: str
+    confirmed: bool     # named in a skills list or shown in a project
+    section: str        # where it was found, so the call can be argued with
 
 
 @dataclass
@@ -58,9 +84,16 @@ class GapReport:
     core_total: int = 0
     have: list[str] = field(default_factory=list)
     have_names: list[str] = field(default_factory=list)
+    held: list[HeldSkill] = field(default_factory=list)   # with evidence level
     unused: list[str] = field(default_factory=list)   # on the CV, not demanded
     gaps: list[Gap] = field(default_factory=list)
     roadmap: list[RoadmapStep] = field(default_factory=list)
+    skills_detected: int = 0
+    # Set when the resume yielded nothing we recognise. Without it a
+    # scrambled PDF or a pasted cover letter returns a confident 0% with a
+    # full learning plan attached, and nothing says the input was the
+    # problem.
+    empty_note: str = ""
 
 
 def core_demands(profile: RoleProfile, top_n: int = TOP_N_FOR_COVERAGE):
@@ -139,13 +172,48 @@ def analyze(resume_text: str, role_id: str, taxonomy: Taxonomy,
             source_id: str = "naukri", top_n: int = 10) -> GapReport:
     profile = RoleProfile.load(role_id, source_id)
 
-    mentions = extract(resume_text, taxonomy, origin=Origin.RESUME)
+    # with_evidence=False: the quoted source line costs a scan of the whole
+    # document per mention and nothing below reads it.
+    mentions = extract(resume_text, taxonomy, origin=Origin.RESUME,
+                       with_evidence=False)
+    section_of = {m.skill_id: m.section for m in mentions}
+
     have = {m.skill_id for m in mentions}
-    # A framework on the CV asserts its language, exactly as in extraction.
+    # Both fixes below also run when postings are processed offline
+    # (scripts/extract_skills.py). Applying them to only one side would make
+    # the resume and the profile disagree about what a skill set even is.
     have |= resolve_implications(have)
+    have = suppress_generic_cloud(have)
 
     demanded = set(profile.by_id)
     core = {d.skill_id for d in core_demands(profile)}
+    matched = have & demanded
+
+    # Evidence level per held skill. Implied languages (React -> JavaScript)
+    # have no section of their own; they inherit "confirmed" because the
+    # framework that asserted them was itself a claim.
+    held = sorted(
+        (
+            HeldSkill(
+                skill_id=sid,
+                skill_name=taxonomy.name_of(sid),
+                confirmed=section_of.get(sid, Section.SKILLS) in _CLAIMED_SECTIONS,
+                section=section_of.get(sid, Section.SKILLS).value,
+            )
+            for sid in matched
+        ),
+        key=lambda h: (h.confirmed is False, h.skill_name.lower()),
+    )
+
+    note = ""
+    if not have:
+        note = (
+            "No skills we recognise were found in that text. If you pasted a "
+            "resume, check it came through as words rather than scrambled "
+            "characters — the score below is measured on what is above, so "
+            "an empty read gives an empty score."
+        )
+
     gaps = rank_by_marginal_coverage(have, profile, taxonomy, top_n)
     return GapReport(
         core_have=len(have & core),
@@ -155,11 +223,14 @@ def analyze(resume_text: str, role_id: str, taxonomy: Taxonomy,
         market=profile.market,
         total_postings=profile.total_postings,
         coverage=coverage_of(have, profile),
-        have=sorted(have & demanded),
-        have_names=sorted(taxonomy.name_of(s) for s in have & demanded),
+        have=sorted(matched),
+        have_names=sorted(taxonomy.name_of(s) for s in matched),
+        held=held,
         unused=sorted(taxonomy.name_of(s) for s in have - demanded),
         gaps=gaps,
         roadmap=build_roadmap(gaps, have, taxonomy),
+        skills_detected=len(have),
+        empty_note=note,
     )
 
 

@@ -539,6 +539,10 @@ select { height: 38px; padding-block: 0; }
   background: var(--ok-soft); border: 1px solid var(--ok-border);
 }
 .have-item .ico { color: var(--ok); flex: 0 0 auto; }
+/* Evidence found only under a heading like Education. Amber, not red: it is
+   a suggestion to move the skill onto a project, not an error. */
+.have-item.weak { background: var(--warn-soft); border-color: var(--warn-border); }
+.have-item.weak .ico { color: var(--warn); }
 
 /* The JD screen carries a demand figure on both sides, so it keeps rows. */
 .skill-list { list-style: none; padding: 0; margin: 0; }

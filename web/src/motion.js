@@ -23,15 +23,24 @@ export function prefersReducedMotion() {
 
    `key` re-runs the effect when the view changes, because switching from
    landing to results mounts entirely new nodes that the old observer has
-   never seen. */
+   never seen.
+
+   The key alone is not enough, and relying on it caused a real bug: the
+   results view swaps a loading skeleton for its real sections when `busy`
+   flips, which mounts new [data-reveal] nodes WITHOUT changing `view`. A
+   single querySelectorAll at effect time never saw them, so the entire body
+   of the results page stayed at opacity 0 -- an invisible page with no
+   error anywhere.
+
+   So the element list is not a snapshot. A MutationObserver picks up
+   anything mounted later, which makes the hook correct regardless of when a
+   caller happens to render. Re-observing an element already being watched
+   is a no-op, so the repeated sweep is cheap. */
 export function useReveal(key) {
   useEffect(() => {
     if (prefersReducedMotion()) return undefined;
 
     document.documentElement.classList.add("motion-on");
-
-    const targets = document.querySelectorAll("[data-reveal]:not(.is-in)");
-    if (!targets.length) return undefined;
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -46,8 +55,20 @@ export function useReveal(key) {
       { threshold: 0.05, rootMargin: "0px 0px -8% 0px" },
     );
 
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const observeAll = () => {
+      for (const el of document.querySelectorAll("[data-reveal]:not(.is-in)")) {
+        io.observe(el);
+      }
+    };
+    observeAll();
+
+    const mo = new MutationObserver(observeAll);
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
   }, [key]);
 }
 

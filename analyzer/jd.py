@@ -18,7 +18,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from analyzer.extract import Origin, extract, resolve_implications
+from analyzer.extract import (
+    Origin,
+    extract,
+    resolve_implications,
+    suppress_generic_cloud,
+)
 from analyzer.profiles import RoleProfile
 from analyzer.roadmap import RoadmapStep, build_roadmap
 from analyzer.taxonomy import Taxonomy
@@ -73,13 +78,21 @@ def analyze_jd(resume_text: str, jd_text: str, taxonomy: Taxonomy,
             f"characters). Paste at least {MIN_JD_CHARS}."
         )
 
-    have = {m.skill_id for m in extract(resume_text, taxonomy, origin=Origin.RESUME)}
+    have = {m.skill_id for m in extract(resume_text, taxonomy,
+                                        origin=Origin.RESUME,
+                                        with_evidence=False)}
     have |= resolve_implications(have)
+    have = suppress_generic_cloud(have)
 
     # The JD is prose, not a resume, so no section weighting applies.
     wanted = {m.skill_id for m in
-              extract(jd_text, taxonomy, origin=Origin.DESCRIPTION, sectioned=False)}
+              extract(jd_text, taxonomy, origin=Origin.DESCRIPTION,
+                      sectioned=False, with_evidence=False)}
     wanted |= resolve_implications(wanted)
+    # Both sides get the same treatment. A posting naming AWS means one
+    # skill, not AWS plus a generic cloud entry -- and if only one side were
+    # suppressed the two would disagree about what they are comparing.
+    wanted = suppress_generic_cloud(wanted)
 
     profile = None
     if role_id:

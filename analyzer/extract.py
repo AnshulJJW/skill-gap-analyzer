@@ -189,13 +189,19 @@ def _evidence_for(surface: str, text: str, width: int = 90) -> str:
 
 def extract(text: str, taxonomy: Taxonomy,
             origin: Origin = Origin.RESUME,
-            sectioned: bool = True) -> list[Mention]:
+            sectioned: bool = True,
+            with_evidence: bool = True) -> list[Mention]:
     """Full pipeline: raw text -> deduped, normalized mentions.
 
     Keeps the highest-confidence mention per skill. Section confidence is a
     judgement call, recorded here so it can be defended: an explicit skills
     list is a direct claim, project text is demonstrated use, and a mention
     under education is usually incidental.
+
+    with_evidence=False skips building the quoted source line. That scan
+    walks every line of the document once per mention, and callers that only
+    want the skill ids -- the gap report is one -- were paying for a string
+    they immediately discarded.
     """
     weights = {
         Section.SKILLS: 1.0,
@@ -220,7 +226,7 @@ def extract(text: str, taxonomy: Taxonomy,
                 origin=origin,
                 method=Method.ALIAS,
                 confidence=confidence,
-                evidence=_evidence_for(surface, chunk),
+                evidence=_evidence_for(surface, chunk) if with_evidence else "",
             )
     return list(best.values())
 

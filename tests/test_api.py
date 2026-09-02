@@ -140,3 +140,59 @@ def test_analyze_jd_rejects_a_job_description_too_short_to_read(client):
         "resume_text": RESUME, "job_description": "Java dev needed.",
     })
     assert r.status_code == 422
+
+
+def test_analyze_reports_evidence_level_per_held_skill(client):
+    r = client.post("/analyze", json={
+        "resume_text": (
+            "TECHNICAL SKILLS\nPython, SQL, Java\n\n"
+            "EDUCATION\nB.E. Computer Science. Coursework included Docker.\n"
+        ),
+        "role_id": "sde1-backend",
+    })
+    assert r.status_code == 200, r.text
+    held = {h["skill_name"]: h for h in r.json()["held"]}
+    assert held["Python"]["confirmed"] is True
+    assert held["Docker"]["confirmed"] is False
+    assert held["Docker"]["section"] == "education"
+
+
+def test_analyze_flags_a_resume_it_could_not_read(client):
+    """A scrambled PDF is the likeliest real failure, and a bare 0% hides it."""
+    r = client.post("/analyze", json={
+        "resume_text": "I enjoy long walks on the beach and reading poetry. " * 4,
+        "role_id": "sde1-backend",
+    })
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["skills_detected"] == 0
+    assert body["empty_note"]
+
+
+def test_analyze_rejects_a_resume_too_short_to_measure(client):
+    r = client.post("/analyze", json={"resume_text": "Python", "role_id": "sde1-backend"})
+    assert r.status_code == 422
+
+
+def test_analyze_rejects_an_oversized_body(client):
+    r = client.post("/analyze", json={
+        "resume_text": "Python and SQL. " * 5000,
+        "role_id": "sde1-backend",
+    })
+    assert r.status_code == 422
+
+
+def test_parse_resume_rejects_a_file_that_is_not_a_pdf(client):
+    """Checked by magic bytes, not by the filename -- renaming a .exe to
+    .pdf must not get past it."""
+    r = client.post("/parse-resume",
+                    files={"file": ("resume.pdf", b"MZ\x90\x00 not a pdf",
+                                    "application/pdf")})
+    assert r.status_code == 400
+    assert "pdf" in r.json()["detail"].lower()
+
+
+def test_parse_resume_rejects_an_empty_file(client):
+    r = client.post("/parse-resume",
+                    files={"file": ("resume.pdf", b"", "application/pdf")})
+    assert r.status_code == 400

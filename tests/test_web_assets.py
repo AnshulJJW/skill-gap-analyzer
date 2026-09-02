@@ -179,3 +179,23 @@ def test_the_hero_preview_is_labelled_as_an_example():
     assert "Example result" in preview, (
         "the sample dashboard must say it is an example"
     )
+
+
+def test_reveal_does_not_snapshot_the_dom_once():
+    """Sections can mount after the effect runs.
+
+    The results view swaps a loading skeleton for its real content when the
+    request finishes, which mounts new [data-reveal] nodes without changing
+    `view`. A single querySelectorAll at effect time never saw them, and the
+    whole body of the results page stayed at opacity 0 -- an invisible page
+    with no error anywhere to explain it.
+    """
+    js = JS.read_text(encoding="utf-8")
+    body = js[js.index("export function useReveal"):]
+    body = body[: body.index("export function useCountUp")]
+    assert "MutationObserver" in body, (
+        "useReveal must pick up nodes mounted after it ran"
+    )
+    assert "if (!targets.length) return" not in body, (
+        "the early return skipped wiring up the observer entirely"
+    )

@@ -28,6 +28,12 @@ export default function Results({
   // Skills on the resume that this role actually asks for. Shown after the
   // gaps: gaps are the part you can act on, so they lead.
   const have = report.have_names ?? [];
+  const held = report.held ?? [];
+  const confirmed = held.filter((h) => h.confirmed);
+  // Found only under a heading like EDUCATION -- a course title rather than
+  // a claim. Worth showing separately: it is the one thing on the page the
+  // reader can fix in five minutes, by moving it onto a project.
+  const weak = held.filter((h) => !h.confirmed);
   const note = encouragement(report.coverage, gaps.length);
 
   return (
@@ -80,6 +86,12 @@ export default function Results({
           </div>
         </div>
       </section>
+
+      {report.empty_note && (
+        <div className="res-block">
+          <Callout tone="warn"><strong>Nothing was recognised.</strong> {report.empty_note}</Callout>
+        </div>
+      )}
 
       {error && <div className="res-block"><Callout tone="danger">{error}</Callout></div>}
 
@@ -135,7 +147,7 @@ export default function Results({
               </p>
             </div>
 
-            {have.length === 0 && gaps.length === 0 ? (
+            {held.length === 0 && gaps.length === 0 ? (
               <Empty>Nothing matched. Check the resume text and try again.</Empty>
             ) : (
               <>
@@ -160,19 +172,40 @@ export default function Results({
                   </>
                 )}
 
-                {have.length > 0 && (
+                {confirmed.length > 0 && (
                   <>
                     <h3 className="group">
-                      Skills you already have <span className="count ok">{have.length}</span>
+                      Skills you already have <span className="count ok">{confirmed.length}</span>
                     </h3>
                     {/* Compact tiles rather than metered rows: these carry no
                         demand figure, and a column of empty dashes reads as
                         broken. */}
                     <div className="have-grid">
-                      {have.map((name) => (
-                        <div className="have-item" key={name}>
+                      {confirmed.map((h) => (
+                        <div className="have-item" key={h.skill_id} title={`Found under ${h.section}`}>
                           <span className="ico"><Icon.check width={14} height={14} /></span>
-                          {name}
+                          {h.skill_name}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {weak.length > 0 && (
+                  <>
+                    <h3 className="group">
+                      Only mentioned in passing <span className="count">{weak.length}</span>
+                    </h3>
+                    <p className="small muted" style={{ marginTop: "-.35rem", marginBottom: ".7rem" }}>
+                      These appear under a heading like Education rather than in
+                      your skills list or a project. They still count toward your
+                      score — but a recruiter reading quickly may not credit them.
+                    </p>
+                    <div className="have-grid">
+                      {weak.map((h) => (
+                        <div className="have-item weak" key={h.skill_id} title={`Found under ${h.section}`}>
+                          <span className="ico"><Icon.alert width={14} height={14} /></span>
+                          {h.skill_name}
                         </div>
                       ))}
                     </div>
