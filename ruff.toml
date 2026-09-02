@@ -1,0 +1,23 @@
+# Ruff configuration.
+#
+# This lives in ruff.toml rather than pyproject.toml on purpose. A
+# pyproject.toml at the repository root makes the root look like a Python
+# package to anything that inspects it -- Vercel's framework detection read
+# it, decided this was a FastAPI project, and ran `uv lock` against a file
+# with no [project] table. Three failed deploys.
+#
+# The root is not a Python package: nothing here is built or published as a
+# distribution. Keeping linter settings in the linter's own file says that
+# plainly, and leaves no pyproject.toml for anything to misread.
+
+line-length = 88
+
+[lint.per-file-ignores]
+# Prose content file. ISC004 exists to catch a missing comma silently merging
+# two entries; _check_shape() verifies every entry has exactly four fields at
+# runtime, which catches the same bug more directly.
+"scripts/build_interview_doc.py" = ["ISC004"]
+# B008 forbids a function call in an argument default. FastAPI's dependency
+# system is built on exactly that -- File(...), Depends(...), Query(...) --
+# so the rule is a false positive in route definitions, not a smell.
+"api/main.py" = ["B008"]

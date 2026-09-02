@@ -125,9 +125,8 @@ def test_render_blueprint_matches_the_runtime_install():
 
 def test_the_root_vercel_config_builds_the_frontend_not_the_backend():
     """Vercel guesses the framework from the repository root, and this root
-    is a Python project -- requirements.txt and a pyproject.toml holding only
-    ruff settings. It guessed FastAPI twice and tried to `uv lock` against a
-    pyproject.toml with no [project] table.
+    still contains requirements.txt. It guessed FastAPI and tried to install
+    Python dependencies even after the Vite build had succeeded.
 
     Naming the commands explicitly removes the guess. framework:null is the
     part that actually disables detection; the commands alone are not enough.
@@ -138,12 +137,19 @@ def test_the_root_vercel_config_builds_the_frontend_not_the_backend():
     assert "web" in cfg["buildCommand"] and "web" in cfg["installCommand"]
 
 
-def test_pyproject_is_lint_config_only():
-    """If a [project] table is ever added here, the root becomes a real
-    Python package and Vercel's detection would be right to build it --
-    at which point vercel.json above is the only thing stopping it."""
-    text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    assert "[project]" not in text, (
-        "a [project] table changes what this repository root claims to be; "
-        "check vercel.json still points at the frontend"
+def test_the_repository_root_does_not_look_like_a_python_package():
+    """Vercel's Python builder reads pyproject.toml directly.
+
+    The root used to carry one holding nothing but ruff settings. Vercel read
+    it, decided this was a FastAPI project, and ran `uv lock` against a file
+    with no [project] table -- three failed deploys, none of which the build
+    command could prevent, because the Python step runs after it.
+
+    Linter settings live in ruff.toml now. Reintroducing pyproject.toml
+    brings the whole thing back.
+    """
+    assert not (ROOT / "pyproject.toml").exists(), (
+        "pyproject.toml at the root makes Vercel build this as Python; "
+        "ruff settings belong in ruff.toml"
     )
+    assert (ROOT / "ruff.toml").exists(), "ruff config went missing"
