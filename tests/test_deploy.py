@@ -121,3 +121,29 @@ def test_render_blueprint_matches_the_runtime_install():
     assert "api.main:app" in blueprint
     assert "$PORT" in blueprint, "the instance port is assigned, not fixed"
     assert "healthCheckPath: /health" in blueprint
+
+
+def test_the_root_vercel_config_builds_the_frontend_not_the_backend():
+    """Vercel guesses the framework from the repository root, and this root
+    is a Python project -- requirements.txt and a pyproject.toml holding only
+    ruff settings. It guessed FastAPI twice and tried to `uv lock` against a
+    pyproject.toml with no [project] table.
+
+    Naming the commands explicitly removes the guess. framework:null is the
+    part that actually disables detection; the commands alone are not enough.
+    """
+    cfg = json.loads((ROOT / "vercel.json").read_text(encoding="utf-8"))
+    assert cfg["framework"] is None, "detection must be off, or FastAPI wins again"
+    assert cfg["outputDirectory"] == "web/dist"
+    assert "web" in cfg["buildCommand"] and "web" in cfg["installCommand"]
+
+
+def test_pyproject_is_lint_config_only():
+    """If a [project] table is ever added here, the root becomes a real
+    Python package and Vercel's detection would be right to build it --
+    at which point vercel.json above is the only thing stopping it."""
+    text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert "[project]" not in text, (
+        "a [project] table changes what this repository root claims to be; "
+        "check vercel.json still points at the frontend"
+    )
